@@ -1,8 +1,11 @@
-theme = 'hugo-theme-relearn'
 baseURL = 'https://cegepmv.github.io/420-312'
 languageCode = 'fr-fr'
 title = 'Réseaux Informatiques'
 enableEmoji = true
+
+[module]
+  [[module.imports]]
+    path = 'hugo-theme-relearn'
 
 [params]
     linkTitle = 'Réseaux Informatiques'

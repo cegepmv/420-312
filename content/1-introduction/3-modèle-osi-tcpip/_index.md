@@ -1,7 +1,7 @@
 +++
 pre = '<b>3. </b>'
 title = 'Modèles OSI et TCP/IP'
-draft = true
+draft = false
 weight = "130"
 +++
 
@@ -15,7 +15,7 @@ Exemple : Qui veut lire ?
 
 la communication les règles entre les hommes régissent. Ilesttrèsdifficiledecomprendredesmessagesquinesontpasbienformatésetquinesuiventpaslesrèglesetlesprotocolesétablis. A estruturada gramatica, da lingua, da pontuacaoe do sentancefaza configuracaohumanacompreensivelpormuitosindividuosdiferentes.
 
-Il est très difficile de comprendre des messages qui ne sont pas bien formatés et qui ne suivent pas les règles/protocoles établis, n'est-ce pas :sweat_smile: ? Ce sont la grammaire, la langue, la ponctuation et la structure de la phrase qui permettent de comprendre une information.
+Il est très difficile de comprendre des messages qui ne sont pas bien formatés et qui ne suivent pas les règles/protocoles établis, n'est-ce pas :sweat_smile: ? Ce sont la grammaire, la langue, la ponctuation et la structure de la phrase qui permettent de comprendre un message.
 
 <!-- Les protocoles utilisés dans les communications réseau partagent de nombreuses caractéristiques fondamentales avec les protocoles utilisés pour régir les conversations humaines. -->
 
@@ -50,8 +50,6 @@ Chaque couche résout un certain nombre de problèmes relatifs à la transmissio
 
 ### Le modèle TCP/IP
 Le modèle TCP/IP (encore appelé « modèle Internet »), qui date de 1976, a été stabilisé bien avant la publication du modèle OSI en 1984.
-
-Le modèle Internet a été créé afin de répondre à un problème pratique, alors que le modèle OSI correspond à une approche plus théorique, et a été développé plus tôt dans l'histoire des réseaux, sous l'influence et la surveillance des opérateurs télécoms, alors en position de force. Le modèle OSI est donc plus facile à comprendre, mais le modèle TCP/IP est le plus utilisé en pratique.
 
 {{% notice style="info" %}}
 TCP/IP est un modèle dérivé de l’ARPANET dont le but était de maintenir les communications coûte que coûte en cas d’attaque nucléaire. Il en découle un réseau basé sur le routage de paquets à travers une couche appelée Internet.
