@@ -1,0 +1,20 @@
+theme = 'hugo-theme-relearn'
+baseURL = 'https://cegepmv.github.io/420-312'
+languageCode = 'fr-fr'
+title = 'Réseaux Informatiques'
+enableEmoji = true
+
+[params]
+    linkTitle = 'Réseaux Informatiques'
+    collapsibleMenu = true
+    disableLandingPageButton = true
+    themeVariant = ['auto', 'zen-light', 'zen-dark']
+    disableInlineCopyToClipBoard = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
