@@ -136,6 +136,7 @@ La différence entre concentrateur et commutateur est la topologie simulée : to
 {{% center %}}
 *Différence entre concentrateur (à gauche) et commutateur (à droite).*
 {{% /center %}}
+
 Un concentrateur (hub) **redistribue chaque paquet reçu sur tous les autres ports**, sans se préoccuper de sa destination : **Il simule une topologie en bus**, alors que la topologie réelle est en étoile. De même pour un point d’accès sans-fil (WAP). 
 
 Les commutateurs (switch) ont un fonctionnement similaire aux concentrateurs, si ce n'est qu'ils **n'envoient les données qu'au composant de destination**. Un commutateur **simule donc une topologie maillée** à partir d'une topologie en étoile : on retrouve la distinction entre topologie physique et logique.
