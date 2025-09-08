@@ -4,8 +4,7 @@ title = 'Modes de transfert'
 draft = false
 weight = "150"
 +++
-
-***
+-----------------------
 
 Une transmission sur le réseau peut prendre différentes formes suivant le nombre de destinataires. Un hôte peut en effet vouloir communiquer avec un ordinateur bien précis, ou envoyer une donnée à plusieurs PC différents. Suivant le nombre de destinataires, on peut faire la différence entre *Unicast*, *Anycast*, *Multicast* et *Broadcast*.
 

@@ -1,8 +1,8 @@
 +++
-pre = '<b>3. </b>'
+pre = '<b>2. </b>'
 title = "Matériel des couches basses"
 draft = false
-weight = "230"
+weight = "220"
 +++
 
 -------------------------

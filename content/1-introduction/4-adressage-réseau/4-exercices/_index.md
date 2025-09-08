@@ -4,7 +4,7 @@ title = 'Exercices'
 draft = false
 weight = "144"
 +++
-
+----------------
 ### Exercice 1
 *Alors que votre VM est éteinte, mettez le type de son adapteur réseau à NAT. Ensuite démarrez-la.*
 

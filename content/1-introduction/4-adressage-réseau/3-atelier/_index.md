@@ -4,7 +4,7 @@ title = 'Atelier VMWare'
 draft = false
 weight = "143"
 +++
-
+----------------
 ### Configuration de l'interface réseau virtuelle
 4 modes sont possibles :
 

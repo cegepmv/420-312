@@ -4,7 +4,7 @@ title = 'Commandes utilitaires'
 draft = false
 weight = "142"
 +++
-
+------------------
 ## Ping
 `ping` est une commande utilitaire d'administration réseau utilisée pour tester l'accessibilité d'un hôte sur un réseau.
 

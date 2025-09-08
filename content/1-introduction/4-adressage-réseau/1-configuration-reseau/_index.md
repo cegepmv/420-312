@@ -4,7 +4,7 @@ title = 'Configuration réseau'
 draft = false
 weight = "140"
 +++
-
+---------------------
 ## Interface réseau
 Une interface réseau est un point de connexion matériel (comme une carte réseau physique) ou logiciel qui permet à un appareil de communiquer avec un réseau, qu'il soit privé ou public, en envoyant et recevant des données. Cette interface possède obligatoirement une adresse MAC et optionnellement (si elle est configurée) une ou plusieurs adresses IP.
 
