@@ -1,8 +1,8 @@
 +++
-pre = '<b>2. </b>'
+pre = '<b>4. </b>'
 title = 'Exercices'
 draft = false
-weight = "142"
+weight = "144"
 +++
 
 ### Exercice 1
@@ -20,12 +20,12 @@ weight = "142"
 5. Testez que tout fonctionne.
 
 ### Exercice 2
-1. Ajoutez deux adresses IP à votre interface à l’aide de la commande `ip`, vous aurez donc 3 adresses IP différentes.
+1. Créez une VM avec une interface en mode *LAN Segment* puis configurez son interface comme suit : 
+    + Adresse IP : `192.168.20.10/24`
+    + Passerelle par défaut : `192.168.20.1`
+    + Serveurs DNS : `1.1.1.1, 1.0.0.1`
 
-{{% notice style="warning" title="Attention" %}}
-Les deux adresses doivent être dans le même réseau.
-{{% /notice %}}
+2. Créez une deuxième VM avec une interface en mode *LAN Segment*, puis configurez son interface avec une IP située sur le même réseau (`192.168.20.x/24`), différente de la première VM. 
+3. Testez la connexion entre les 2 VMs à l'aide de la commande `ping`, puis avec `SSH`. 
 
-2. Configurez le fichier `hosts` pour que chacune des 3 adresses répondent aux `ping` avec un nom différent.
-3. Quand vous redémarrez le service `Network`, est-ce que l’interface est toujours là?
-4. Comment les rendre persistante? (Essayez de trouver la réponse au moins en théorie, testez le si vous le souhaitez).
+2. Configurez le fichier `hosts` des deux VMs pour que les deux adresses répondent aux `ping` avec un nom différent.

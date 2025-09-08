@@ -1,7 +1,7 @@
 +++
 pre = '<b>5. </b>'
 title = 'Modes de transfert'
-draft = true
+draft = false
 weight = "150"
 +++
 

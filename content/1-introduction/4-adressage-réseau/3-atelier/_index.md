@@ -1,11 +1,11 @@
 +++
-pre = '<b>2. </b>'
+pre = '<b>3. </b>'
 title = 'Atelier VMWare'
 draft = false
-weight = "142"
+weight = "143"
 +++
 
-### Configuration de la carte réseau virtuelle
+### Configuration de l'interface réseau virtuelle
 4 modes sont possibles :
 
 + **Bridged :** En bridge, vous êtes sur le réseau de l’école : votre adresse IP sera dans la même plage d’adresse que la machine hôte.
