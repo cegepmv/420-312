@@ -38,15 +38,13 @@ weight = "240"
 
 ##### Encapsulation des données
 
-+ Assemblage des trames avant la transmission et désassemblage des trames à leur réception. La couche MAC ajoute un en-tête et un code de fin (trailer) à l'unité de données de protocole (PDU) de la couche réseau.
++ Encapsulation/Désencapsulation : Assemblage des trames avant la transmission et désassemblage des trames à leur réception. La couche MAC ajoute un en-tête et un code de fin (trailer) à l'unité de données de protocole (*PDU*) de la couche réseau.
 
-+ Trois fonctions principales:
++ Deux fonctions principales:
 
     + **Délimitation des trames :** identification d'un groupe de bits formant une trame, synchronisation entre les noeuds de transmission et les noeuds de réception
 
     + **Adressage :** Chaque en-tête Ethernet ajouté à la trame contient l'adresse physique (MAC) qui permet de remettre celle-ci au noeud de destination
-
-    + **Détection des erreurs :** chaque trame Ethernet contient un code de fin (trailer) avec un contrôle par redondance cyclique (CRC, Cyclic Redundancy Check) du contenu des trames
 
 ### Structure de trame
 
@@ -104,11 +102,11 @@ L'IEEE demande aux revendeurs de suivre deux règles simples:
 
 ![Couches 1 et 2](../images/02-20.png?width=600px)
 
-##### Adresse MAC unicast (monodiffusion)
+##### Adresse MAC *unicast* (monodiffusion)
 
 ![Couches 1 et 2](../images/02-21.png?width=600px)
 
-##### Adresse MAC broadcast (diffusion)
+##### Adresse MAC *broadcast* (diffusion)
 
 ![Couches 1 et 2](../images/02-22.png?width=600px)
 
@@ -124,7 +122,7 @@ ARP : **A**ddress **R**esolution **P**rotocol
 
 + Le noeud expéditeur a besoin d'un moyen de trouver l'adresse MAC de destination pour une liaison Ethernet donnée
 
-+ Le protocole ARP assure deux fonctions de base:
++ Le protocole ARP assure deux fonctions de base :
 
     + La résolution des adresses IPv4 en adresses MAC
 
@@ -138,9 +136,9 @@ ARP : **A**ddress **R**esolution **P**rotocol
 
     + Quand un noeud reçoit des trames en provenance du support, il enregistre les adresses MAC et IP source dans la table ARP sous forme de mappages.
 
-+ Requête ARP :
++ Une requête ARP :
 
-    + Diffusion de couche 2 vers tous les périphériques du LAN Ethernet.
+    + Diffusion de couche 2 vers tous les périphériques du réseau local (LAN).
 
     + Le noeud qui correspond à l'adresse IP de la diffusion répond.
 
@@ -167,3 +165,16 @@ Si l'hôte IPv4 de destination se trouve sur le réseau local, la trame utilise 
 Si l'hôte IPv4 de destination n'est pas sur le réseau local, l'émetteur utilise la méthode ARP pour déterminer une adresse MAC pour l'interface du routeur qui sert de passerelle.
 
 Si la table ne contient pas d'entrée pour la passerelle, une requête ARP est utilisée pour récupérer l'adresse MAC associée à l'adresseIP de l'interface du routeur.
+
+{{% notice style="tip" title="Astuce : Trouver le fabriquant d'un périphrique du réseau"  %}}
+Dans le cas où nous connaissons l'adresse IP d'un équipement sur le réseau (par exemple `192.168.10.50`), comment faire pour connaître le constructeur et déduire la nature de cette machine ?
+
+1. Utiliser la commande `ping` pour communiquer pour la première fois avec cette machine. Cela remplit la table ARP de notre machine avec l'adresse MAC associée à l'adresse `192.168.10.50` : 
+```bash
+ping 192.168.10.50
+``` 
+
+2. Lancer la commande `arp -a` pour afficher la table ARP. Dans la table, indentifier l'adresse MAC associée à l'adresse IP `192.168.10.50`.
+
+3. Récupérer l'adresse MAC et recherchez le fabriquant de ce périphérique sur internet ([exemple de site](https://dnschecker.org/mac-lookup.php)).
+{{% /notice %}}

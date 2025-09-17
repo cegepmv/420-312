@@ -36,7 +36,7 @@ La couche liaison de données assure deux services de base :
 
 + **Contrôler l'accès au support** et **détecter les erreurs**.
 
-##### Concepts
+### Concepts
 
 ![Couches 1 et 2](./images/02-5.png?width=700px)
 - **Bande passante:** Capacité d'un support à transporter des données. La bande passante numérique mesure la quantité de données pouvant circuler d'un emplacement à un autre pendant une période donnée.
