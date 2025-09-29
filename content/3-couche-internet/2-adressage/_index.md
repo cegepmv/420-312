@@ -36,12 +36,13 @@ Le masque de sous-réseau ne contient pas réellement le réseau ou la partie h�
     + **Diffusion limitée :** Utilisée dans le même sous réseau. Limite : **les routeurs ne transmettent pas une diffusion limitée** (voir l’exemple de image)!
     + **Diffusion dirigée :** Utilisée pour atteindre d’autres réseaux que le leréseau dont on ait.E xemple : pour atteindre le réseau `172.16.4.0/24` depuis un autre réseau que celui-ci, on en envoi à l’IP de diffusion de ce réseau, donc à 172.16.5.255.
 
-<!-- + **Multidiffusion  (multicast):** Quelques exemples de transmission multidiffusion : Diffusions vidéo et audio, Échange d’informations de routage entre des protocoles de routage, Distribution de logiciels, Jeu en ligne etc... -->
++ **Multidiffusion  (multicast):** Quelques exemples de transmission multidiffusion : Diffusions vidéo et audio, Échange d’informations de routage entre des protocoles de routage, Distribution de logiciels, Jeu en ligne etc...
+![Mutlidiffusion](../images/32-10.png)
 
 ## Types d’adresses IPv4
 ### Adresses publiques et privées
 #### Adresses privées
-Les hôtes qui n’ont pas besoin d’accéder à Internet peuvent utiliser des adresses privées
+Les hôtes d'un réseau privé peuvent utiliser des adresses privées. cette adresse IP ne sera pas utilisée pour les requêtes sur internet.
 
 + `10.0.0.0` à `10.255.255.255` (`10.0.0.0/8`)
 
