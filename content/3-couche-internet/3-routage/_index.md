@@ -30,7 +30,7 @@ Une route définie sur une station est un chemin que doivent emprunter les paque
 
 Soit l’exemple (en image) d’une station, appelée *station 1*, d’adresse IP `112.65.77.8` sur un réseau `112.0.0.0/8` :
 
-![Exemple de route](../images/34-2.png)
+![Exemple de route](../images/30-01.png)
 
 + Elle est connectée à une passerelle qui a pour IP dans ce réseau `112.65.123.3` sur son interface `eth0`.
 
