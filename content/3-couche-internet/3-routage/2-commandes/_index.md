@@ -60,11 +60,34 @@ $ nmcli -f CONNECTIONS device show <interface>
 $ nmcli connection show id <profil>
 ```
 
-Activer/désactiver :
+##### Activer/désactiver
 ```bash
 $ nmcli connection up <profil>
 # ou nmcli con up <profil>
 $ nmcli connection down <profil>
 # ou nmcli con down <profil>
+```
+
+##### Ajout d'une IP statique :
+```bash
+$ nmcli con mod <profil> ipv4.address <ip/cidr>
+$ nmcli con mod <profil> ipv4.method manual
+$ nmcli con down <profil>
+$ nmcli con up <profil>
+```
+
+##### Ajout d'une route statique  :
+```bash
+$ nmcli con mod <profil> +ipv4.routes <réseau de destination> <passerelle>
+```
+
+##### Ajout d'une passerelle par défaut :
+```bash
+$ nmcli con mod <profil> ipv4.gateway <ip>
+```
+
+##### Ajout d'adresses de serveurs dns :
+```bash
+$ nmcli con mod <profil> ipv4.dns <ip1,ip2>
 ```
 
