@@ -173,9 +173,6 @@ Effacez les routes statiques (si vous les avez implémentées):
 ```bash
 ip route del <adresse réseau> via <passerelle>
 ```
-Exemple avec `station01`:
-
-CAPTURE
 
 + Pour la machine *Win10* :
 ```powershell
@@ -221,25 +218,22 @@ De même vérifiez si le *forwarding* du routeur est toujours actif. Est-ce le c
 
 Les règles de routage et le *forwarding* configurés précédemment ne sont pas permanents et ont une durée de vie d’une session. Pour faire en sorte de les configurer de façon permanente, il faut procéder de la manière suivante :
 
-+ Pour `linux-station01` et `linux-station02`, 2 options :
++ Pour `linux-station01` et `linux-station02` :
     
-    <!-- + **Option 1 :** Créer un script d'initialisation dans le répertoire `/etc/init.d` contenant les commandes effectuées dans les étapes précédentes (statique ou par défaut) puis lancer la commande `chkconfig`:
-    ```bash
-    sudo nano /etc/rc.d/init.d/routes.sh
-    sudo chkconfig --add /etc/init.d/routes.sh -->
-    ```
-    
-    + **Option 1 :** Utiliser `nmcli`
-    ```bash
-    # Route statique : 
-    sudo nmcli con mod <interface> ipv4.routes "<réseau de destination> <passerelle>"
-    # ou route par défaut :
-    sudo nmcli con mod <interface> ipv4.gateway <adresse IP du routeur>
-    ```
-    Exemple pour *linux-station02* :
-    ```bash
-    sudo nmcli con mod ens160 +ipv4.routes "192.168.10.0/24 192.168.20.1"
-    ```
+<!-- + **Option 1 :** Créer un script d'initialisation dans le répertoire `/etc/init.d` contenant les commandes effectuées dans les étapes précédentes (statique ou par défaut) puis lancer la commande `chkconfig`:
+```bash
+sudo nano /etc/rc.d/init.d/routes.sh
+sudo chkconfig --add /etc/init.d/routes.sh -->
+```bash
+# Route statique : 
+sudo nmcli con mod <interface> ipv4.routes "<réseau de destination> <passerelle>"
+# ou route par défaut :
+sudo nmcli con mod <interface> ipv4.gateway <adresse IP du routeur>
+```
+Exemple pour *linux-station02* :
+```bash
+sudo nmcli con mod ens160 +ipv4.routes "192.168.10.0/24 192.168.20.1"
+```
 
 + Pour `win10-station03` :
 
@@ -248,7 +242,10 @@ Les règles de routage et le *forwarding* configurés précédemment ne sont pas
     route add -p 192.168.10.0 mask 255.255.255.0 192.168.20.1
     ```
 
-    + **Route par défaut :** ajouter l'adresse IP du routeur dans la section Passerelle par défaut lors de la configuration de l'IP statique.
+    + **Route par défaut :** 
+    ```powershell
+    route add -p 0.00.0 mask 0.0.0.0 192.168.20.1
+    ```
 
 + Pour `linux-routeur` :
 Ajoutez au fichier `/etc/sysctl.conf` la ligne : `net.ipv4.ip_forward=1`
