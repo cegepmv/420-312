@@ -28,21 +28,20 @@ Le programme suivant envoit un message par UDP sur un réseau. L’adresse de de
 ```python
 import socket
 
-PORT = 8888
-DEST_IP = "127.0.0.1"
-MESSAGE = "abcdefg!\n"
+DEST_IP = "127.0.0.1" # localhost
+DEST_PORT = 8888
+MESSAGE = "Salut !\n"
 
-# Créer le socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-# Créer un objet pour l'adresse
-dest_addr = (DEST_IP, PORT)
-
-# Envoyer le message
-sock.sendto(MESSAGE.encode(), dest_addr)
-
-# Fermer le socket
-sock.close()
+try:
+    # Ouverture d'un socket 
+    # se ferme lorsqu'on sort du bloc with
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as socket:
+        # Envoyer le message
+        socket.sendto(MESSAGE.encode(), (DEST_IP, DEST_PORT))
+except Exception as err:
+    print(f"Erreur: {err}")
+except KeyboardInterrupt:
+    print("Fin du programme")
 ```
 
 Vous pouvez tester ce programme comme suit: à partir d’un hôte sur le même réseau que le client, ouvrez un port UDP en mode “listen” avec la commande `nc` (`netcat`). Cet hôte joue donc le rôle de serveur. Par exemple, pour ouvrir le port UDP `8888` la commande est la suivante :
@@ -58,34 +57,45 @@ Le programme suivant envoit un message par TCP sur un réseau. L’adresse de de
 ```python
 import socket
 
-PORT = 8888
-DEST_IP = "127.0.0.1"
+DEST_IP="127.0.0.1"
+DEST_PORT = 8888
 MESSAGE = "abcdefg!\n"
 
-# Créer le socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Créer un tuple pour le socket de destination
-dest_addr = (DEST_IP, PORT)
-
 try:
-    # Établir la connexion
-    sock.connect(dest_addr)
-    # Envoyer le message
-    sock.send(MESSAGE.encode())
-except Exception as error:
-    # Si erreur de connexion ou d'envoie
-    # Afficher l'erreur sans faire planter le programme
-    print(f"Erreur: {error}")
+    # Ouverture d'un socket (se ferme lorsqu'on sort du bloc with)
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket:
+        # Demande de connexion
+        socket.connect((DEST_IP, DEST_PORT))
+        
+        # Envoie du message
+        socket.send(MESSAGE.encode())
 
-# Fermer la connexion
-sock.close()
+# Erreur de connexion
+except ConnectionRefusedError:
+    print("Erreur: Serveur indisponible")
+# Autres erreurs
+except Exception as err:
+    print(f"Erreur: {err}")
+# Fin du programme avec CTRL+C
+except KeyboardInterrupt:
+    print("Fin du programme")
 ```
 
 Vous pouvez aussi tester ce programme avec la commande `nc`. À partir d’un hôte sur le même réseau que la machine client (qui aura le rôle de serveur), ouvrez un port TCP en mode “listen” au port TCP `8888`:
 ```bash
 nc -lp 8888
 ```
+
+{{% notice style="tip" title=Remarque %}}
++ Les commandes `nc` ou `python` sont introuvables? Essayez de les installer :
+```bash
+sudo dnf install nc # Alma/Rocky/Centos
+sudo apt install netcat-openbsd # Ubuntu/Debian
+
+sudo dnf install python # Alma/Rocky/Centos
+sudo apt install python # Ubuntu/Debian
+```
+{{% /notice %}}
 
 Assurez-vous que la variable `DEST_IP` du programme a bien comme valeur l’adresse de l’hôte où vous avez lancé la commande `nc`; ensuite exécutez-le.
 
@@ -96,27 +106,32 @@ Le programme suivant ouvre un socket au port UDP `8888` et affiche les messages 
 ```python
 import socket
 
+IP = "" # Écoute sur toutes les IPs du serveur
 PORT = 8888
 BUFFER_SIZE = 1024
 
-# Créer le socket
-socket_local = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-adr_local = ('', PORT)
+try: 
+    # Ouverture d'un socket (se ferme quand on sort du bloc with)
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as socket:
+        # Lie le socket à l'adresse et au port d'écoute
+        socket.bind((IP, PORT))
+        print(f"Attente de messages UDP sur le port {PORT}...")
 
-# Lier le socket à l'adresse
-socket_local.bind(adr_local)
+        # Réception des messages
+        while True:
+            # Réception des données
+            message, adr_dist = socket.recvfrom(BUFFER_SIZE)
+            
+            # Décodage binaire -> texte
+            # Suppression des "impuretés"
+            message = message.decode().strip()
+            print(f"Message reçu: {message}")
 
-print(f"On attend les messages UDP entrants au port {PORT}...")
+except Exception as err:
+    print(f"Erreur: {err}")
+except KeyboardInterrupt:
+    print(f"Fin du programme")
 
-# Réception des messages
-while True:
-    # Réception des données
-    buffer, adr_dist = socket_local.recvfrom(BUFFER_SIZE)
-    
-    # Décodage binaire -> texte
-    message = buffer.decode()
-
-    print(f"Message reçu: {message}", end='')
 ```
 
 Pour tester ce programme à partir d’un autre hôte (qui agit comme client), lancez la commande `nc` (remplacez `1.2.3.4` par l’adresse IP du serveur) et tapez le message que vous voulez envoyer:
@@ -131,37 +146,39 @@ Le programme suivant ouvre un socket au port TCP `8888` et attend les connexions
 ```python
 import socket
 
+IP = "" # Écoute sur toutes les IPs du serveur
 PORT = 8888
 BUFFER_SIZE = 1024
+try: 
+    # Ouverture d'un socket (se ferme quand on sort du bloc with)
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket:
+        # Lie le socket à l'adresse et au port d'écoute
+        socket.bind((IP, PORT))
+        
+        # Attend une connexion (écoute)
+        socket.listen()
+        print(f"Serveur TCP en attente de connexion sur le port {PORT}...")
+        
+        # Accepte la connexion reçue
+        conn, addr = socket.accept()
+        with conn:
+            print(f"Client connecté : {addr}")
+            while True:
+                # Attend de recevoir un message
+                data = conn.recv(BUFFER_SIZE)
+                if not data :
+                    print("Déconnecté")
+                    break
+                # Décodage binaire -> texte
+                # Suppression des "impuretés"
+                message = data.decode().strip()
+                print(f"Reçu : {message}")
+except Exception as err:
+    print(f"Erreur: {err}")
+except KeyboardInterrupt:
+    print(f"Fin du programme")
+    exit(1)
 
-# Créer le socket
-socket_local = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-address = ('', PORT)  
-
-# Lier le socket à l'adresse
-socket_local.bind(address)
-
-# Attendre une connexion
-socket_local.listen(3)
-print(f"Serveur TCP en écoute au port {PORT}...")
-
-socket_dist, client_address = socket_local.accept()
-print(f"Socket distant: {client_address}")
-
-# Réception des messages
-while True:
-    # Données
-    data = socket_dist.recv(BUFFER_SIZE)
-    if not data:
-        print("Déconnecté")
-        break
-    else:
-        # Décoder + afficher les message
-        message = data.decode()
-        print(f"Reçu: {message}", end='')
-
-socket_dist.close()
-socket_local.close()
 ```
 
 Pour tester ce programme à partir d’un autre hôte (qui agit comme client), lancez la commande `nc` (remplacez `1.2.3.4` par l’adresse IP du serveur) et tapez le message que vous voulez envoyer:
@@ -170,6 +187,16 @@ Pour tester ce programme à partir d’un autre hôte (qui agit comme client), l
 nc 1.2.3.4 8888
 abcdefg!
 ```
+
+{{%notice style="note" title="Note"%}}
+Si vous n'arrivez pas à faire communiquer le client et le serveur, essayez de désactiver le pare-feu (ce n'est pas une très bonne pratique, mais nous n'allons pas couvrir les règles de pare-feu dans ce cours) :
+
+```bash
+sudo systemctl stop firewalld # arrêter le service du pare-feu
+sudo systemctl stop firewalld # désactiver le service (ne démarre pas au prochain reboot)
+sudo systemctl status firewalld # vérifier
+```
+{{%/notice %}}
 
 ## Exercices
 ### Exercice 1
@@ -182,8 +209,8 @@ abcdefg!
 
 2. Créez un client TCP qui :
     + se connecte au serveur,
-    + envoie le message "Bonjour serveur !",
-    + affiche la réponse reçue.
+    + demande à l'utilisateur d'entrer un message
+    + envoie le message au serveur
     + lorsque le message envoyé est "quit", le client met fin à la connexion et le programme se termine.
 
 {{% expand title="Solution"%}}
@@ -191,128 +218,128 @@ abcdefg!
 ```python
 import socket
 
-PORT = 5000         # Port d'écoute
+IP = ""
+PORT = 5000
+BUFFER_SIZE = 1024
 
-# Création du socket TCP
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind((HOST, PORT))
-server_socket.listen(1)
-
-print(f"Serveur TCP en attente de connexion sur le port {PORT}...")
-
-# Attente de connexion d'un client
-conn, addr = server_socket.accept()
-print(f"Connexion établie avec {addr}")
-
-# Boucle de communication
-while True:
-    data = conn.recv(1024)  # Réception (max 1024 octets)
-    if not data:
-        break
-
-    message = data.decode('utf-8')
-    print(f"Message reçu du client : {message}")
-
-    if message.lower() == "quit":
-        print("Le client a quitté la conversation.")
-        break
-
-    reponse = f"Bonjour client, j'ai bien reçu ton message : {message}"
-    conn.sendall(reponse.encode('utf-8'))
-
-# Fermeture de la connexion
-conn.close()
-server_socket.close()
-print("Serveur terminé.")
+try:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket:
+        socket.bind((IP, PORT))
+        socket.listen()
+        print(f"Serveur TCP en attente de connexion sur le port {PORT}...")
+        conn, addr = socket.accept()
+        with conn:
+            print(f"Client connecté : {addr}")
+            while True:
+                data = conn.recv(1024)
+                if not data:
+                    break
+                
+                request = data.decode().strip()
+                print(f"Reçu : {request}")
+                
+                if request == "quit":
+                    break
+                
+                response = f"Bonjour client, j'ai bien reçu ton message : {request}"
+                conn.sendall(response.encode('utf-8'))
+        print("Fin de la conversation")
+except ConnectionRefusedError as e:
+    print("Erreur: serveur indisponible")
+except Exception as err:
+    print(f"Erreur: {err}")
+except KeyboardInterrupt:
+    print("Fin de la conversation")
 ```
-
-2. **Client**
+2. **Client** 
 ```python
 import socket
 
-HOST = '127.0.0.1'
+IP="192.168.121.226"
 PORT = 5000
+BUFFER_SIZE = 1024
 
-# Création du socket TCP
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((HOST, PORT))
+try:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.connect((IP, PORT))
 
-print("Connecté au serveur TCP.")
-print("Tape 'quit' pour quitter.")
-
-while True:
-    message = input(">>> ")
-    client_socket.send(message.encode('utf-8'))
-
-    if message.lower() == "quit":
-        print("Fermeture de la connexion.")
-        break
-
-    data = client_socket.recv(1024)
-    print("Réponse du serveur :", data.decode('utf-8'))
-
-client_socket.close()
+        while True:
+            user_input = input(">>> ")
+            sock.send(user_input.strip().encode())
+            if user_input == "quit":
+                print("Fin de la conversation")
+                break 
+            data = sock.recv(BUFFER_SIZE)
+            if not data :
+                print("Déconnecté")
+                break
+            else:
+                message = data.decode("utf-8")
+                print(f"Serveur: {message}")
+except ConnectionRefusedError as e:
+    print("Erreur: serveur indisponible")
+except Exception as err:
+    print(f"Erreur: {err}")
+except KeyboardInterrupt:
+    print("Fin de la conversation")
 ```
 {{% /expand %}}
 
 
 ### Exercice 2
-Reproduit le comportement des client-serveur de l'exercice 1, cette fois-ci avec UDP.
+Reproduire le comportement du client-serveur de l'exercice 1, cette fois-ci avec UDP.
 
 {{% expand title="Solution"%}}
 1. **Serveur**
 ```python
 import socket
 
-HOST = '127.0.0.1'
+IP = ""
 PORT = 5000
+BUFFER_SIZE = 1024
 
-# Création du socket UDP
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-server_socket.bind((HOST, PORT))
-
-print(f"Serveur UDP en écoute sur le port {PORT}...")
-
-while True:
-    data, addr = server_socket.recvfrom(1024)
-    message = data.decode('utf-8')
-    print(f"Message reçu de {addr} : {message}")
-
-    if message.lower() == "quit":
-        print("Le client a demandé la fin de la communication.")
-        break
-
-    reponse = f"Bonjour client, j'ai bien reçu ton message : {message}"
-    server_socket.sendto(reponse.encode('utf-8'), addr)
-
-server_socket.close()
-print("Serveur UDP terminé.")
+try:
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as socket:
+        socket.bind((IP, PORT))
+        print(f"Serveur UDP en écoute de messages sur le port {PORT}...")
+        while True:
+            data, address = socket.recvfrom(BUFFER_SIZE)
+            request = data.decode().strip()
+            print(f"Reçu : {request}")
+            
+            response = f"Bonjour client, j'ai bien reçu ton message : {request}"
+            socket.sendto(response.encode(), address)
+except Exception as err:
+    print(f"Erreur: {err}")
+except KeyboardInterrupt:
+    print("Fin du serveur UDP")
 ```
 
 + **Client**
 ```python
 import socket
 
-HOST = '127.0.0.1'
+IP="192.168.121.226"
 PORT = 5000
+BUFFER_SIZE = 1024
 
-# Création du socket UDP
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-print("Client UDP prêt.")
-print("Tape 'quit' pour quitter.")
-
-while True:
-    message = input(">>> ")
-    client_socket.sendto(message.encode('utf-8'), (HOST, PORT))
-
-    if message.lower() == "quit":
-        print("Fermeture du client UDP.")
-        break
-
-    data, _ = client_socket.recvfrom(1024)
-    print("Réponse du serveur :", data.decode('utf-8'))
-
-client_socket.close()
+try:
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+        while True:
+            user_input = input(">>> ")
+            sock.sendto(
+                user_input.strip().encode(),
+                (IP, PORT)
+            )
+            if user_input == "quit":
+                break 
+            data = sock.recv(BUFFER_SIZE)
+            message = data.decode()
+            print(f"Serveur: {message}")
+        print("Fin du client UDP")
+except Exception as err:
+    print(f"Erreur: {err}")
+except KeyboardInterrupt:
+    print("Fin du client UDP")
 ```
 {{% /expand %}}
