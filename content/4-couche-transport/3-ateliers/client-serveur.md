@@ -193,7 +193,7 @@ Si vous n'arrivez pas à faire communiquer le client et le serveur, essayez de d
 
 ```bash
 sudo systemctl stop firewalld # arrêter le service du pare-feu
-sudo systemctl stop firewalld # désactiver le service (ne démarre pas au prochain reboot)
+sudo systemctl disable firewalld # désactiver le service (ne démarre pas au prochain reboot)
 sudo systemctl status firewalld # vérifier
 ```
 {{%/notice %}}
