@@ -83,7 +83,7 @@ Le routeur travaille donc principalement avec les **adresses IP (couche 3)**.
 Lorsqu'un ordinateur communique sur un réseau, les adresses MAC et IP sont utilisées conjointement, mais elles ne servent pas au même objectif.
 
 
-| ||Adresse MAC|	Adresse IP|
+| -|Adresse MAC|	Adresse IP|
 |-|-------------|------------|
 | **Couche OSI**|	Couche 2 – Liaison de données	|Couche 3 – Réseau|
 | **Type**	|Adresse physique|	Adresse logique|

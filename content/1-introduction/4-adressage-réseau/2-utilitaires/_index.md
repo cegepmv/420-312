@@ -27,17 +27,3 @@ $ ssh user@host
 ```bash
 $ ssh user@host commande
 ```
-
-## ARP
-ARP (*Address Resolution Protocol*) est un protocole qui permet de faire correspondre une adresse IP à une adresse MAC dans un réseau local (LAN). 
-
-+ Pour connaitre le tableau de correspondance ARP d'une machine Linux : 
-```bash
-arp -a
-```
-
-+ Pour supprimer le cache ARP d'une machine :
-```bash
-arp -a -d
-```
-
