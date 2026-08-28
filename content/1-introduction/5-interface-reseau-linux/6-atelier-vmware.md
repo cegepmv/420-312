@@ -1,8 +1,7 @@
 +++
-pre = '<b>3. </b>'
 title = 'Atelier VMWare'
 draft = false
-weight = "143"
+weight = "156"
 +++
 ----------------
 ### Configuration de l'interface réseau virtuelle

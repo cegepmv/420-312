@@ -1,8 +1,7 @@
 +++
-pre = '<b>4. </b>'
 title = 'Exercices'
 draft = false
-weight = "144"
+weight = "156"
 +++
 ----------------
 ### Exercice 1
@@ -24,8 +23,6 @@ weight = "144"
     + Adresse IP : `192.168.20.10/24`
     + Passerelle par défaut : `192.168.20.1`
     + Serveurs DNS : `1.1.1.1, 1.0.0.1`
-
 2. Créez une deuxième VM avec une interface en mode *LAN Segment*, puis configurez son interface avec une IP située sur le même réseau (`192.168.20.x/24`), différente de la première VM. 
 3. Testez la connexion entre les 2 VMs à l'aide de la commande `ping`, puis avec `SSH`. 
-
-2. Configurez le fichier `hosts` des deux VMs pour que les deux adresses répondent aux `ping` avec un nom différent.
+4. Configurez le fichier `hosts` des deux VMs pour que les deux adresses répondent aux `ping` avec un nom différent.

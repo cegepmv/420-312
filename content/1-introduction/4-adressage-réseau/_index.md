@@ -13,7 +13,7 @@ Pour envoyer une lettre par la poste, les relais postiers ont besoin de connaitr
 Il existe deux types d'adresse réseau :
 
 + **Adresses physiques :**  utilisées principalement sur les réseaux locaux (LAN). Elles sont associées à la carte réseau d'un appareil et sont utilisées à la **couche 2 du modèle OSI**. Il s'agit des **adresses MAC**.
-+ **Adresses logiques :** utilisées pour permettre la communication entre différents réseaux. Elles sont utilisées à la couche 3 du modèle OSI et sont définies par le protocole IP. Il s'agit des adresses IP.
++ **Adresses logiques :** utilisées pour permettre la communication entre différents réseaux. Elles sont utilisées à la **couche 3 du modèle OSI** et sont définies par le protocole IP. Il s'agit des **adresses IP**.
 
 {{%notice style="info"%}}
 On peut faire une analogie avec le courrier postal :
@@ -31,13 +31,13 @@ Les deux adresses jouent donc des rôles différents et complémentaires.
 *Exemple d'adresse MAC*
 {{% /center %}}
 
-Une adresse **MAC (Media Access Control)** est une adresse utilisée à la **couche 2 (liaison de données) du modèle OSI**.
+Une adresse **MAC (*Media Access Control*)** est une adresse utilisée à la **couche 2 (liaison de données) du modèle OSI**.
 
 + Elle est généralement composée de **six paires de chiffres hexadécimaux**, pour un total de **48 bits**.
 + Elle est associée à une interface réseau (carte réseau Ethernet, interface Wi-Fi, etc.).
 + Elle est généralement représentée sous une forme semblable à `00:1A:2B:3C:4D:5E`.
 + Elle est utilisée principalement pour la **communication à l’intérieur d’un réseau local (LAN)**.
-+ Les switches utilisent les adresses MAC pour déterminer vers quel port transmettre une trame Ethernet.
++ Les **switches** utilisent les adresses MAC pour déterminer vers quel port transmettre une trame Ethernet.
 + Une adresse MAC est normalement unique au niveau mondial lorsqu'elle est attribuée par le fabricant, mais elle peut être modifiée ou usurpée par logiciel.
 
 
@@ -47,8 +47,6 @@ Lorsqu'un ordinateur envoie des données à un autre ordinateur situé sur le m�
 
 Le switch possède une **table MAC** qui lui permet de savoir sur quel port se trouve chaque appareil. Il peut ainsi transmettre la trame uniquement vers le port approprié plutôt que de l'envoyer à tous les appareils du réseau.
 
-
-
 ## Adresse IP
 
 ![Exemple d'une adresse IP](../images/010402-adresse-IP.png)
@@ -57,12 +55,12 @@ Le switch possède une **table MAC** qui lui permet de savoir sur quel port se t
 {{% /center %}}
 
 
-Une adresse IP (Internet Protocol) est une adresse logique utilisée à la couche 3 (réseau) du modèle OSI.
+Une adresse **IP** (*Internet Protocol*) est une adresse logique utilisée à la **couche 3 (réseau) du modèle OSI**.
 
 Dans le cas d'**IPv4** :
 
-+ Elle se compose de 4 nombres décimaux allant de 0 à 255.
-+ Chaque nombre décimal peut être représenté par un nombre binaire de 8 bits, pour un total de 32 bits ou 4 octets.
++ Elle se compose de **4 nombres décimaux** allant de 0 à 255.
++ Chaque nombre décimal peut être représenté par un nombre binaire de **8 bits**, pour un total de **32 bits** ou **4 octets**.
 + Elle est attribuée à une interface réseau par configuration manuelle ou automatiquement, notamment à l'aide de **DHCP**.
 + Elle dépend de la configuration et de l'emplacement logique de l'hôte dans le réseau.
 + Contrairement à une adresse MAC, une adresse IP peut facilement changer, par exemple lorsqu'un appareil se connecte à un autre réseau.
@@ -75,8 +73,9 @@ Par exemple, lorsqu'un ordinateur du réseau `192.168.1.0/24` veut communiquer a
 
 Le routeur examine l'**adresse IP de destination** afin de déterminer vers quel réseau le paquet doit être acheminé.
 
+{{%notice style="tip" %}}
 Le routeur travaille donc principalement avec les **adresses IP (couche 3)**.
-
+{{%/notice%}}
 
 ## MAC et IP : deux adresses, deux rôles
 
@@ -116,10 +115,10 @@ Il connaît l'adresse IP du destinataire, mais pour envoyer la trame Ethernet su
 
 Il utilise alors ARP :
 
-1. L'ordinateur 192.168.1.10 vérifie s'il connaît déjà la MAC associée à 192.168.1.20.
-2. Si ce n'est pas le cas, il envoie une requête ARP sur le réseau local.
+1. L'ordinateur `192.168.1.10` vérifie s'il connaît déjà la MAC associée à `192.168.1.20`.
+2. Si ce n'est pas le cas, il envoie une **requête ARP** sur le réseau local.
 3. La requête demande essentiellement :
-« Qui possède l'adresse IP 192.168.1.20 ? »
+"Qui possède l'adresse IP `192.168.1.20` ?"
 4. L'appareil possédant cette adresse IP répond avec son adresse MAC.
 5. L'ordinateur peut alors construire une trame Ethernet et l'envoyer au destinataire.
 
