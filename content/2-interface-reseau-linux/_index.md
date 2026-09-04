@@ -1,8 +1,8 @@
 +++
-pre = '<b>5. </b>'
+pre = '<b>2. </b>'
 title = 'Interface réseau Linux'
 draft = false
-weight = "140"
+weight = "200"
 +++
 ---------------------
 

@@ -1,6 +1,6 @@
 +++
 title = 'Atelier VMWare'
-draft = false
+draft = true
 weight = "156"
 +++
 ----------------

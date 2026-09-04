@@ -1,7 +1,8 @@
 +++
+pre = '<b>2. </b>'
 title = 'NetworkManager et nmcli'
 draft = false
-weight = "152"
+weight = "220"
 +++
 ---------------------
 
@@ -66,16 +67,20 @@ nmcli device
 On devrait maintenant voir la connection associée au device.
 
 ### Activer une connection
-
 Après avoir créé une connection, on peut l'activer avec :
+
 ```bash
 sudo nmcli connection up my-conn
 ```
+
 On peut ensuite vérifier l'état :
+
 ```bash
 nmcli device
 ```
+
 ou :
+
 ```bash
 nmcli connection show
 ```
