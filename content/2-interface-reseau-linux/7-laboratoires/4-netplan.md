@@ -5,9 +5,9 @@ weight = "274"
 +++
 ---------------------
 
-Ce laboratoire est réalisé sur VM 2.
+Ce laboratoire est réalisé sur la VM `ubuntu-server`.
 
-## Objectifs
+### Objectifs
 
 Vous allez apprendre à :
 
@@ -18,100 +18,17 @@ Vous allez apprendre à :
 + configurer des serveurs DNS ;
 + revenir à DHCP.
 
-## 1 — Trouver la configuration
+1. Vérifiez les fichiers de configuration **Netplan**. Identifiez le nom de l'interface de type **Ethernet** 
 
-Listez les fichiers :
-```bash
-ls /etc/netplan/
-```
-Affichez le fichier de configuration :
-```bash
-cat /etc/netplan/<fichier>.yaml
-```
-Identifiez le nom de l'interface Ethernet.
+2. Configurez l'interface de façon statique en gardant **la même configuration reçue par DHCP** (IP, passerelle et DNS)
+3. Testez la configuration (ping, internet, résolution de nom, etc...)
+4. Si la résolution fonctionne, vérifiez également le fichier `/etc/resolv.conf`
 
-## 2 — Configuration statique
+##### Questions
++ Pourquoi le contenu de `/etc/resolv.conf` peut-il être différent de ce que vous avez directement écrit dans votre fichier **Netplan** ?
++ Explorez les commentaires du fichier `/etc/resolv.conf`, une commande est conseillée pour vérifier l'état de la résolution de nom (e.g. quel serveur DNS est configuré/utilisé).
 
-Configurez l'interface avec :
 
-+ **Adresse IP :** `192.168.20.20/24`
-+ **Passerelle :** `192.168.20.1`
-+ **DNS        :** `1.1.1.1`
-
-Utilisez une configuration de ce type :
-```yaml
-network:
-  version: 2
-
-  ethernets:
-    <interface>:
-      addresses:
-        - 192.168.20.20/24
-
-      routes:
-        - to: default
-          via: 192.168.20.1
-
-      nameservers:
-        addresses:
-          - 1.1.1.1
-          - 1.0.0.1
-```
-
-## 3 — Tester la configuration
-
-Avant d'appliquer définitivement la configuration :
-```bash
-sudo netplan try
-```
-Si tout fonctionne, confirmez la configuration.
-
-Vous pouvez également appliquer directement :
-```bash
-sudo netplan apply
-```
-Vérifiez :
-```bash
-ip a
-ip route
-```
-Testez la passerelle :
-```bash
-ping -c 3 192.168.20.1
-```
-
-## 4 — Tester le DNS
-
-Testez :
-```bash
-ping -c 3 google.com
-```
-Si la résolution fonctionne, vérifiez également :
-```bash
-cat /etc/resolv.conf
-```
-
-### Question
-
-Pourquoi le contenu de `/etc/resolv.conf` peut-il être différent de ce que vous avez directement écrit dans votre fichier Netplan ?
-
-## 5 — Revenir à DHCP
-
-Modifiez la configuration :
-```bash
-network:
-  version: 2
-
-  ethernets:
-    <interface>:
-      dhcp4: true
-```
-Appliquez :
-```bash
-sudo netplan apply
-```
-Vérifiez :
-```bash
-ip a
-ip route
-```
+5. Revenez au mode **DHCP** puis faites les tests nécessaires pour vérifier que tout fonctionne comme prévu (ping, internet, résolution de nom, etc...).
+6. Démarrez la VM du laboratoire 3, ajoutez les bonnes informations au fichier `/etc/hosts` des deux machines pour qu'elles puissent utiliser des noms à la place de leur adresse IP. 
+7. Testez en faisant des ping. Pour les courageux, essayez de vous connecter par SSH.

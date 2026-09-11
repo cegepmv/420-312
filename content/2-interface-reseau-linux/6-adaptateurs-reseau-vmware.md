@@ -6,7 +6,7 @@ weight = "260"
 +++
 ----------------
 
-Lorsqu’on crée une machine virtuelle dans VMware, une des composantes du “PC” qu’on virtualise est la **carte réseau** (*Network Adapter*). VMware propose plusieurs modes pour connecter cette carte réseau au réseau de la machine hôte, chacun ayant un comportement différent.
+Lorsqu’on crée une machine virtuelle dans **VMware**, une des composantes du “PC” qu’on virtualise est la **carte réseau** (*Network Adapter*). **VMware** propose plusieurs modes pour connecter cette carte réseau au réseau de la machine hôte, chacun ayant un comportement différent.
 
 Les quatre modes suivants sont particulièrement utiles dans nos laboratoires :
 
@@ -20,19 +20,19 @@ Les quatre modes suivants sont particulièrement utiles dans nos laboratoires :
 Dans ce mode, la VM passe par l’ordinateur hôte pour accéder à Internet.
 
 + La VM reçoit une adresse IP sur un réseau virtuel géré par VMware.
-+ VMware fournit généralement un service DHCP pour ce réseau.
++ VMware fournit généralement un **service DHCP** pour ce réseau.
 + La VM peut accéder à Internet.
 + La VM n'est généralement pas directement accessible depuis les autres machines du réseau local.
 + L'hôte peut communiquer avec la VM.
 
 {{%notice style="tip" title="Analogie"%}}
-À imaginer comme : **La VM est cachée derrière l’ordinateur hôte.** »
+À imaginer comme : **La VM est cachée derrière l’ordinateur hôte.**
 {{%/notice%}}
 
 Le schéma conceptuel est :
 ![Schéma conceptuel carte réseau VMWare en mode NAT](../images/VMWare-NAT.png)
 
-Le NAT est particulièrement pratique lorsqu'on veut simplement **donner un accès Internet à une VM** sans la connecter directement au réseau physique.
+Le **NAT** est particulièrement pratique lorsqu'on veut simplement **donner un accès Internet à une VM** sans la connecter directement au réseau physique.
 
 ### Mode Bridged
 
@@ -52,7 +52,7 @@ La VM se comporte alors comme une machine physique supplémentaire sur le résea
 
 ![Schéma conceptuel carte réseau VMWare en mode Bridged](../images/VMWare-Bridge.png)
 
-Le mode Bridged est notamment utile lorsqu'une VM doit être **accessible depuis d'autres machines du réseau**.
+Le mode **Bridged** est notamment utile lorsqu'une VM doit être **accessible depuis d'autres machines du réseau**.
 
 ### Mode Host-Only
 
@@ -70,16 +70,17 @@ En mode **Host-Only**, VMware crée un réseau virtuel privé entre l'ordinateur
 
 ![Schéma conceptuel carte réseau VMWare en mode Host-Only](../images/VMWare-HostOnly.png)
 
-
-Le mode Host-Only est très pratique pour créer un **laboratoire privé** tout en permettant à l'ordinateur hôte d'accéder aux machines virtuelles.
+{{%notice style="tip" title=""%}}
+Le mode **Host-Only** est très pratique pour créer un **laboratoire privé** tout en permettant à l'ordinateur hôte d'accéder aux machines virtuelles.
+{{%/notice%}}
 
 ### Mode LAN Segment
 
 Le mode **LAN Segment** permet de créer un **réseau virtuel complètement isolé** auquel plusieurs machines virtuelles peuvent être connectées.
 
-Contrairement au mode *Host-Only*, le réseau n'est pas directement connecté à l'ordinateur hôte.
+Contrairement au mode *Host-Only*, le réseau **n'est pas directement connecté à l'ordinateur hôte**.
 
-Une VM connectée à un LAN Segment peut donc communiquer avec les autres VMs connectées au **même LAN Segment**, mais elle ne peut pas communiquer directement avec :
+Une VM connectée à un *LAN Segment* peut donc communiquer avec les autres VMs connectées au **même LAN Segment**, mais elle ne peut pas communiquer directement avec :
 + l'ordinateur hôte ;
 + Internet ;
 + le réseau physique.
@@ -119,12 +120,12 @@ Le **LAN Segment** est donc particulièrement intéressant pour construire des l
 {{%/notice%}}
 
 ### Récapitulatif
-|Mode|	Accès Internet|	Hôte ↔ VM|	VM ↔ VM|	VM visible sur réseau physique ?|
+|Mode|	Accès Internet|	Hôte↔VM|	VM↔VM|	VM visible sur réseau physique?|
 |----|-----------|------|-----|-------|
-|NAT	|Oui	|Oui	|Oui*|	|Non|
-|Bridged	|Oui**	|Oui	|Oui	|Oui|
-|Host-Only	|Non***	|Oui	|Oui	|Non|
-|LAN Segment	|Non***	|Non	|Oui	|Non|
+|**NAT**	|Oui	|Oui	|Oui*|	|Non|
+|**Bridged**	|Oui**	|Oui	|Oui	|Oui|
+|**Host-Only**	|Non***	|Oui	|Oui	|Non|
+|**LAN Segment**	|Non***	|Non	|Oui	|Non|
 
 /* Les VMs doivent utiliser le même réseau NAT.
 

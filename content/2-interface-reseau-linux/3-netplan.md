@@ -8,7 +8,7 @@ weight = "230"
 
 Sur **Ubuntu**, une autre méthode courante de configuration réseau est **Netplan**.
 
-Netplan permet de définir la configuration réseau dans des **fichiers YAML**. Cette configuration est ensuite appliquée par le système de gestion réseau utilisé par Ubuntu.
+**Netplan** permet de définir la configuration réseau dans des **fichiers YAML**. Cette configuration est ensuite appliquée par le système de gestion réseau utilisé par Ubuntu.
 
 Les fichiers de configuration Netplan se trouvent généralement dans :
 ```bash
@@ -48,10 +48,10 @@ network:
           - 8.8.4.4
 ```
 **Explication**
-`network:` - Indique que nous configurons le réseau.
-`version: 2` - Indique la version de la syntaxe Netplan.
-`ethernets:` - Indique que nous configurons une interface Ethernet.
-`ens160:` - Correspond au nom de l'interface réseau.
++ `network:` Indique que nous configurons le réseau.
++ `version: 2` Indique la version de la syntaxe *Netplan*.
++ `ethernets:` Indique que nous configurons une interface **Ethernet**.
++ `ens160:` Correspond au nom de l'interface réseau.
 
 ```yaml
 addresses:

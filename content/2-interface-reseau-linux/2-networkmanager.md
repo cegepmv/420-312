@@ -16,20 +16,20 @@ nmcli device
 ```
 Exemple :
 ```bash
-DEVICE   TYPE      STATE      CONNECTION
-ens160   ethernet  connected  ens160
+DEVICE   TYPE      STATE        CONNECTION
+ens160   ethernet  connected    ens160
 ens224   ethernet  disconnected  --
-lo       loopback  connected  lo
+lo       loopback  connected     lo
 ```
 
 Il faut faire attention à une distinction importante :
 
-+ **interface / device :** l'interface réseau réelle, par exemple ens160 ;
-+ **connection :** la configuration que NetworkManager applique à cette interface.
++ **interface / device :** l'interface réseau réelle, par exemple `ens160` ;
++ **connection :** la configuration que *NetworkManager* applique à cette interface.
 
 Dans l'exemple ci-dessus : 
-+ ens160 possède une connection appelée ens160 ;
-+ ens224 existe bien comme device, mais la colonne **CONNECTION** contient `--` : aucune connection NetworkManager ne lui est actuellement associée.
++ `ens160` possède une connection appelée `ens160` ;
++ `ens224` existe bien comme **device**, mais la colonne **CONNECTION** contient `--` : aucune connection *NetworkManager* ne lui est actuellement associée.
 
 Pour afficher les connexions :
 ```bash
@@ -42,7 +42,7 @@ nmcli connection show ens160
 
 ### Créer une connection pour un device
 
-Si une interface existe mais qu'elle n'est pas encore gérée par une connection NetworkManager, il faut d'abord créer cette connection.
+Si une interface existe mais qu'elle n'est pas encore gérée par une connection *NetworkManager*, il faut d'abord créer cette connection.
 
 La commande générale est :
 ```bash

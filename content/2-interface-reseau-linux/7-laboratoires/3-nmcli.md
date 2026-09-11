@@ -5,11 +5,8 @@ weight = "273"
 +++
 ---------------------
 
-Ce laboratoire est réalisé sur VM 1.
-
-## Objectifs
-
-Vous allez apprendre à utiliser nmcli pour :
+### Objectifs
+Utiliser `nmcli` pour :
 
 + identifier les devices ;
 + identifier les connections ;
@@ -19,109 +16,23 @@ Vous allez apprendre à utiliser nmcli pour :
 + configurer un DNS ;
 + revenir à DHCP.
 
-## 1 — Device vs. connection
+1. Listez les **devices** et les **connections** de votre VM.
+    + Quel est le nom du device **Ethernet** ?
+    + Quelle **connection** lui est associée ?
+    + Un **device** peut-il exister sans connection ?
+    + Quelle est la différence entre un **device** et une **connection** ?
 
-Exécutez :
-```bash
-nmcli device
-```
-Puis :
-```bash
-nmcli connection show
-```
-Comparez les résultats.
+2. Ajoutez un nouvel adaptateur réseau à votre VM en mode *LAN SEGMENT* puis créez une nouvelle **connection** pour ce **device**. Si une connection est déja présente, supprimez-la et créez en une nouvelle (vérifiez vos résultats).
+3. Configurer une adresse statique avec les paramètres suivants :
+    + **Adresse IP :** `192.168.20.10/24`
+    + **Passerelle :** `192.168.20.1`
+    + **DNS        :** `1.1.1.1`
 
-### Questions
-+ Quel est le nom du device Ethernet ?
-+ Quelle connection lui est associée ?
-+ Un device peut-il exister sans connection ?
-+ Quelle est la différence entre un device et une connection ?
+    Vérifiez que l'interface a bien été configurée.
 
-## 2 — Créer une connection
-
-Si nécessaire, créez une connection :
-```bash
-sudo nmcli connection add \
-  con-name lab-connection \
-  ifname <interface> \
-  type ethernet
-```
-Vérifiez :
-```bash
-nmcli connection show
-```
-Puis :
-```bash
-nmcli device
-```
-
-## 3 — Configurer une adresse statique
-
-Utilisez les paramètres suivants :
-
-+ **Adresse IP :** `192.168.20.10/24`
-+ **Passerelle :** `192.168.20.1`
-+ **DNS        :** `1.1.1.1`
-
-Configurez la connection :
-```bash
-sudo nmcli con mod lab-connection \
-  ipv4.addresses 192.168.20.10/24
-sudo nmcli con mod lab-connection \
-  ipv4.gateway 192.168.20.1
-sudo nmcli con mod lab-connection \
-  ipv4.dns "1.1.1.1 1.0.0.1"
-sudo nmcli con mod lab-connection \
-  ipv4.method manual
-```
-Activez-la :
-```bash
-sudo nmcli con up lab-connection
-Partie 4 — Vérifier
-```
-Utilisez :
-```bash
-ip a
-ip route
-nmcli device
-nmcli connection show lab-connection
-```
-Testez :
-```bash
-ping -c 3 192.168.20.1
-```
-Puis testez l'accès Internet :
-```bash
-ping -c 3 1.1.1.1
-```
-et :
-```bash
-ping -c 3 google.com
-```
-
-## 5 — Revenir à DHCP
-
-Configurez **NetworkManager** pour utiliser **DHCP** :
-```bash
-sudo nmcli con mod lab-connection ipv4.method auto
-```
-Supprimez les paramètres statiques :
-```bash
-sudo nmcli con mod lab-connection ipv4.addresses ""
-sudo nmcli con mod lab-connection ipv4.gateway ""
-sudo nmcli con mod lab-connection ipv4.dns ""
-```
-Réactivez la connection :
-```bash
-sudo nmcli con down lab-connection
-sudo nmcli con up lab-connection
-```
-Vérifiez :
-```bash
-ip a
-ip route
-```
-
-### Question
-
-Quelles informations ont maintenant été obtenues automatiquement ?
+4. Changez le mode de cette 2ème interface en mode **NAT**, puis configurez cette interface avec **NetworkManager** pour utiliser **DHCP**.
+5. Faites les vérifications nécessaires : assurez vous d'avoir bien reçu 
+    + une adresse IP, 
+    + la passerelle par défaut
+    + celle du DNS.
+6. Vérifiez votre connexion à Internet et la résolution de nom.

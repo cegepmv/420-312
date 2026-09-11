@@ -28,7 +28,7 @@ Une interface réseau possède généralement :
 + une **adresse MAC** ;
 + une ou plusieurs **adresses IP** lorsqu'elle est configurée ;
 + un état : **UP** ou **DOWN** ;
-éventuellement une configuration de routage associée.
++ éventuellement une configuration de routage associée.
 
 Par exemple, une machine virtuelle Linux peut posséder les interfaces suivantes :
 ```bash

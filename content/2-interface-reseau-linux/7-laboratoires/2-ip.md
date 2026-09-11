@@ -5,7 +5,7 @@ weight = "272"
 +++
 ---------------------
 
-Dans ce laboratoire, nous allons nous concentrer sur la gestion d'une interface réseau Linux.
+Dans ce laboratoire, nous allons nous concentrer sur la **gestion d'une interface réseau Linux** avec la commande `ip`.
 
 ## Objectifs
 
@@ -23,88 +23,21 @@ Les modifications effectuées directement avec la commande `ip` ne constituent g
 Elles sont utilisées ici pour expérimenter et comprendre le fonctionnement du réseau.
 {{%/notice%}}
 
-## 1 — Identifier les interfaces
-```bash
-ip link
-```
-Puis :
-```bash
-ip address
-```
-Identifiez :
+1. Identifiez les interfaces de votre machine : l'interface **loopback**, l'interface **Ethernet**, son adresse **MAC**, son adresse **IP** puis **l'état** de l'interface.
+2. Désactivez votre interface **Ethernet**, revérifiez son état, puis réactivez-la et vérifiez à nouveau.
 
-+ l'interface loopback ;
-+ l'interface Ethernet ;
-+ l'adresse MAC ;
-+ l'adresse IP ;
-+ l'état de l'interface.
+**Question :** Quelle différence faites-vous entre l'état **UP** et **DOWN** ?
 
-## 2 — Activer et désactiver une interface
+3. Ajoutez temporairement l'adresse IP `192.168.20.10/24` à votre interface Ethernet. Vérifiez puis ajoutez en une troisième : `192.168.20.11/24`.
 
-Désactivez votre interface Ethernet :
-```bash
-sudo ip link set <interface> down
-```
-Vérifiez :
-```bash
-ip link show <interface>
-```
-Réactivez-la :
-```bash
-sudo ip link set <interface> up
-```
-Vérifiez à nouveau.
 
-### Question
-
-Quelle différence faites-vous entre l'état UP et DOWN ?
-
-## Partie 3 — Ajouter une adresse IP
-
-Ajoutez temporairement :
-```bash
-sudo ip addr add 192.168.20.10/24 dev <interface>
-```
-Vérifiez :
-```bash
-ip a show <interface>
-```
-Ajoutez ensuite :
-```bash
-sudo ip addr add 192.168.20.11/24 dev <interface>
-```
-
-### Questions
+**Questions**
 + Combien d'adresses IPv4 l'interface possède-t-elle maintenant ?
 + Est-il possible d'avoir plusieurs adresses IP sur une même interface ?
 
-Supprimez ensuite l'adresse :
-```bash
-sudo ip addr del 192.168.20.11/24 dev <interface>
-```
+4. Redémarrez ensuite votre VM. L'interface a t-elle gardé les changements au redémarrage?
+5. Identifiez la passerelle par défaut, puis ajoutez en une nouvelle.
+6. Allumez une deuxième VM, dans le même mode que celle-ci.
+7. Observez le cache ARP de votre VM, puis effectuez un ping vers la deuxième VM. Expliquez l'apparition éventuelle d'une nouvelle entrée. 
 
-## 4 — Observer les routes
-```bash
-ip route
-```
-Identifiez :
-
-+ les réseaux directement connectés ;
-+ la route par défaut ;
-+ l'interface utilisée.
-
-## 5 — Observer ARP
-
-Exécutez :
-```bash
-ip neigh
-```
-Puis effectuez un ping vers une autre machine du réseau :
-```bash
-ping -c 3 192.168.20.20
-```
-Observez de nouveau :
-```bash
-ip neigh
-```
-Expliquez l'apparition éventuelle d'une nouvelle entrée.
+**Question :** L'adresse MAC correspond-elle à celle de l'interface de la **VM2**?

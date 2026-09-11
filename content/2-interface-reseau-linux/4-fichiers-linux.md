@@ -24,7 +24,7 @@ search linux.local
 qui définit un ou plusieurs domaines de recherche.
 
 {{%notice style="warning" title="Attention"%}}
-Sur les distributions Linux modernes, /etc/resolv.conf peut être généré automatiquement par NetworkManager, systemd-resolved ou un autre gestionnaire. Il ne faut donc pas nécessairement modifier ce fichier directement.
+Sur les distributions Linux modernes, `/etc/resolv.conf` peut être généré automatiquement par **NetworkManager**, **systemd-resolved** ou un autre gestionnaire. Il ne faut donc pas nécessairement modifier ce fichier directement.
 
 Il est généralement préférable de configurer les DNS dans le système de gestion réseau utilisé par la distribution, par exemple **Netplan** ou **NetworkManager**.
 {{%/notice%}}
