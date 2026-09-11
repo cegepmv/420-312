@@ -51,8 +51,8 @@ Complétez le tableau :
 VMware utilise notamment des réseaux virtuels comme `VMnet1` et `VMnet8` pour fournir des fonctionnalités de type **Host-Only** et **NAT**. 
 
 C'est les interfaces que la machine hôte utilise pour communiquer et se mettre en réseau avec les machines virtuelles : 
-+ une machine virtuelle avec un adaptateur réseau en mode **NAT** communiquera avec la machine hôte via son interface `VMnet1`
-+ une machine virtuelle avec un adaptateur réseau en mode **Host-Only** communiquera avec la machine hôte via son interface `VMnet8`
++ une machine virtuelle avec un adaptateur réseau en mode **NAT** communiquera avec la machine hôte via son interface `VMnet8`
++ une machine virtuelle avec un adaptateur réseau en mode **Host-Only** communiquera avec la machine hôte via son interface `VMnet1`
 {{%/notice%}}
 
 ### 2 — Mode NAT
