@@ -1,4 +1,4 @@
-+++
+<!-- +++
 pre = '<b>A. </b>'
 title = "Guides et méthodes"
 weight = "360"
@@ -133,4 +133,4 @@ Pour convertir une adresse IP en binaire, une méthode fonctionne à tous les co
 |Adresse réseau         | `10.101.98.0`  |
 |1ère adresse hôte      | `10.101.98.1`  |
 |Dernière adresse hôte  | `10.101.99.254`|
-|Adresse de diffusion   | `10.101.99.255`|
+|Adresse de diffusion   | `10.101.99.255`| -->

@@ -5,9 +5,22 @@ weight = "300"
 +++
 -----------------
 
-La couche d'accès réseau du modèle *TCP/IP* est divisée en deux couches dans le *modèle OSI* : **La couche physique** (L1) et **la couche liaison de données** (L2). Dans ce chapitre, nous allons explorer leurs rôles, le matériel, les normes et protocoles associés à ces couches.
+Dans le modèle **TCP/IP**, la couche d'accès réseau regroupe les fonctions correspondant principalement aux **couches physique (L1)** et **liaison de données (L2)** du modèle OSI.
 
-## Couche physique
+![Couches basses des modèles OSI et TCP/IP](./images/02-1.png?width=500px)
+
+
+Ces couches sont responsables de la **transmission des données sur un réseau local** : elles définissent notamment le support utilisé, la manière dont les bits sont transmis et la façon dont les équipements s'identifient et échangent des **trames**.
+
+Dans ce chapitre, nous étudierons :
+
+- les principaux **supports de transmission**;
+- les équipements des couches 1 et 2;
+- le fonctionnement d'**Ethernet**;
+- les **adresses MAC** et les trames;
+- le rôle du protocole **ARP** dans la communication IPv4 sur un réseau Ethernet.
+
+<!-- ## Couche physique
 ### Rôle
 
 + Transmission physique des données entre deux équipements réseaux. 
@@ -43,4 +56,4 @@ La couche liaison de données assure deux services de base :
 
 - **Débit:** Mesure du transfert de bits sur le support pendant une période donnée. De nombreux facteurs influencent le débit. Notamment: la quantité de trafic, le type de trafic, ou la latence créée par le nombre de périphériques réseau rencontrés entre la source et la destination.
 
-<!-- ![Couches 1 et 2](../images/02-7.png?width=700px) -->
+![Couches 1 et 2](../images/02-7.png?width=700px) -->

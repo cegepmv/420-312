@@ -219,7 +219,7 @@ Pour concevoir un câble catégorie 5, positionner le connecteur RJ-45 de façon
 
 ### Normes des supports de transmission non-guidés 
 
-![Wifi](../images/02-9.png?width=50vw)
+![Les différents supports de transmission non-guidés et leur normes (Wifi, Bluetooth, Wi-Max et Satellitaire)](../images/02-9.png?width=50vw)
 
 
 
@@ -366,11 +366,11 @@ L'IEEE demande aux revendeurs de suivre deux règles simples:
 
 ##### Adresse MAC *unicast* (monodiffusion)
 
-![Couches 1 et 2](../images/02-21.png?width=600px)
+![Exemple de trame avec adresse Unicast](../images/02-21.png?width=600px)
 
 ##### Adresse MAC *broadcast* (diffusion)
 
-![Couches 1 et 2](../images/02-22.png?width=600px)
+![Exemple de trame avec adresse mac broadcast](../images/02-22.png?width=600px)
 
 <!-- ##### Adresse MAC de multidiffusion
 
@@ -427,16 +427,3 @@ Si l'hôte IPv4 de destination se trouve sur le réseau local, la trame utilise 
 Si l'hôte IPv4 de destination n'est pas sur le réseau local, l'émetteur utilise la méthode ARP pour déterminer une adresse MAC pour l'interface du routeur qui sert de passerelle.
 
 Si la table ne contient pas d'entrée pour la passerelle, une requête ARP est utilisée pour récupérer l'adresse MAC associée à l'adresseIP de l'interface du routeur.
-
-{{% notice style="tip" title="Astuce : Trouver le fabriquant d'un périphrique du réseau"  %}}
-Dans le cas où nous connaissons l'adresse IP d'un équipement sur le réseau (par exemple `192.168.10.50`), comment faire pour connaître le constructeur et déduire la nature de cette machine ?
-
-1. Utiliser la commande `ping` pour communiquer pour la première fois avec cette machine. Cela remplit la table ARP de notre machine avec l'adresse MAC associée à l'adresse `192.168.10.50` : 
-```bash
-ping 192.168.10.50
-``` 
-
-2. Lancer la commande `arp -a` pour afficher la table ARP. Dans la table, indentifier l'adresse MAC associée à l'adresse IP `192.168.10.50`.
-
-3. Récupérer l'adresse MAC et recherchez le fabriquant de ce périphérique sur internet ([exemple de site](https://dnschecker.org/mac-lookup.php)).
-{{% /notice %}}

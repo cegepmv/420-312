@@ -1,4 +1,4 @@
-+++
+<!-- +++
 title = "VMWare"
 weight = "331"
 draft = false
@@ -223,7 +223,7 @@ Les règles de routage et le *forwarding* configurés précédemment ne sont pas
 <!-- + **Option 1 :** Créer un script d'initialisation dans le répertoire `/etc/init.d` contenant les commandes effectuées dans les étapes précédentes (statique ou par défaut) puis lancer la commande `chkconfig`:
 ```bash
 sudo nano /etc/rc.d/init.d/routes.sh
-sudo chkconfig --add /etc/init.d/routes.sh -->
+sudo chkconfig --add /etc/init.d/routes.sh 
 ```bash
 # Route statique : 
 sudo nmcli con mod <interface> ipv4.routes "<réseau de destination> <passerelle>"
@@ -254,4 +254,4 @@ Ensuite, pour activer les changements :
 sudo sysctl -p /etc/sysctl.conf
 ```
 
-Vérifiez que les routes ne disparaissent pas et que le *forwarding* du routeur reste actif même après avoir redémarré toutes les stations, testez la communication entre les stations situées dans des réseaux différents.
+Vérifiez que les routes ne disparaissent pas et que le *forwarding* du routeur reste actif même après avoir redémarré toutes les stations, testez la communication entre les stations situées dans des réseaux différents. -->

@@ -1,4 +1,4 @@
-+++
+<!-- +++
 pre = '<b>1. </b>'
 title = "Protocole IP"
 weight = "310"
@@ -40,7 +40,7 @@ Lisez chaque description du protocole IP puis dites à quelle caractéristique e
 
 + **Services différenciés (aussi appelé champ de type de service) :** un champ de 8bits utilisé pour définir la priorité de chaque paquet. 
 
-<!-- Les 6 premiers bits définissent la valeur DCSP (DifferentiatedServices Code Point) qui est utilisée par un mécanisme de qualité de service. Les 2 derniers bits identifient la valeur de notification explicite de congestion qui peut être utilisée pour empêcher l’abandon de paquets pendant les périodes d’encombrement du réseau. -->
+<!-- Les 6 premiers bits définissent la valeur DCSP (DifferentiatedServices Code Point) qui est utilisée par un mécanisme de qualité de service. Les 2 derniers bits identifient la valeur de notification explicite de congestion qui peut être utilisée pour empêcher l’abandon de paquets pendant les périodes d’encombrement du réseau. 
 
 + **Time-to-live (durée de vie, TTL) :**  contient une valeur binaire de 8bits utilisée pour limiter la durée de vie d’un paquet. Cette durée est indiquée en secondes mais est généralement appelée «nombre de sauts». L’expéditeur du paquet définit la valeur de durée de vie initiale et celle-ci diminue de un chaque fois que le paquet est traité par un routeur, ou effectue un saut. Si la valeur du champ TTL (durée de vie) arrive à zéro, le routeur rejette le paquet et envoie un message de dépassement de délai ICMP à l’adresseIP source. La commande tracerouteutilise ce champ pour identifier les routeurs utilisés entre la source et la destination.
 
@@ -65,4 +65,4 @@ Identification ce champ de 16bits identifie de manière unique le fragment d’u
 Indicateurs ce champ de 3bits indique la façon dont le paquet est fragmenté. Il est utilisé avec les champs de décalage du fragment et d’identification pour reconstituer le paquet d’origine.
 
 Décalage du fragment ce champ de 13bits indique la position dans laquelle placer le fragment de paquet pour reconstituer le paquet d’origine. -->
-
+ -->

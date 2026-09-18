@@ -1,4 +1,4 @@
-+++
+<!-- +++
 pre = "<b>2. </b>"
 title = "Commandes utiles"
 weight = "320"
@@ -90,4 +90,4 @@ $ nmcli con mod <profil> ipv4.gateway <ip>
 ```bash
 $ nmcli con mod <profil> ipv4.dns <ip1,ip2>
 ```
-
+ -->

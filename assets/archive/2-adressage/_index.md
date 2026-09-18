@@ -1,4 +1,4 @@
-+++
+<!-- +++
 pre = '<b>2. </b>'
 title = "Adressage"
 weight = "320"
@@ -55,7 +55,7 @@ Ne sont pas globalement routables
 
 Destinées uniquement à un usage dans les réseaux des fournisseurs de services.
 
-Bloc d’adresses: 100.64.0.0/10 -->
+Bloc d’adresses: 100.64.0.0/10 
 
 #### Adresses réservées
 ![Adresses IP réservées](../images/32-7.png)
@@ -66,4 +66,4 @@ Bloc d’adresses: 100.64.0.0/10 -->
 ### Limite de l'adressage par classe
 ![Limite adressage IP par classe](../images/32-9.png)
 
-+ **CIDR :** Un nouvel ensemble de normes a été créé pour permettre aux fournisseurs de services d’allouer les adresses IPv4 sur n’importe quelle limite binaire (longueur de préfixe) plutôt que seulement avec une adresse de classe A, B ou C.
++ **CIDR :** Un nouvel ensemble de normes a été créé pour permettre aux fournisseurs de services d’allouer les adresses IPv4 sur n’importe quelle limite binaire (longueur de préfixe) plutôt que seulement avec une adresse de classe A, B ou C. -->

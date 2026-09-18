@@ -1,4 +1,4 @@
-+++
+<!-- +++
 pre = "<b>1. </b>"
 title = "Tables de routage"
 weight = "310"
@@ -108,4 +108,4 @@ $ ip route show table default
 Error: ipv4: FIB table does not exist.
 Dump terminated
 
-```
+``` -->

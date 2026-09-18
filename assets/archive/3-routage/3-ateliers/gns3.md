@@ -1,4 +1,4 @@
-+++
+<!-- +++
 title = "GNS3"
 weight = "332"
 draft = false
@@ -24,7 +24,7 @@ Ce réseau a les spécifications suivantes :
     + Un commutateur (*switch*) (`S1`)
 
 ### Pré-requis
-<!-- + Avoir téléchargé et ouvert la VM GNS3 sur VMWare ([lien de téléchargement](https://gns3.com/software/download-vm)) -->
+<!-- + Avoir téléchargé et ouvert la VM GNS3 sur VMWare ([lien de téléchargement](https://gns3.com/software/download-vm))
 + Télécharger les émulations des produits *Mikrotik* sur le [marketplace de GNS3](https://gns3.com/marketplace/appliances), onglet *“Appliances”* : 
 + Téléchargez Mikrotik CHR :
 
@@ -128,4 +128,4 @@ Enfin, testez que le réseau est fonctionnel :
     + À l'interface `ether2` du routeur, à laquelle PC1 est directement connectée.
     + À l'interface `ether1` du routeur, qui se trouve de "l'autre côté".
     + À `station2` à travers le routeur.
-+ De retour au routeur, quittez le mode sans échec via `CTRL-X` lorsque vous êtes satisfait de la configuration du routeur. La configuration sera sauvegardée.
++ De retour au routeur, quittez le mode sans échec via `CTRL-X` lorsque vous êtes satisfait de la configuration du routeur. La configuration sera sauvegardée. -->

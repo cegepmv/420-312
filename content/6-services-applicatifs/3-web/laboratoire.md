@@ -1,6 +1,7 @@
 +++
 title = "Ateliers"
 weight = "531"
+draft=true
 +++
 # Introduction à nginx
 -------------------

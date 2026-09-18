@@ -1,34 +1,81 @@
 +++
-pre = '<b>4. </b>'
-title = "Couche internet"
+pre = "<b>4. </b>"
+title = "Couche Internet"
 weight = "400"
+draft = false
 +++
--------------------
 
-![Couche réseau](./images/03-1.png)
+Dans le modèle **TCP/IP**, la **couche Internet** est responsable de l'acheminement des paquets entre différents réseaux.
 
+Elle permet notamment :
 
-Ce chapitre porte sur le rôle de la couche réseau (modèle OSI) ou Internet (modèle TCP/IP) . Il examine comment cette dernière divise les réseaux en groupes d’hôtes pour gérer le flux de paquets de données dans un réseau.
+- d'identifier les interfaces réseau à l'aide d'**adresses IP**;
+- de déterminer si une destination se trouve sur le réseau local ou sur un réseau distant;
+- d'acheminer les paquets à travers plusieurs routeurs;
+- d'échanger des messages de contrôle, d'erreur et de diagnostic.
 
-Ce chapitre aborde également la communication entre les réseaux (appelée routage) ainsi que l’adressage IP.
+Le principal protocole de cette couche est **IP (*Internet Protocol*)**.
 
-## Rôles
-La couche réseau/internet utilise trois processus de base :
+<!-- Dans ce chapitre, nous étudierons principalement :
 
-**Adressage des périphériques finaux :** Les périphériques finaux doivent être configurés avec une adresse IP unique pour être identifiés sur le réseau. Un périphérique final disposant d’une adresse IP est qualifié *d’hôte*.
+- le fonctionnement du protocole **IP**;
+- l'adressage **IPv4**;
+- les **masques et préfixes CIDR**;
+- le calcul de **sous-réseaux**;
+- le **VLSM**;
+- le fonctionnement du **routage IP**;
+- les **tables de routage**;
+- le protocole **ICMP**;
+- les limitations d'IPv4 et le **NAT**;
+- la configuration du réseau sous **Linux**. -->
 
-**Encapsulation/Désencapsulation :** La couche réseau reçoit une unité de données de protocole (PDU) de la couche transport. Dans le cadre du processus **l’encapsulation**, la couche réseau ajoute des informations d’en-tête IP, telles que l’adresse IP des hôtes source (expéditeur) et de destination (destinataire). Une fois les informations d’en-tête ajoutées à la PDU, celle-ci est appelée **paquet**. Lorsque le paquet arrive au niveau de la couche réseau de l’hôte de destination, l’hôte vérifie l’en-tête du paquet IP. Si l’adresse IP de destination dans l’en-tête correspond à l’adresse IP de l’hôte qui effectue la vérification, l’en-tête IP est supprimé du paquet. Ce processus de suppression des en-têtes des couches inférieures est appelé **la désencapsulation**. Une fois la désencapsulation effectuée par la couche réseau, la PDU de couche 4 est transmise au service approprié au niveau de la couche transport.
+## Le protocole IP
 
-**Routage :** La couche réseau fournit des services permettant de diriger les paquets vers un hôte de destination sur un autre réseau. Pour voyager vers d’autres réseaux, le paquet doit être traité par **un routeur**. Le rôle du routeur est de sélectionner les chemins afin de diriger les paquets vers l’hôte de destination. Ce processus est appelé **le routage**. Un paquet peut passer par de nombreux périphériques intermédiaires avant d’atteindre l’hôte de destination. 
+### Rôle
 
+Le protocole **IP (*Internet Protocol*)** permet d'acheminer des paquets entre différents réseaux.
 
-## Protocoles de la couche réseau
-+ **IP** (*Internet Protocol*)
+Contrairement à Ethernet, qui assure principalement la communication sur une liaison ou un réseau local, IP permet d'interconnecter plusieurs réseaux.
 
-+ **ICMP** (*Internet Control Message Protocol*)
+![Exemple d'une topologie avec plusieurs réseaux](/04-reseaux-routeur.png)
 
-+ **RIP** (*Routing Information protocol*)
+Chaque paquet IP contient notamment :
 
-+ **EIGRP** (*Enhanced Interior Gateway Routing*)
+- une **adresse IP source**;
+- une **adresse IP destination**;
+- des informations nécessaires à son traitement et à son acheminement.
 
-+ **OSPF** (*Open ShortestPath First*)
+IP est un protocole **sans connexion** et **best effort**.
+
+Cela signifie qu'IP :
+
+- ne garantit pas que le paquet arrivera à destination;
+- ne garantit pas l'ordre d'arrivée des paquets;
+- ne garantit pas l'absence de duplication;
+- ne retransmet pas automatiquement les paquets perdus.
+
+Les protocoles des couches supérieures, comme **TCP**, peuvent fournir certaines garanties supplémentaires.
+
+### Paquet IP
+
+Les données provenant de la couche transport sont encapsulées dans un **paquet IP**.
+
+![Entête IP](/04-01-entete-ip.png?width=40rem)
+
+L'en-tête IP contient notamment les adresses IP source et destination.
+
++ **Version :** contient une valeur binaire de 4bits indiquant la version du paquetIP. Pour les paquetsIPv4, ce champ est toujours 0100.
+
++ **Services différenciés (aussi appelé champ de type de service) :** un champ de 8bits utilisé pour définir la priorité de chaque paquet. 
+
++ **Time-to-live (durée de vie, TTL) :**  contient une valeur binaire de 8bits utilisé pour limiter la durée de vie d’un paquet. Cette durée est indiquée en secondes mais est généralement appelée «nombre de sauts». L’expéditeur du paquet définit la valeur de durée de vie initiale et celle-ci diminue de un chaque fois que le paquet est traité par un routeur, ou effectue un saut. Si la valeur du champ TTL (durée de vie) arrive à zéro, le routeur rejette le paquet et envoie un message de dépassement de délai ICMP à l’adresseIP source. La commande tracerouteutilise ce champ pour identifier les routeurs utilisés entre la source et la destination.
+
++ **Protocole :** Cette valeur binaire de 8 bits indique le type de données utiles transportées par le paquet, ce qui permet à la couche réseau de transmettre les données au protocole de couche supérieure approprié. Les valeurs habituelles sont notamment ICMP (1), TCP (6) et UDP (17).
+
++ **Adresse IP source :** contient une valeur binaire de 32 bits qui représente l’adresse IP source du paquet.
+
++ **Adresse IP de destination :** contient une valeur binaire de 32 bits qui représente l’adresse IP de destination du paquet.
+
++ **Longueur d’en-tête Internet :** contient une valeur binaire de 4bits indiquant le nombre de mots de 32bits contenus dans l’en-tête. Cette valeur varie en fonction des champs d’options et de remplissage. La valeur minimale de ce champ est 5 (c.-à-d., 5x32=160bits=20octets) et la valeur maximale 15 (c.-à-d., 15x32=480bits= 60octets).
+
++ **Longueur de paquet :** Ce champ de 16 bits indique la taille globale du paquet, y compris l’en-tête et les données, en octets. Sa valeur minimale est de 20 octets (un en-tête de 20octets + 0octet de données) et sa valeur maximale est de 65535octets.

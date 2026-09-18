@@ -1,4 +1,4 @@
-+++
+<!-- +++
 pre = '<b>1. </b>'
 title = "Supports de transmission"
 draft = false
@@ -183,4 +183,4 @@ Pour concevoir un câble catégorie 5, positionner le connecteur RJ-45 de façon
 ![Wifi](../images/02-9.png?width=50vw)
 
 
-
+ -->

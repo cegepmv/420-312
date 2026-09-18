@@ -1,4 +1,4 @@
-+++
+<!-- +++
 pre = '<b>3. </b>'
 title = "Protocoles des couches basses"
 draft = false
@@ -32,10 +32,9 @@ weight = "240"
 + Responsable du positionnement et de la récupération des trames sur les supports
 + Deux rôles essentiels: **encapsulation des données** et **contrôle d'accès au support**
 
-<!-- ### La sous-couche MAC
+### La sous-couche MAC
 
-![Couches 1 et 2](../images/02-15.png?width=700px) -->
-
+![Couches 1 et 2](../images/02-15.png?width=700px) 
 ##### Encapsulation des données
 
 + Encapsulation/Désencapsulation : Assemblage des trames avant la transmission et désassemblage des trames à leur réception. La couche MAC ajoute un en-tête et un code de fin (trailer) à l'unité de données de protocole (*PDU*) de la couche réseau.
@@ -112,7 +111,7 @@ L'IEEE demande aux revendeurs de suivre deux règles simples:
 
 <!-- ##### Adresse MAC de multidiffusion
 
-![Couches 1 et 2](../images/02-23.png?width=600px) -->
+![Couches 1 et 2](../images/02-23.png?width=600px) 
 
 ## ARP
 
@@ -177,4 +176,4 @@ ping 192.168.10.50
 2. Lancer la commande `arp -a` pour afficher la table ARP. Dans la table, indentifier l'adresse MAC associée à l'adresse IP `192.168.10.50`.
 
 3. Récupérer l'adresse MAC et recherchez le fabriquant de ce périphérique sur internet ([exemple de site](https://dnschecker.org/mac-lookup.php)).
-{{% /notice %}}
+{{% /notice %}} -->

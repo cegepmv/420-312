@@ -1,4 +1,4 @@
-+++
+<!-- +++
 pre = "<b>3. </b>"
 title = "Routage"
 weight = "340"
@@ -78,4 +78,4 @@ $ ip route add default via 112.65.123.3
 ```bash
 $ route add -net 0.0.0.0/0 gw 112.65.123.3
 ```
-+ De même du coté des stations 4, 5 et 6 vers la gateway `192.168.0.1`.
++ De même du coté des stations 4, 5 et 6 vers la gateway `192.168.0.1`. -->

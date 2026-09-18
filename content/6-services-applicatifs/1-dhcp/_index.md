@@ -2,6 +2,7 @@
 pre = '<b>1. </b>'
 title = "DHCP"
 weight = "510"
+draft=true
 +++
 -------------------
 
