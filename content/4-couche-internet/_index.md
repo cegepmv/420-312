@@ -45,7 +45,7 @@ Chaque paquet IP contient notamment :
 - une **adresse IP destination**;
 - des informations nécessaires à son traitement et à son acheminement.
 
-IP est un protocole **sans connexion** et **best effort**.
+IP est un protocole **sans connexion** et **best effort (acheminement au mieux)**.
 
 Cela signifie qu'IP :
 
