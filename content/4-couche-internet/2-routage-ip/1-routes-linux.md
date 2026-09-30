@@ -1,13 +1,15 @@
 +++
-title = "Routage dans Linux"
+title = "Configurer des routes sur Linux"
 weight = "421"
-draft=true
+draft = true
 +++
+
+-----------
 ## Configurer une route avec `ip`
 
 La commande `ip` permet de consulter et de modifier la configuration réseau sous Linux.
 
-#### Ajouter une route
+###### Ajouter une route
 
 ```bash
 sudo ip route add 10.10.20.0/24 via 192.168.1.254
@@ -21,33 +23,35 @@ sudo ip route add 10.10.20.0/24 via 192.168.1.254 dev ens160
 
 La passerelle `192.168.1.254` doit elle-même être accessible par l'interface utilisée.
 
-#### Ajouter une route par défaut
+###### Ajouter une route par défaut
 
 ```bash
 sudo ip route add default via 192.168.1.1
 ```
 
-#### Supprimer une route
+###### Supprimer une route
 
 ```bash
 sudo ip route del 10.10.20.0/24
 ```
 
-#### Consulter les routes
+###### Consulter les routes
 
 ```bash
 ip route
 ```
 
-#### Déterminer la route utilisée pour une destination
+###### Déterminer la route utilisée pour une destination
 
 ```bash
 ip route get 8.8.8.8
 ```
 
-> Les modifications effectuées directement avec `ip` modifient l'état réseau courant. Elles ne sont généralement pas persistantes après un redémarrage. Une configuration persistante doit être réalisée avec le gestionnaire réseau utilisé par la distribution.
+{{%notice style="note" title="Rappel"%}}
+Les modifications effectuées directement avec `ip` modifient l'état réseau courant. Elles ne sont généralement pas persistantes après un redémarrage. Une configuration persistante doit être réalisée avec le gestionnaire réseau utilisé par la distribution (*NetworkManager*, *Netplan* ou autre).
+{{%/notice%}}
 
-## Configurer des routes avec `nmcli`
+## Configurer des routes avec nmcli
 
 Sur les distributions utilisant **NetworkManager**, `nmcli` permet de gérer les connexions réseau.
 
@@ -76,8 +80,6 @@ Pour supprimer la route :
 ```bash
 sudo nmcli connection modify ens160 -ipv4.routes "10.10.20.0/24 192.168.1.254"
 ```
-
-> `ip` modifie l'état réseau courant, tandis que `nmcli` permet de modifier une configuration gérée par **NetworkManager**.
 
 ## Configurer des routes avec Netplan
 
@@ -127,5 +129,3 @@ Pour appliquer la configuration :
 ```bash
 sudo netplan apply
 ```
-
-> La configuration exacte dépend de la distribution, de la version de Netplan et du gestionnaire réseau utilisé. Il faut éviter de configurer simultanément la même interface avec plusieurs gestionnaires réseau.

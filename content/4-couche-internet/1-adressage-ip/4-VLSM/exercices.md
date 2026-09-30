@@ -14,10 +14,10 @@ Elle doit créer les réseaux suivants :
 
 |Service|	Hôtes nécessaires|
 |----|-------|
-|Administration|	50|
-|Développement||	25|
-|Support|	12|
-|Direction|	5|
+|**Développement**|	25|
+|**Administration**|	50|
+|**Direction**|	5|
+|**Support**|	12|
 
 Utilisez le VLSM.
 
@@ -41,11 +41,11 @@ Elle doit créer les réseaux suivants :
 
 |Service|	Hôtes nécessaires|
 |-------|-----------------|
-|**Serveurs** |	100 |
 |**Employés** |	60 |
-|**Wi-Fi** |	40|
-|**Administration** |	20|
+|**Serveurs** |	100 |
 |**Imprimantes** |	10|
+|**Administration** |	20|
+|**Wi-Fi** |	40|
 |**Gestion réseau** |	5|
 
 Utilisez le VLSM afin de minimiser l'espace gaspillé.

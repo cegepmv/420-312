@@ -5,16 +5,14 @@ weight = "430"
 draft = true
 +++
 
-**ICMP (*Internet Control Message Protocol*)** est un protocole utilisé avec IP pour échanger des messages de :
+-------------
 
-- contrôle;
-- erreur;
-- diagnostic.
+**ICMP (*Internet Control Message Protocol*)** est un protocole utilisé avec IP pour échanger des messages de contrôle, d'erreur et de diagnostic.
 
 ICMP ne sert pas à transporter directement les données d'une application comme HTTP ou SSH.
 
 
-## `ping`
+## ping
 
 La commande `ping` utilise notamment des messages **ICMP Echo Request** et **ICMP Echo Reply**.
 
@@ -40,11 +38,12 @@ Hôte A                         Hôte B
 - le temps de réponse;
 - d'éventuelles pertes de paquets.
 
-> L'absence de réponse à `ping` ne signifie pas nécessairement que la machine est hors ligne. Un pare-feu ou une politique réseau peut bloquer les messages ICMP.
+{{%notice style="note" title="Remarque"%}}
+L'absence de réponse à `ping` ne signifie pas nécessairement que la machine est hors ligne. Un pare-feu ou une politique réseau peut bloquer les messages ICMP.
+{{%/notice%}}
 
----
 
-## `traceroute`
+## traceroute
 
 `traceroute` permet d'observer les différents routeurs traversés pour atteindre une destination.
 
@@ -62,6 +61,7 @@ tracert 8.8.8.8
 
 Cette commande est utile pour diagnostiquer les problèmes de routage.
 
-> Selon l'implémentation et les options utilisées, `traceroute` peut utiliser différents types de paquets, notamment UDP ou ICMP.
 
----
+{{%notice style="info" title="Note"%}}
+Selon l'implémentation et les options utilisées, `traceroute` peut utiliser différents types de paquets, notamment UDP ou ICMP.
+{{%/notice%}}

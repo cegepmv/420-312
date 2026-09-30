@@ -2,10 +2,11 @@
 pre = '<b>2. </b>'
 title = "Routage IP"
 weight = "420"
-draft=true
+draft = true
 +++
+-----------
 
-## Réseau local ou réseau distant ?
+## Réseau local ou distant ?
 
 Lorsqu'un hôte veut communiquer avec une adresse IP, il doit déterminer si la destination se trouve :
 
@@ -32,8 +33,9 @@ Les deux hôtes appartiennent au réseau :
 A peut donc communiquer directement avec B.
 
 Dans un réseau Ethernet, la trame est envoyée vers la MAC de B.
-
-> Le fonctionnement détaillé d'ARP a déjà été présenté dans le chapitre précédent. ARP permet de déterminer l'adresse MAC correspondant à une adresse IPv4 située sur le réseau local.
+{{%notice style="note" title="Rappel"%}}
+Le fonctionnement détaillé d'ARP a déjà été présenté dans le chapitre précédent. ARP permet de déterminer l'adresse MAC correspondant à une adresse IPv4 située sur le réseau local.
+{{%/notice%}}
 
 ### Destination distante
 
@@ -130,7 +132,7 @@ default via 192.168.1.1 dev ens160
 
 signifie :
 
-- `default` : route utilisée lorsqu'aucune route plus précise ne correspond;
+- `default` : route utilisée lorsqu'aucune route plus précise ne correspond (c'est la passerelle par défaut);
 - `via 192.168.1.1` : passerelle utilisée;
 - `dev ens160` : interface utilisée.
 

@@ -37,7 +37,7 @@ Le protocole **IP (*Internet Protocol*)** permet d'acheminer des paquets entre d
 
 Contrairement à Ethernet, qui assure principalement la communication sur une liaison ou un réseau local, IP permet d'interconnecter plusieurs réseaux.
 
-![Exemple d'une topologie avec plusieurs réseaux](/04-reseaux-routeur.png)
+![Exemple d'une topologie avec plusieurs réseaux](/images/04-reseaux-routeur.png)
 
 Chaque paquet IP contient notamment :
 
@@ -64,18 +64,21 @@ Les données provenant de la couche transport sont encapsulées dans un **paquet
 
 L'en-tête IP contient notamment les adresses IP source et destination.
 
-+ **Version :** contient une valeur binaire de 4bits indiquant la version du paquetIP. Pour les paquetsIPv4, ce champ est toujours 0100.
+|Champ| Fonction|
+|-----|---------|
+|**Version**|Version du paquet IP (pour IPv4: `0100`)|
+|**Services différenciés**| Définit la priorité du paquet|. 
+|**Time-to-live (TTL)**|  Indique la durée de vie d’un paquet. L’expéditeur définit la valeur de durée de vie initiale et celle-ci diminue à chaque fois que le paquet est traité par un routeur. Si sa valeur arrive à zéro, le routeur rejette le paquet.|
+|**Protocole**| Indique le type de données transportées par les couches supérieures. Les valeurs habituelles sont notamment ICMP (1), TCP (6) et UDP (17).|
+|**Adresse IP source**| Adresse IP source du paquet|
+|**Adresse IP de destination**| Adresse IP de destination du paquet|
+|**Longueur d’en-tête**| Indique le la taille de l'entête du paquet (en nombre de mots de 32 bits)|
+**Longueur de paquet**| Indique la taille globale du paquet (y compris l’en-tête et les données) en octets|
 
-+ **Services différenciés (aussi appelé champ de type de service) :** un champ de 8bits utilisé pour définir la priorité de chaque paquet. 
 
-+ **Time-to-live (durée de vie, TTL) :**  contient une valeur binaire de 8bits utilisé pour limiter la durée de vie d’un paquet. Cette durée est indiquée en secondes mais est généralement appelée «nombre de sauts». L’expéditeur du paquet définit la valeur de durée de vie initiale et celle-ci diminue de un chaque fois que le paquet est traité par un routeur, ou effectue un saut. Si la valeur du champ TTL (durée de vie) arrive à zéro, le routeur rejette le paquet et envoie un message de dépassement de délai ICMP à l’adresseIP source. La commande tracerouteutilise ce champ pour identifier les routeurs utilisés entre la source et la destination.
 
-+ **Protocole :** Cette valeur binaire de 8 bits indique le type de données utiles transportées par le paquet, ce qui permet à la couche réseau de transmettre les données au protocole de couche supérieure approprié. Les valeurs habituelles sont notamment ICMP (1), TCP (6) et UDP (17).
 
-+ **Adresse IP source :** contient une valeur binaire de 32 bits qui représente l’adresse IP source du paquet.
 
-+ **Adresse IP de destination :** contient une valeur binaire de 32 bits qui représente l’adresse IP de destination du paquet.
-
-+ **Longueur d’en-tête Internet :** contient une valeur binaire de 4bits indiquant le nombre de mots de 32bits contenus dans l’en-tête. Cette valeur varie en fonction des champs d’options et de remplissage. La valeur minimale de ce champ est 5 (c.-à-d., 5x32=160bits=20octets) et la valeur maximale 15 (c.-à-d., 15x32=480bits= 60octets).
-
-+ **Longueur de paquet :** Ce champ de 16 bits indique la taille globale du paquet, y compris l’en-tête et les données, en octets. Sa valeur minimale est de 20 octets (un en-tête de 20octets + 0octet de données) et sa valeur maximale est de 65535octets.
+<!-- 
+Suite TTL : et envoie un message de dépassement de délai ICMP à l’adresse IP source. La commande traceroute utilise ce champ pour identifier les routeurs utilisés entre la source et la destination
+ -->
