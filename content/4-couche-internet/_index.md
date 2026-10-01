@@ -4,6 +4,7 @@ title = "Couche Internet"
 weight = "400"
 draft = false
 +++
+-------------
 
 Dans le modèle **TCP/IP**, la **couche Internet** est responsable de l'acheminement des paquets entre différents réseaux.
 

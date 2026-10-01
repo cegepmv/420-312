@@ -1,10 +1,10 @@
 +++
 title = "Configurer des routes sur Linux"
 weight = "421"
-draft = true
+draft = false
 +++
-
 -----------
+
 ## Configurer une route avec `ip`
 
 La commande `ip` permet de consulter et de modifier la configuration réseau sous Linux.

@@ -2,7 +2,7 @@
 pre = '<b>2. </b>'
 title = "Routage IP"
 weight = "420"
-draft = true
+draft = false
 +++
 -----------
 
@@ -81,18 +81,11 @@ Le **routage** consiste à déterminer par quel chemin un paquet doit être ache
 
 Un **routeur** possède généralement plusieurs interfaces réseau, chacune étant connectée à un réseau différent.
 
-```text
-              Réseau A
-          192.168.1.0/24
-                │
-                │
-           ┌────┴────┐
-           │ Routeur │
-           └────┬────┘
-                │
-          Réseau B
-          10.0.0.0/24
-```
+![Exemple d'un routeur avec deux interfaces, chacune dans un réseau.](/images/04-routage.png)
+{{%center%}}
+*Exemple d'un routeur avec deux interfaces, chacune dans un réseau.*
+{{%/center%}}
+
 
 Lorsqu'un routeur reçoit un paquet IP, il consulte sa **table de routage** afin de déterminer où transmettre le paquet.
 

@@ -3,8 +3,8 @@ title = "Créer des sous-réseaux"
 weight = "413"
 draft=false
 +++
-
 -----------
+
 Un réseau peut être divisé en plusieurs sous-réseaux.
 
 Prenons :

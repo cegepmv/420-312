@@ -3,8 +3,6 @@ title = "Calcul de sous-réseaux"
 weight = "412"
 draft=false
 +++
-
-
 ---------
 
 ## Méthode complète

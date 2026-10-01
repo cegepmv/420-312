@@ -2,41 +2,20 @@
 pre = '<b>5. </b>'
 title = "IPv4, routage et couches inférieures"
 weight = "450"
-draft = true
+draft = false
 +++
-
-# IPv4, routage et couches inférieures
+---------------
 
 Lorsqu'une application communique avec un serveur distant, les différentes couches travaillent ensemble.
 
 Exemple :
 
-```text
-Application
-    │
-    │ données
-    ▼
-Transport
-    │
-    │ segment TCP/UDP
-    ▼
-Internet
-    │
-    │ paquet IP
-    │ source = 192.168.1.10
-    │ destination = 8.8.8.8
-    ▼
-Liaison de données
-    │
-    │ trame Ethernet
-    │ MAC destination = passerelle
-    ▼
-Physique
-    │
-    │ bits
-    ▼
-Support réseau
-```
+
+![Exemple d'encapsulation d'un paquet IP pour un serveur distant](/images/04-encapsulation-paquet-serveur-distant.png)
+{{%center%}}
+*Exemple d'encapsulation d'un paquet IP à destination d'un serveur distant (`8.8.8.8`)*
+{{%/center%}}
+
 
 Le paquet IP peut traverser plusieurs réseaux et plusieurs routeurs.
 
@@ -44,16 +23,11 @@ Les informations de couche 2 sont généralement **recréées à chaque liaison*
 
 Par exemple :
 
-```text
-Hôte A             Routeur              Routeur             Serveur
-   │                   │                   │                   │
-   │ Trame Ethernet    │                   │                   │
-   ├──────────────────►│                   │                   │
-   │                   │ Nouvelle trame    │                   │
-   │                   ├──────────────────►│                   │
-   │                   │                   │ Nouvelle trame    │
-   │                   │                   ├──────────────────►│
-```
+![Schéma illustrant le changement de trame à chaque liaison, contrairement aux adresses IP source et destination qui ne changent pas](/images/04-changement-trame-liaison.png)
+{{%center%}}
+*Schéma illustrant le changement de trame à chaque liaison, avec les adresses IP source et destination qui ne changent pas*
+{{%/center%}}
+
 
 Le paquet IP, lui, continue son chemin à travers les différents routeurs.
 

@@ -4,6 +4,7 @@ weight = "414"
 draft=false
 +++
 ---------
+
 Le **VLSM (*Variable Length Subnet Masking*)** permet de créer des sous-réseaux de tailles différentes à partir d'un même réseau.
 
 Sans VLSM, tous les sous-réseaux auraient la même taille.

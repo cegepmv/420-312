@@ -2,7 +2,7 @@
 pre = "<b>3. </b>"
 title = "ICMP"
 weight = "430"
-draft = true
+draft = false
 +++
 
 -------------
@@ -22,14 +22,10 @@ ping 192.168.1.1
 
 Échange simplifié :
 
-```text
-Hôte A                         Hôte B
-  │                              │
-  │── ICMP Echo Request ────────►│
-  │                              │
-  │◄── ICMP Echo Reply ──────────│
-  │                              │
-```
+![Diagramme d'échange ICMP entre deux hôtes lors d'un ping](/images/04-ping.png)
+{{% center %}}
+*Échange ICMP lors d'un ping*
+{{% /center %}}
 
 `ping` permet notamment de vérifier :
 
@@ -55,7 +51,7 @@ traceroute 8.8.8.8
 
 Sous Windows :
 
-```powershell
+```bash
 tracert 8.8.8.8
 ```
 

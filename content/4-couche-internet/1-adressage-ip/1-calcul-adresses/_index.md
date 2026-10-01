@@ -1,7 +1,9 @@
 +++
 title = "Calcul d'adresses"
 weight = "411"
+draft = false
 +++
+-------------
 
 ## Conversion d'une adresse IPv4 en binaire
 

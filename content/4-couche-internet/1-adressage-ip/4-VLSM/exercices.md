@@ -4,6 +4,7 @@ weight = "414"
 draft=false
 +++
 ------------
+
 ### 1 — VLSM simple
 
 Une entreprise possède :

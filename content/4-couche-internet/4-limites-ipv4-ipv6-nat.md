@@ -1,8 +1,8 @@
 +++
 pre = '<b>4. </b>'
-title = "Limitation IPv4 et NAT"
+title = "Limitations d'IPv4: IPv6 et NAT"
 weight = "440"
-draft = true
+draft = false
 +++
 ----------
 
@@ -78,16 +78,10 @@ Dans les réseaux résidentiels et de nombreuses organisations, le NAT permet no
 
 Exemple :
 
-```text
-Réseau privé
-
-192.168.1.10 ─┐
-192.168.1.11 ─┼──► Routeur NAT ───► Internet
-192.168.1.12 ─┘       │
-                       │
-                 IP publique
-                 203.0.113.10
-```
+![Exemple de fonctionnement d'un routeur NAT](/images/04-NAT.png)
+{{%center%}}
+*Fonctionnement d'un routeur NAT (traduction de l'adresse privée vers son adresse publique*
+{{%/center%}}
 
 Les appareils internes utilisent des adresses privées :
 
