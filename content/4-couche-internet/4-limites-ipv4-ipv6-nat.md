@@ -25,32 +25,30 @@ Avec l'augmentation du nombre d'ordinateurs, de téléphones, de serveurs et d'a
 
 <!-- La principale limite d'IPv4 est la taille de son espace d'adressage. Avec des adresses de 32 bits, IPv4 offre environ 4,3 milliards de valeurs d'adresses possibles. Or, le nombre d'appareils connectés à Internet a considérablement augmenté. -->
 
-Une solution fondamentale au problème de manque d'adresses publique est **IPv6 (*Internet Protocol version 6*)**.
+Une solution au problème fondamental de manque d'adresses publique est **IPv6 (*Internet Protocol version 6*)**.
 
 ### Un espace d'adressage beaucoup plus vaste
 
 IPv6 utilise des adresses de **128 bits**, contre 32 bits pour IPv4.
 
 Cela représente :
-```text
-IPv4 : 2^32 ≈ 4,3 milliards d'adresses
 
-IPv6 : 2^128 ≈ 340 undecillions d'adresses (340 avec 36 zéros !!)
-```
++ **IPv4 :** 2^32  ≈ 4,3 milliards d'adresses
++ **IPv6 :** 2^128 ≈ 340 undecillions d'adresses (340 avec 36 zéros !!)
 
-L'espace d'adressage d'IPv6 est donc suffisamment vaste pour attribuer des adresses uniques à un très grand nombre d'appareils.
+L'espace d'adressage d'*IPv6* est donc suffisamment vaste pour attribuer des adresses uniques à un très grand nombre d'appareils.
 
 {{%notice style="info" title=" "%}}
-IPv6 ne constitue pas seulement une augmentation du nombre d'adresses. Il a également été conçu avec différentes améliorations au niveau du protocole IP, notamment une simplification de l'en-tête et la possibilité d'utiliser la **configuration automatique des adresses**.
+*IPv6* ne constitue pas seulement une augmentation du nombre d'adresses. Il a également été conçu avec différentes améliorations au niveau du protocole IP, notamment une simplification de l'en-tête et la possibilité d'utiliser la **configuration automatique des adresses**.
 {{%/notice%}}
 
-### Pourquoi n'a-t-il pas remplacé IPv4 ?
+### Pourquoi n'a-t-il pas déjà remplacé IPv4 ?
 
-On pourrait penser qu'il suffirait de remplacer progressivement IPv4 par IPv6. En pratique, la transition est plus complexe.
+On pourrait penser qu'il suffirait de remplacer progressivement *IPv4* par *IPv6*. En pratique, la transition est plus complexe.
 
-Internet repose sur un très grand nombre de réseaux, de routeurs, de serveurs et d'appareils qui doivent pouvoir communiquer entre eux. IPv4 et IPv6 ne sont pas directement compatibles : un appareil utilisant uniquement IPv4 ne peut pas simplement communiquer avec un appareil utilisant uniquement IPv6.
+Internet repose sur un très grand nombre de réseaux, de routeurs, de serveurs et d'appareils qui doivent pouvoir communiquer entre eux. *IPv4* et *IPv6* ne sont pas directement compatibles : un appareil utilisant uniquement *IPv4* ne peut pas simplement communiquer avec un appareil utilisant uniquement *IPv6*.
 
-La transition vers IPv6 nécessite donc la coexistence des deux protocoles et l'utilisation de différentes techniques de transition.
+La transition vers *IPv6* nécessite donc la coexistence des deux protocoles et l'utilisation de différentes techniques de transition.
 
 De plus, certaines solutions ont permis de prolonger l'utilisation d'IPv4, notamment le **NAT**.
 
@@ -153,7 +151,7 @@ Le NAT peut avoir des effets sur l'accessibilité depuis Internet, mais il ne do
 
 ## Adresses IPv4 privées
 
-Les principales plages privées IPv4 définies par RFC 1918 sont :
+Les principales plages privées IPv4 définies par [RFC 1918](https://www.rfc-editor.org/rfc/rfc1918.html) sont :
 
 | Plage                                | Préfixe           |
 | ------------------------------------- | ------------------ |

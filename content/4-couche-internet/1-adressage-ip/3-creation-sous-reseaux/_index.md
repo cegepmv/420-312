@@ -1,5 +1,5 @@
 +++
-title = "Créer des sous-réseaux"
+title = "Création de sous-réseaux"
 weight = "413"
 draft=false
 +++

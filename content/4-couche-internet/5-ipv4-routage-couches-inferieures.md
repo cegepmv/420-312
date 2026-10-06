@@ -32,5 +32,5 @@ Par exemple :
 Le paquet IP, lui, continue son chemin à travers les différents routeurs.
 
 {{%notice style="tip" title=" "%}}
-Les chapitres précédents ont détaillé Ethernet et ARP. Ici, l'idée essentielle est de comprendre que la couche Internet fournit l'adressage logique et l'acheminement, tandis que la couche de liaison assure la transmission sur chaque liaison.
+Les chapitres précédents ont détaillé Ethernet et ARP. Ici, l'idée essentielle est de comprendre que **la couche Internet fournit l'adressage logique et l'acheminement**, tandis que **la couche de liaison assure la transmission sur chaque liaison**.
 {{%/notice%}}
