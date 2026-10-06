@@ -1,9 +1,163 @@
 +++
-title = "2- Implémentation Packet Tracer"
-weight = "472"
+pre = "<b>7. </b>"
+title = "Atelier synthèse"
+weight = "470"
 draft = false
 +++
 -------------
+
+## Mise en situation
+
+Une entreprise souhaite concevoir le réseau informatique de son organisation.
+
+L’entreprise dispose du bloc d’adresses privé suivant :
+
+```text
+172.16.0.0/16
+```
+Elle est composée de quatre départements :
+
+| Département                  | Nombre d’hôtes requis |
+| ---------------------------- | --------------------: |
+| **Direction**                |                   100 |
+| **Ressources humaines (RH)** |                    50 |
+| **Informatique (IT)**        |                    25 |
+| **Finance**                  |                    10 |
+
+L’entreprise dispose de **deux routeurs**.
+
+Chaque routeur dessert deux départements :
+
++ **Routeur R1**
+  + réseau de la Direction
+  + réseau des RH
+  + liaison WAN vers R2
++ **Routeur R2**
+  + réseau de l’IT
+  + réseau de la Finance
+  + liaison WAN vers R1
+
+La liaison entre les deux routeurs est une liaison **point à point**.
+
+### Topologie logique
+
+![Topologie de l'atelier synthèse](/images/04-atelier-synthese-topologie.png)
+
+```text
+                 ┌─────────────────────┐
+                 │     Direction       │
+                 │     100 hôtes       │
+                 └─────────┬───────────┘
+                           │
+                        G0/0
+                           │
+                      ┌────┴────┐
+                      │   R1    │
+                      └────┬────┘
+                           │
+                        G0/1
+                           │
+                 ┌─────────┴───────────┐
+                 │         RH          │
+                 │      50 hôtes       │
+                 └─────────────────────┘
+
+                      R1
+                       │
+                 Liaison WAN
+                  point à point
+                       │
+                      R2
+
+                      R2
+                 ┌─────┴─────┐
+                 │           │
+              G0/0         G0/1
+                 │           │
+        ┌────────┘           └────────┐
+        │                             │
+   ┌────┴─────┐                 ┌─────┴─────┐
+   │    IT    │                 │  Finance  │
+   │ 25 hôtes │                 │ 10 hôtes  │
+   └──────────┘                 └───────────┘
+```
+
+L’objectif est de concevoir le réseau, puis de l’implémenter et de le tester dans **Cisco Packet Tracer**.
+
+
+## 1- Plan d’adressage avec VLSM
+
+### 1. Analyse des besoins
+
+À partir du nombre d’hôtes requis pour chaque département, déterminez pour chacun :
+
+1. Le nombre minimal de bits nécessaires pour les hôtes.
+2. Le nombre total d'adresses disponibles dans le sous-réseau.
+3. Le préfixe CIDR approprié.
+4. Le masque de sous-réseau correspondant.
+
+Complétez le tableau :
+
+| Département     | Hôtes requis | Bits hôtes nécessaires | Préfixe | Nombre d’adresses |
+| --------------- | -----------: | ---------------------: | ------: | ----------------: |
+| **Direction**   |          100 |                        |         |                   |
+| **RH**          |           50 |                        |         |                   |
+| **IT**          |           25 |                        |         |                   |
+| **Finance**     |           10 |                        |         |                   |
+| **WAN**         |            2 |                        |         |                   |
+
+{{%notice style="tip" title="Rappel"%}}
+Pour un réseau *IPv4* classique, deux adresses sont réservées : l’adresse réseau et l’adresse de diffusion (broadcast).
+{{%/notice%}}
+
+### 2. Déterminer l’ordre d’allocation
+
+Avec la méthode **VLSM**, les sous-réseaux doivent être attribués en commençant généralement par les besoins les plus importants.
+
+Classez donc les réseaux du plus grand au plus petit.
+
+### 3. Construire le plan d’adressage
+
+À partir du bloc :
+```text
+172.16.0.0/16
+```
+Découpez l’espace d’adressage à l’aide de **VLSM**.
+
+Pour chaque réseau, déterminez :
+
+* l’adresse réseau ;
+* le préfixe CIDR ;
+* le masque de sous-réseau ;
+* la plage d'adresses hôte (1ère -> dernière adresse hôte)
+* l’adresse de broadcast ;
+* l’adresse à utiliser comme passerelle par défaut.
+
+### Tableau à compléter
+
+| Réseau        | Besoin | Adresse réseau | Préfixe | Masque | Plage d'adresses | Broadcast | Passerelle |
+| ------------- | -----: | -------------- | ------- | ------ | ---------------- | --------- | ---------- |
+| **Direction** |    100 |                |         |        |                  |           |            |
+| **RH**        |     50 |                |         |        |                  |           |            |
+| **IT**        |     25 |                |         |        |                  |           |            |
+| **Finance**   |     10 |                |         |        |                  |           |            |
+| **WAN R1–R2** |      2 |                |         |        |                  |           |            |
+
+### Consigne importante
+
+Pour chacun des quatre réseaux locaux, **la première adresse hôte doit être attribuée à l’interface du routeur** et servir de passerelle par défaut.
+
+Par exemple, si un réseau est :
+```text
+172.16.0.0/25
+```
+
+alors la passerelle devra être :
+```text
+172.16.0.1
+```
+
+## 2- Implémentation Packet Tracer
 
 ### 1. Construire la topologie
 
@@ -16,8 +170,6 @@ Dans *Cisco Packet Tracer*, créez une topologie comprenant :
 
 La topologie doit respecter la structure suivante :
 
-![Topologie de l'atelier sur Packet Tracer](/images/04-atelier-synthese-topologie-packet-tracer.png)
-<!-- 
 ```text
  PC(s)             PC(s)
    │                 │
@@ -28,7 +180,7 @@ La topologie doit respecter la structure suivante :
                          SW3   SW4
                           │     │
                          IT   Finance
-``` -->
+```
 
 R1 doit donc posséder **trois interfaces** :
 * une interface vers la Direction ;
@@ -68,6 +220,7 @@ Vous êtes libre de choisir les adresses des postes à l’intérieur de la plag
 + Le poste doit utiliser comme passerelle l’adresse de l’interface du routeur correspondant à son réseau.
 + La passerelle doit correspondre à **la première adresse hôte du sous-réseau**.
 
+
 {{%notice style="tip" title="Conseils"%}}
 Utilisez une convention d’adressage cohérente. Par exemple, vous pouvez attribuer la première adresse hôte au routeur, puis commencer les postes à la deuxième adresse hôte.
 {{%/notice%}}
@@ -75,15 +228,16 @@ Utilisez une convention d’adressage cohérente. Par exemple, vous pouvez attri
 Vérification avant configuration
 
 Avant de poursuivre, vérifiez que :
-+ [ ] Chaque interface possède une adresse unique.
-+ [ ] Chaque adresse appartient au bon sous-réseau.
-+ [ ] Les interfaces des routeurs utilisent la première adresse hôte de leur réseau.
-+ [ ] Chaque PC utilise une adresse valide de son sous-réseau.
-+ [ ] Chaque PC utilise la bonne passerelle.
-+ [ ] Les deux interfaces de la liaison WAN appartiennent au même sous-réseau.
-+ [ ] Aucune adresse réseau n'est attribuée à un équipement.
-+ [ ] Aucune adresse de broadcast n'est attribuée à un équipement.
-+ [ ] Aucun sous-réseau ne chevauche un autre.
+
+* [ ] Chaque interface possède une adresse unique.
+* [ ] Chaque adresse appartient au bon sous-réseau.
+* [ ] Les interfaces des routeurs utilisent la première adresse hôte de leur réseau.
+* [ ] Chaque PC utilise une adresse valide de son sous-réseau.
+* [ ] Chaque PC utilise la bonne passerelle.
+* [ ] Les deux interfaces de la liaison WAN appartiennent au même sous-réseau.
+* [ ] Aucune adresse réseau n'est attribuée à un équipement.
+* [ ] Aucune adresse de broadcast n'est attribuée à un équipement.
+* [ ] Aucun sous-réseau ne chevauche un autre.
 
 {{%notice style="note" title="Important"%}}
 Faites valider votre plan d’adressage avant de commencer la configuration des équipements.
@@ -94,48 +248,21 @@ Faites valider votre plan d’adressage avant de commencer la configuration des 
 Configurez les interfaces de R1 et R2 à partir du plan d’adressage réalisé établi à l'étape précédente.
 
 Pour chaque interface :
+
 1. attribuez l’adresse IPv4 appropriée ;
 2. configurez le masque ;
 3. activez l’interface ;
 4. vérifiez son état.
-
-<!-- Exemple :
-
-```text
-R1(config)# interface gigabitEthernet 0/0
-R1(config-if)# ip address <adresse> <masque>
-R1(config-if)# no shutdown
-```
-
-Vérifiez ensuite les interfaces avec :
-
-```text
-show ip interface brief
-```
-
-Les interfaces utilisées doivent être dans l’état :
-
-```text
-up    up
-``` -->
 
 ### 3. Configurer les postes clients
 
 Configurez chaque poste avec les informations déterminées dans votre plan d’adressage.
 
 Pour chaque poste, configurez :
-+ son adresse IPv4 ;
-+ son masque de sous-réseau ;
-+ sa passerelle par défaut.
 
-<!-- 
-Par exemple :
-
-```text
-Adresse IP       : 172.16.x.x
-Masque           : 255.255.x.x
-Passerelle       : 172.16.x.x
-``` -->
+* son adresse IPv4 ;
+* son masque de sous-réseau ;
+* sa passerelle par défaut.
 
 ### 4. Configurer le routage
 
@@ -150,6 +277,7 @@ Configurez le **routage statique** entre R1 et R2 :
 1. Sur R1, ajoutez les routes nécessaires vers le réseau **IT** et le réseau **Finance**.
 2. Sur R2, ajoutez les routes nécessaires vers le réseau **Direction** et le réseau **RH**.
     Utilisez la syntaxe :
+
     ```bash
     ip route <réseau_destination> <masque> <prochain_saut>
     ```
@@ -157,26 +285,14 @@ Configurez le **routage statique** entre R1 et R2 :
     ```text
     show ip route
     ```
+
     Identifiez :
-    + les réseaux directement connectés ;
-    + les routes statiques ;
-    + l’interface ou le prochain saut utilisé pour chaque réseau distant.
+    * les réseaux directement connectés ;
+    * les routes statiques ;
+    * l’interface ou le prochain saut utilisé pour chaque réseau distant.
 
     Vous devez être capable d'expliquer pourquoi R1 sait atteindre le réseau IT et pourquoi R2 sait atteindre le réseau Direction.
 
-<!-- 
-Par exemple :
-
-```bash
-R1(config)# ip route <réseau> <masque> <adresse_R2>
-```
-
-et :
-
-```bash
-R2(config)# ip route <réseau> <masque> <adresse_R1>
-``` 
--->
 
 ### 5. Tester la communication
 
@@ -248,17 +364,17 @@ Pourquoi le paquet passe-t-il par la passerelle du réseau local avant d’attei
 
 Avant de terminer l’atelier, vérifiez les éléments suivants :
 
-+ [ ]  Les quatre sous-réseaux ont été calculés avec VLSM.
-+ [ ]  Aucun sous-réseau ne chevauche un autre.
-+ [ ]  L’espace d’adressage `172.16.0.0/16` est utilisé efficacement.
-+ [ ]  La première adresse hôte de chaque LAN est utilisée comme passerelle.
-+ [ ]  Les interfaces de R1 et R2 sont correctement configurées.
-+ [ ]  La liaison WAN entre R1 et R2 fonctionne.
-+ [ ]  Les tables de routage contiennent les routes nécessaires.
-+ [ ]  Les postes utilisent la bonne passerelle.
-+ [ ]  Les communications entre les quatre départements fonctionnent.
-+ [ ]  `show ip route` permet d'observer les routes configurées.
-+ [ ]  `tracert` permet d'observer le passage par les routeurs.
++ Les quatre sous-réseaux ont été calculés avec VLSM.
++ Aucun sous-réseau ne chevauche un autre.
++ L’espace d’adressage `172.16.0.0/16` est utilisé efficacement.
++ La première adresse hôte de chaque LAN est utilisée comme passerelle.
++ Les interfaces de R1 et R2 sont correctement configurées.
++ La liaison WAN entre R1 et R2 fonctionne.
++ Les tables de routage contiennent les routes nécessaires.
++ Les postes utilisent la bonne passerelle.
++ Les communications entre les quatre départements fonctionnent.
++ `show ip route` permet d'observer les routes configurées.
++ `tracert` permet d'observer le passage par les routeurs.
 
 
 ### Questions de synthèse

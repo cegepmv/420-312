@@ -1,7 +1,7 @@
 +++
 title = "1- Plan d’adressage avec VLSM"
 weight = "471"
-draft = true
+draft = false
 +++
 -------------
 
@@ -16,13 +16,13 @@ draft = true
 
 Complétez le tableau :
 
-| Département | Hôtes requis | Bits hôtes nécessaires | Préfixe | Nombre d’adresses |
-| ----------- | -----------: | ---------------------: | ------: | ----------------: |
-| Direction   |          100 |                        |         |                   |
-| RH          |           50 |                        |         |                   |
-| IT          |           25 |                        |         |                   |
-| Finance     |           10 |                        |         |                   |
-| WAN         |            2 |                        |         |                   |
+| Département     | Hôtes requis | Bits hôtes nécessaires | Préfixe | Nombre d’adresses |
+| --------------- | -----------: | ---------------------: | ------: | ----------------: |
+| **Direction**   |          100 |                        |         |                   |
+| **RH**          |           50 |                        |         |                   |
+| **IT**          |           25 |                        |         |                   |
+| **Finance**     |           10 |                        |         |                   |
+| **WAN**         |            2 |                        |         |                   |
 
 {{%notice style="tip" title="Rappel"%}}
 Pour un réseau *IPv4* classique, deux adresses sont réservées : l’adresse réseau et l’adresse de diffusion (broadcast).
@@ -47,20 +47,19 @@ Pour chaque réseau, déterminez :
 * l’adresse réseau ;
 * le préfixe CIDR ;
 * le masque de sous-réseau ;
-* la première adresse hôte ;
-* la dernière adresse hôte ;
+* la plage d'adresses hôte (1ère -> dernière adresse hôte)
 * l’adresse de broadcast ;
 * l’adresse à utiliser comme passerelle par défaut.
 
 ### Tableau à compléter
 
-| Réseau    | Besoin | Adresse réseau | Préfixe | Masque | Première adresse hôte | Dernière adresse hôte | Broadcast | Passerelle |
-| --------- | -----: | -------------- | ------- | ------ | --------------------- | --------------------- | --------- | ---------- |
-| Direction |    100 |                |         |        |                       |                       |           |            |
-| RH        |     50 |                |         |        |                       |                       |           |            |
-| IT        |     25 |                |         |        |                       |                       |           |            |
-| Finance   |     10 |                |         |        |                       |                       |           |            |
-| WAN R1–R2 |      2 |                |         |        |                       |                       |           |            |
+| Réseau        | Besoin | Adresse réseau | Préfixe | Masque | Plage d'adresses | Broadcast | Passerelle |
+| ------------- | -----: | -------------- | ------- | ------ | ---------------- | --------- | ---------- |
+| **Direction** |    100 |                |         |        |                  |           |            |
+| **RH**        |     50 |                |         |        |                  |           |            |
+| **IT**        |     25 |                |         |        |                  |           |            |
+| **Finance**   |     10 |                |         |        |                  |           |            |
+| **WAN R1–R2** |      2 |                |         |        |                  |           |            |
 
 ### Consigne importante
 

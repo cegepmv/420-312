@@ -16,7 +16,9 @@ sudo nmcli con mod "CONNECTION" \
     ipv4.method manual \
     ipv4.addresses 10.20.10.10/24
 ```
-Remplacez `CONNECTION` par le nom réel de votre connexion.
+Remplacez `CONNECTION` par le nom réel de votre connexion. 
+
+Si aucune connection n'est assignée à l'interface, créez-en une.
 
 {{%/notice%}}
 
@@ -36,7 +38,7 @@ Vous devriez obtenir une connexion associée à l'interface réseau.
 ### 2. Configurer CLIENT2 avec Netplan
 Configurez l'interface de **CLIENT2** avec `Netplan`.
 
-{{%notice style="note" title="Adresse IP et préfixe seulement"%}}
+{{%notice style="note" title="Adresse IP et CIDR seulement !"%}}
 Ne configurez pas sa passerelle par défaut et son DNS, seulement son adresse IP/préfixe :
 ```yaml
 network:
@@ -174,7 +176,7 @@ Il ne sera actif que temporairement.
 
 #### Ajouter les routes avec les outils de configuration
 
-1. Supprimez les routes configurée avec `ip`
+1. Supprimez les routes configurées avec `ip`
 2. Configurez les routes de manière persistante en utilisant :
     + `nmcli` sur **CLIENT1** 
     + `Netplan` sur **CLIENT2**.
