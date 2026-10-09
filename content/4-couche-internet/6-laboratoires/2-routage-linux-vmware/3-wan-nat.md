@@ -110,6 +110,7 @@ Nous allons utiliser `firewall-cmd` pour configurer un **NAT** de type *masquera
 Sur **ROUTEUR** :
 ```bash
 sudo firewall-cmd --zone=public --add-masquerade --permanent
+sudo firewall-cmd --reload
 ```
 
 Cette règle permet, pour les paquets qui quittent le routeur par son interface WAN, de remplacer leur adresse source par l'adresse de l'interface WAN.
