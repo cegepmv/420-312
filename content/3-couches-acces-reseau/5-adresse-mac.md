@@ -1,7 +1,10 @@
 +++
 pre = '<b>5. </b>'
 title = "Adresse MAC"
+slug = "5-adresse-mac"
 weight = "350"
+draft = false
+
 +++
 -------------
 

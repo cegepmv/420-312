@@ -1,8 +1,9 @@
 +++
 pre = '<b>2. </b>'
 title = 'Interface réseau Linux'
-draft = false
+slug = "2-interface-reseau-linux"
 weight = "200"
+draft = false
 +++
 ---------------------
 

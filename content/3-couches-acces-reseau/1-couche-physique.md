@@ -1,7 +1,9 @@
 +++
 pre = '<b>1. </b>'
 title = "Couche physique"
+slug = "1-couche-physique"
 weight = "310"
+draft = false
 +++
 -----------------
 
@@ -39,6 +41,7 @@ On distingue deux grandes catégories :
 
 
 ### Supports guidés
+
 #### Paire torsadée
 
 La **paire torsadée** est constituée de fils de cuivre regroupés par paires et torsadés entre eux.
@@ -106,7 +109,7 @@ Il est aujourd'hui beaucoup moins utilisé que la paire torsadée et la fibre op
 
 #### Fibre optique
 
-![Fibre optique](/03-01-fibre-optique.webp?width=28rem)
+![Fibre optique](/images/03/03-01-fibre-optique.webp?width=28rem)
 
 La **fibre optique** utilise des impulsions lumineuses pour transmettre les données.
 

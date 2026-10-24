@@ -1,7 +1,9 @@
 +++
 pre = '<b>3. </b>'
 title = "Couche(s) d'accès réseau"
+slug = "3-couches-acces-reseau"
 weight = "300"
+draft = false
 +++
 -----------------
 

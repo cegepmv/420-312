@@ -1,7 +1,8 @@
 +++
 title = "VLSM"
+slug = 'vlsm'
 weight = "414"
-draft=false
+draft = false
 +++
 ---------
 

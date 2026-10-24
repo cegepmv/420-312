@@ -1,8 +1,9 @@
 +++
 pre = '<b>3. </b>'
 title = 'Netplan'
-draft = false
+slug = '3-netplan'
 weight = "230"
+draft = false
 +++
 ---------------------
 

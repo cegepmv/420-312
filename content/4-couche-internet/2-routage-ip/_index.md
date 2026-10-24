@@ -1,6 +1,7 @@
 +++
 pre = '<b>2. </b>'
 title = "Routage IP"
+slug = '2-routage-ip'
 weight = "420"
 draft = false
 +++

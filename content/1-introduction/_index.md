@@ -1,12 +1,13 @@
 +++
 pre = '<b>1. </b>'
 title = "Introduction"
+slug = "1-introduction"
 weight = "100"
+draft = false
 +++
 -------------------
-Un réseau informatique peut être défini comme un *"ensemble d’équipements informatiques variés (ordinateurs, imprimantes, périphériques de toutes sortes) qui communiquent entre eux par l’intermédiaire de supports ou médias de transmission, dans le but de partager des ressources (matérielles, logicielles, données)"*.
 
-<!-- ![Réseau](./01-1.png) -->
+Un réseau informatique peut être défini comme un *"ensemble d’équipements informatiques variés (ordinateurs, imprimantes, périphériques de toutes sortes) qui communiquent entre eux par l’intermédiaire de supports ou médias de transmission, dans le but de partager des ressources (matérielles, logicielles, données)"*.
 
 ### Utilité d'un réseau informatique
 

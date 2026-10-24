@@ -1,6 +1,6 @@
 +++
-slug= '1-intro-packet-tracer'
 title = "1- Introduction à Packet Tracer"
+slug= '1-introduction-packet-tracer'
 weight = "461"
 draft = false
 +++
@@ -20,7 +20,7 @@ Le routeur possède deux interfaces :
 
 La topologie sera donc similaire à celle-ci :
 
-![Toplogie du laboratoire](/images/04-topologie-lab1-packet-tracer.png)
+![Toplogie du laboratoire](/images/04/04-topologie-lab1-packet-tracer.png)
 
 {{%notice style="info" title="Remarque"%}}
 Selon le modèle de routeur choisi dans *Packet Tracer*, les noms des interfaces peuvent être différents. Par exemple, vous pourriez avoir `GigabitEthernet0/0`, `GigabitEthernet0/1` et `GigabitEthernet0/2`.
@@ -37,7 +37,7 @@ Dans *Packet Tracer*, ajoutez :
 + les câbles Ethernet nécessaires.
 
 La topologie doit avoir la forme suivante :
-![Topologie du laboratoire sur Cisco Packet Tracer](/images/04-topologie-lab1.png)
+![Topologie du laboratoire sur Cisco Packet Tracer](/images/04/04-topologie-lab1.png)
 
 Les commutateurs sont utilisés pour représenter les réseaux locaux. Ils ne nécessitent pas de configuration particulière pour ce laboratoire.
 

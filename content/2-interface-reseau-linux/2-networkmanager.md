@@ -1,8 +1,9 @@
 +++
 pre = '<b>2. </b>'
 title = 'NetworkManager et nmcli'
-draft = false
+slug = "2-networkmanager-nmcli"
 weight = "220"
+draft = false
 +++
 ---------------------
 

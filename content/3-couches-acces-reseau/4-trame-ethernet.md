@@ -1,7 +1,9 @@
 +++
 pre = '<b>4. </b>'
 title = "La trame Ethernet"
+slug = "4-trame-ethernet"
 weight = "340"
+draft = false
 +++
 
 ---------------
@@ -10,7 +12,7 @@ Lorsqu'un paquet provenant de la couche réseau doit être transmis sur Ethernet
 
 De façon simplifiée, une trame contient :
 
-![Structure d'une trame Ethernet](/03-02-trame-ethernet.webp)
+![Structure d'une trame Ethernet](/images/03/03-02-trame-ethernet.webp)
 
 | Champ | Rôle |
 |---|---|
@@ -20,11 +22,3 @@ De façon simplifiée, une trame contient :
 | **Type** | Utilisé par LLC. Indique le protocole transporté (par exemple IPv4) |
 | **Données** | Contient le paquet provenant de la couche réseau |
 | **FCS** | Permet de détecter certaines erreurs de transmission |
-
-
-
-<!-- La trame Ethernet possède une taille minimale et maximale définies par les normes Ethernet classiques.
-
-Pour une trame Ethernet II standard, la taille du champ allant de l'adresse MAC destination jusqu'au FCS est généralement comprise entre **64 et 1518 octets**.
-
---- -->

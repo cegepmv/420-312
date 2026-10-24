@@ -1,7 +1,9 @@
 +++
 pre = '<b>6. </b>'
 title = "ARP"
+slug = "6-arp"
 weight = "360"
+draft = false
 +++
 -------------
 

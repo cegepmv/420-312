@@ -1,8 +1,9 @@
 +++
 pre = '<b>2. </b>'
 title = "Matériel des couches basses"
-draft = false
+slug = "2-materiel-couches-basses"
 weight = "320"
+draft = false
 +++
 
 ----------

@@ -1,6 +1,7 @@
 +++
 pre = "<b>7. </b>"
 title = "Atelier synthèse"
+slug = '7-atelier-synthese'
 weight = "470"
 draft = false
 +++

@@ -1,7 +1,8 @@
 +++
 title = "Création de sous-réseaux"
+slug = 'creation-de-sous-reseaux'
 weight = "413"
-draft=false
+draft = false
 +++
 -----------
 

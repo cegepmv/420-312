@@ -1,5 +1,6 @@
 +++
 title = "Calcul d'adresses"
+slug = 'calcul-d-adresses'
 weight = "411"
 draft = false
 +++
@@ -223,8 +224,6 @@ adresses totales = 2^{32-n}
 
 hôtes utilisables = 2^{32-n}-2
 ```
-
-<!-- > Pour les exercices classiques de ce chapitre, on utilise cette formule. Les préfixes `/31` et `/32` sont des cas particuliers. -->
 
 #### Exemple : `/26`
 

@@ -1,6 +1,7 @@
 +++
 pre = "<b>3. </b>"
 title = "ICMP"
+slug = '3-icmp'
 weight = "430"
 draft = false
 +++

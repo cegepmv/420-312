@@ -1,5 +1,6 @@
 +++
 title = "1- Plan d’adressage avec VLSM"
+slug = '1-plan-adressage-et-vlsm'
 weight = "471"
 draft = false
 +++

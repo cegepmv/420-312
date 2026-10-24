@@ -1,5 +1,6 @@
 +++
 title = "2- Implémentation Packet Tracer"
+slug = '2-implementation-packet-tracer'
 weight = "472"
 draft = false
 +++

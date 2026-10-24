@@ -1,8 +1,9 @@
 +++
 pre = '<b>1. </b>'
 title = 'La commande ip'
-draft = false
+slug = "1-commande-ip"
 weight = "210"
+draft = false
 +++
 ---------------------
 

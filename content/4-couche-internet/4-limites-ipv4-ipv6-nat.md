@@ -1,6 +1,7 @@
 +++
 pre = '<b>4. </b>'
 title = "Limitations d'IPv4: IPv6 et NAT"
+slug = '4-limites-ipv4-ipv6-nat'
 weight = "440"
 draft = false
 +++

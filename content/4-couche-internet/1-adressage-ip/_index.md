@@ -1,6 +1,7 @@
 +++
 pre = '<b>1. </b>'
 title = "Adressage IP"
+slug = "1-adressage-ip"
 weight = "410"
 draft = false
 +++
@@ -33,7 +34,7 @@ La notation **CIDR (*Classless Inter-Domain Routing*)** permet d'indiquer le nom
 
 Exemple :
 
-![Exemple de séparation IP en partie réseau et partie hôte](/32-2.png?width=35rem)
+![Exemple de séparation IP en partie réseau et partie hôte](/images/04/04-ip-reseau-hote.png?width=35rem)
 
 Le `/24` signifie que les **24 premiers bits** appartiennent à la partie réseau.
 

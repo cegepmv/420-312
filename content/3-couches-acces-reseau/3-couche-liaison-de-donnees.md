@@ -1,8 +1,9 @@
 +++
 pre = '<b>3. </b>'
 title = "Couche liaison de données"
-draft = false
+slug = "3-couche-liaison-de-donnees"
 weight = "330"
+draft = false
 +++
 
 ----------------------

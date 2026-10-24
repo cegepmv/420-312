@@ -1,86 +1,88 @@
 +++
 pre = '<b>5. </b>'
 title = "Couche transport"
+slug = '5-couche-transport'
 weight = "500"
-draft=true
+draft = false
 +++
 -------------------
+<!--
+Adresse à remplacer dans le laboratoire 1 : SERVEUR_WEB (nom du serveur HTTP du département)
+-->
 
-Dans le chapitre précédent, nous avons vu que la couche Internet permettait (entre autres) de transmettre des paquets d'un périphérique source à un périphérique de destination grâce à l'adressage IP.
+Dans le chapitre précédent, nous avons vu que la **couche Internet** permet d'acheminer un paquet jusqu'à l'hôte de destination grâce à l'adresse IP.
 
-Mais lorsqu'une donnée arrive à un ordinateur, comment savoir à quelle application est-elle destinée ?   
+Mais un hôte exécute généralement plusieurs applications réseau en même temps : un navigateur, un client de courriel, un service SSH, etc.
 
-La couche transport est chargée de l’établissement d’une session de communication temporaire **entre deux applications** et de l’acheminement des données entre ces deux applications.
+Lorsqu'un paquet arrive, comment l'hôte sait-il à **quelle application** les données sont destinées ?
 
-## Rôle
+C'est le rôle de la **couche transport**.
 
-![role-transport](images/04-01-01.png)
+Elle permet notamment :
 
-La couche tranport est responsable de trois tâches :
+- d'identifier les applications à l'aide de **numéros de port**;
+- de faire circuler plusieurs conversations en même temps sur une même interface réseau;
+- de découper les données des applications en blocs adaptés au réseau;
+- de fournir, selon le protocole utilisé, une communication **fiable** ou une communication **rapide et légère**.
 
-+ Suivi des conversations individuelles
-+ Segmentation des données et reconstruction des segments
-+ Identification de l’application appropriée pour chaque flux de communication
+Les deux principaux protocoles de cette couche sont **TCP (*Transmission Control Protocol*)** et **UDP (*User Datagram Protocol*)**.
+
+## Rôle de la couche transport
+
+La couche transport assure la communication **entre deux applications**, alors que la couche Internet assure la communication **entre deux hôtes**.
+
+| Couche | Communication | Identifiant |
+|--------|---------------|-------------|
+| **Internet** | d'un hôte à un autre hôte | Adresse IP |
+| **Transport** | d'une application à une autre application | Numéro de port |
+
+### Suivi des conversations
+
+Chaque échange de données entre une application source et une application de destination est appelé une **conversation**.
+
+Un même hôte peut mener plusieurs conversations simultanément, avec un ou plusieurs hôtes distants.
+
+Exemple :
+![Schéma représentant plusieurs conversations](/images/05/05-conversation.png)
+
+La couche transport doit garder ces conversations séparées : les données de l'onglet 1 ne doivent pas être remises au client de courriel.
+
+### Segmentation et reconstitution
+
+Les données d'une application (un fichier, une page web) peuvent être beaucoup trop volumineuses pour être transmises en un seul bloc.
+
+- **À l'envoi**, la couche transport découpe les données en blocs et ajoute un **en-tête** à chacun.
+- **À la réception**, elle utilise les informations de l'en-tête pour reconstituer les données et les remettre à la bonne application.
+
+<!-- L'unité de données de la couche transport s'appelle :
+
+- un **segment** avec TCP;
+- un **datagramme** avec UDP. -->
+
+![Encapsulation d'un segment](/images/05/05-encapsulation.png)
+{{%center%}}
+*Encapsulation : les données de l'application sont placées dans un segment, lui-même placé dans un paquet IP, puis dans une trame.*
+{{%/center%}}
+
+{{%notice style="note" title="Rappel"%}}
+Au chapitre 4, nous avons vu que le champ **Protocole** de l'en-tête IP indique le contenu du paquet : `6` pour TCP et `17` pour UDP. C'est grâce à ce champ que l'hôte de destination sait à quel protocole de transport remettre les données.
+{{%/notice%}}
+
+### Multiplexage
+
+Grâce à la segmentation, les segments de plusieurs applications peuvent être **entremêlés** sur la même interface réseau. C'est le **multiplexage**.
+
+![Multiplexage](/images/05/05-multiplexage.png)
+
+À la réception, l'opération inverse (**démultiplexage**) consiste à lire le **port de destination** de chaque segment pour le remettre à la bonne application.
+
+Sans ce mécanisme, une seule application pourrait utiliser le réseau à la fois. Par exemple, un téléchargement monopoliserait le lien et empêcherait de consulter ses courriels en même temps.
+
+{{%notice style="tip" title="À retenir"%}}
+L'adresse IP permet d'atteindre le bon **hôte**. Le numéro de port permet d'atteindre la bonne **application** sur cet hôte.
+{{%/notice%}}
 
 
-### Suivi des conversations individuelles
-
-![role-transport-01](images/04-01-02.png)
-
-Chaque ensemble de données transitant entre une application source et une application de destination est appelé *une conversation*. Un hôte peut héberger plusieurs applications qui communiquent sur le réseau simultanément. Chacune de ces applications communique avec une ou plusieurs applications sur un ou plusieurs hôtes distants. La couche transport est chargée de **garantir ces multiples conversations** et d’**en effectuer le suivi**.
-
-### Segmentation et reconstitution de données
-![role-transport-02](images/04-01-03.png)
-
-+ **Lors de l'encapsulation :** la couche transport segmentent les données d’application en blocs de données de taille appropriée. Un en-tête, (utilisé pour la réorganisation), est ajouté à chaque bloc de données.
-
-+ **Au niveau du destinataire (désencapsulation):** La couche transport reconstitue le flux de données à partir de ses segments, grâce aux informations contenues dans les en-têtes.
-
-#### Multiplexage
-![multiplexage](images/04-01-05.png)
-
-+ L’envoi de certains types de données (par exemple, un flux vidéo en continu) sur le réseau en tant que flux de communication complet peut utiliser toute la bande passante disponible et empêcher d’autres communications d’avoir lieu en même temps.
-
-+ La segmentation des données en parties plus petites permet d'avoirs plusieurs communications différentes provenant de nombreux utilisateurs, d’être imbriquées (*multiplexées*) sur le même réseau. 
-+ Sans segmentation, une seule application pourrait recevoir des données.
-    + Exemple: Pour un flux vidéo en continu (*stream*), le support serait monopolisé par le flux de communication au lieu d’être partagé. Il serait impossible de recevoir des e-mails, de parler sur une messagerie instantanée et d’afficher des pages Web tout en regardant la vidéo.
-
-### Identification des applications
-![role-couche-transport-04](images/04-01-04.png)
-
-De nombreux services ou applications peuvent s’exécuter en même temps sur chaque hôte du réseau. Pour que les flux de données atteignent la bonne application, la couche transport identifie l'application en lui affectant un identificateur qu'on appelle **numéro de port**. Chaque processus logiciel ayant besoin d’accéder au réseau se voit affecter un numéro de port unique sur son hôte.
-
-### Le bon protocole pour une application
-
-![Bon-Protocole-Pour-Bonne-App](images/04-01-07.png)
-
-+ **TCP** et **UDP** sont les deux protocoles de la couche transport, chacun ayant des caractéristiques spécifiques.
-
-+ Le choix entre TCP et UDP dépend des besoins et des exigences des applications ; les développeurs doivent décider quel protocole est le plus approprié dépendamment des besoins de leur application
 
 
-#### TCP (Transmission Control Protocol)
 
-+ Assure que les segments de données arrivent dans le bon ordre et que toutes les informations sont reçues correctement.
-+ Garantit l’intégrité et la fiabilité des données transmises.
-+ Convient aux applications qui nécessitent que toutes les données soient présentes et intactes pour fonctionner correctement.
-+ Exemples d’applications : bases de données, navigateurs web, clients de messagerie électronique.
-+ Avantages : assure la fiabilité de la communication et prévient toute perte de données.
-+ Inconvénients : génère une surcharge réseau supplémentaire en raison des mécanismes d’accusés de réception et de retransmission des paquets manquants.
-
-#### UDP (User Datagram Protocol) :
-
-+ Offre une transmission plus rapide en réduisant la surcharge réseau.
-+ Ne garantit pas la livraison de tous les paquets, mais privilégie la rapidité plutôt que la fiabilité.
-+ Adapté aux applications qui peuvent tolérer la perte de quelques données sans impact significatif sur l’expérience utilisateur.
-
-+ Exemples d’applications : streaming vidéo et audio, VoIP (voix sur IP).
-
-+ Cas pratiques :
-    + Flux vidéo : la perte de quelques segments peut entraîner une légère distorsion ou interruption momentanée, mais le flux global continue sans retard.
-    + Radio sur Internet : si des paquets sont perdus, le son peut subir de petites interruptions, mais l’expérience reste acceptable ; l’utilisation de TCP ralentirait le flux et amplifierait les interruptions à cause des retransmissions.
-
-#### Conclusion : TCP vs. UDP
-+ TCP est privilégié pour les applications nécessitant une fiabilité totale.
-
-+ UDP est privilégié pour les applications où la rapidité et la fluidité de la transmission sont plus importantes que la perte occasionnelle de données.

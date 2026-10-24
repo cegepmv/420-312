@@ -1,6 +1,6 @@
 +++
-slug = '3-wan-et-nat'
 title = "3- WAN et NAT"
+slug = '3-wan-et-nat'
 weight = "465"
 draft = false
 +++
@@ -10,7 +10,7 @@ Nous allons maintenant ajouter une troisième interface au routeur afin de perme
 
 La topologie devient :
 
-![Nouvelle topologie avec une troisième interface WAN pour le routeur](/images/04-topologie-labo2-routage-linux2.png?width=50rem)
+![Nouvelle topologie avec une troisième interface WAN pour le routeur](/images/04/04-topologie-labo2-routage-linux2.png?width=50rem)
 
 ### 1. Ajouter l'interface WAN
 

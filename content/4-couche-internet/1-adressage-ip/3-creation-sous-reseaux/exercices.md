@@ -1,7 +1,8 @@
 +++
 title = "Exercices"
+slug = 'exercices'
 weight = "413"
-draft=false
+draft = false
 +++
 -------------
 

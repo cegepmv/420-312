@@ -1,6 +1,6 @@
 +++
-slug = '2-routage-linux-vmware'
 title = "2- Routage Linux/VMWare"
+slug = '2-routage-linux-vmware'
 weight = "462"
 draft = false
 +++
@@ -14,7 +14,7 @@ Dans ce laboratoire, nous allons reproduire **la même architecture avec des mac
 
 La topologie est la suivante :
 
-![Topologie du laboratoire de routage avec des machines virtuelles Linux sur VMWare](/images/04-topologie-labo2-routage-linux1.png)
+![Topologie du laboratoire de routage avec des machines virtuelles Linux sur VMWare](/images/04/04-topologie-labo2-routage-linux1.png)
 
 Le routeur Linux possèdera d'abord deux interfaces :
 ```text

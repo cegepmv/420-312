@@ -1,6 +1,7 @@
 +++
 pre = "<b>4. </b>"
 title = "Couche Internet"
+slug = '4-couche-internet'
 weight = "400"
 draft = false
 +++
@@ -17,19 +18,6 @@ Elle permet notamment :
 
 Le principal protocole de cette couche est **IP (*Internet Protocol*)**.
 
-<!-- Dans ce chapitre, nous étudierons principalement :
-
-- le fonctionnement du protocole **IP**;
-- l'adressage **IPv4**;
-- les **masques et préfixes CIDR**;
-- le calcul de **sous-réseaux**;
-- le **VLSM**;
-- le fonctionnement du **routage IP**;
-- les **tables de routage**;
-- le protocole **ICMP**;
-- les limitations d'IPv4 et le **NAT**;
-- la configuration du réseau sous **Linux**. -->
-
 ## Le protocole IP
 
 ### Rôle
@@ -38,7 +26,7 @@ Le protocole **IP (*Internet Protocol*)** permet d'acheminer des paquets entre d
 
 Contrairement à Ethernet, qui assure principalement la communication sur une liaison ou un réseau local, IP permet d'interconnecter plusieurs réseaux.
 
-![Exemple d'une topologie avec plusieurs réseaux](/images/04-reseaux-routeur.png)
+![Exemple d'une topologie avec plusieurs réseaux](/images/04/04-reseaux-routeur.png)
 
 Chaque paquet IP contient notamment :
 
@@ -61,7 +49,7 @@ Les protocoles des couches supérieures, comme **TCP**, peuvent fournir certaine
 
 Les données provenant de la couche transport sont encapsulées dans un **paquet IP**.
 
-![Entête IP](/04-01-entete-ip.png?width=40rem)
+![Entête IP](/images/04/04-entete-ip.png?width=40rem)
 
 L'en-tête IP contient notamment les adresses IP source et destination.
 

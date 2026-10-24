@@ -1,5 +1,6 @@
 +++
 title = "Configurer des routes sur Linux"
+slug = 'routes-sur-linux'
 weight = "421"
 draft = false
 +++

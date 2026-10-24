@@ -1,8 +1,9 @@
 +++
 pre = '<b>4. </b>'
 title = 'Fichiers réseau Linux'
-draft = false
+slug = "4-fichiers-reseau-linux"
 weight = "240"
+draft = false
 +++
 ---------------------
 

@@ -1,6 +1,6 @@
 +++
-slug = '1-routes-statiques'
 title = "1- Routage statique"
+slug = '1-routes-statiques'
 weight = "463"
 draft = false
 +++
@@ -26,14 +26,6 @@ Vérifiez :
 ```bash
 ip a
 ```
-
-<!-- 
-Commencez par identifier la connexion :
-```bash
-nmcli con show
-```
-Vous devriez obtenir une connexion associée à l'interface réseau. 
--->
 
 ### 2. Configurer CLIENT2 avec Netplan
 Configurez l'interface de **CLIENT2** avec `Netplan`.
