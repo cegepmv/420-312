@@ -54,10 +54,10 @@ Les données d'une application (un fichier, une page web) peuvent être beaucoup
 - **À l'envoi**, la couche transport découpe les données en blocs et ajoute un **en-tête** à chacun.
 - **À la réception**, elle utilise les informations de l'en-tête pour reconstituer les données et les remettre à la bonne application.
 
-<!-- L'unité de données de la couche transport s'appelle :
+L'unité de données de la couche transport s'appelle :
 
 - un **segment** avec TCP;
-- un **datagramme** avec UDP. -->
+- un **datagramme** avec UDP.
 
 ![Encapsulation d'un segment](/images/05/05-encapsulation.png)
 {{%center%}}
