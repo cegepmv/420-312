@@ -3,13 +3,13 @@ pre = '2- '
 title = "Ports et sockets"
 slug = '2-ports-et-sockets'
 weight = "562"
-draft = true
+draft = false
 +++
 -------------
 
 ## Contexte
 
-Dans ce laboratoire, vous allez mettre en place une communication **client/serveur** entre deux machines Linux, sans programmation, à l'aide de la commande **`nc` (*netcat*)**.
+Dans ce laboratoire, vous allez mettre en place une communication **client/serveur** entre deux machines Linux à l'aide de la commande **`nc` (*netcat*)**.
 
 `nc` permet :
 
@@ -22,7 +22,7 @@ Vous observerez les sockets avec `ss` et le trafic avec Wireshark, afin de compa
 
 ### Machines nécessaires
 
-Réutilisez les machines virtuelles du chapitre 4 :
+Réutilisez les machines virtuelles des chapitres précédents :
 
 | Machine | Rôle | VM | Configuration |
 |---------|------|----|---------------|
@@ -39,37 +39,31 @@ Contrairement à un *LAN Segment*, le réseau **Host-only** est aussi relié au 
 
 ### Plan d'adressage
 
-Sur le poste Windows, relevez l'adresse de la carte **VMware Network Adapter VMnet1** avec `ipconfig`. Elle est de la forme `192.168.X.1`.
+Sur le poste Windows, relevez l'adresse de la carte **VMware Network Adapter VMnet1** avec `ipconfig`. Elle devrait avoir l'adresse IP `192.168.20.1`.
 
-Utilisez ensuite le plan d'adressage suivant, en remplaçant `X` par la valeur relevée :
+Utilisez ensuite le plan d'adressage suivant :
 
 | Machine | Interface | Adresse |
 |---------|-----------|---------|
-| **Poste Windows** | VMware Network Adapter VMnet1 | `192.168.X.1/24` (déjà configurée) |
-| **SERVEUR** | `ens160` | `192.168.X.10/24` |
-| **CLIENT** | `ens160` | `192.168.X.20/24` |
+| **Poste Windows** | VMware Network Adapter VMnet1 | `192.168.20.1/24` (déjà configurée) |
+| **SERVEUR** | `ens160` | `192.168.20.10/24` |
+| **CLIENT** | `ens160` | `192.168.20.20/24` |
 
-1. Configurez **SERVEUR** avec `nmcli` et **CLIENT** avec `Netplan`, comme au chapitre 4. Aucune passerelle n'est nécessaire.
+1. Configurez **SERVEUR** et **CLIENT** avec `nmcli`, comme au chapitre 4. Aucune passerelle n'est nécessaire.
 2. Vérifiez depuis **CLIENT** :
     ```bash
-    ping 192.168.X.10
+    ping 192.168.20.10
     ```
 
 ### Outils
 
-Sur **SERVEUR**, vérifiez que `nc` est installé :
-
-```bash
-nc --version
-```
-
-S'il est absent, installez-le :
+Sur **SERVEUR**, installez `nc` :
 
 ```bash
 sudo dnf install nmap-ncat
 ```
 
-Sur **CLIENT** (Ubuntu), `nc` est généralement déjà installé. Sinon :
+Sur **CLIENT** (Ubuntu), `nc` est normalement déjà installé. Sinon :
 
 ```bash
 sudo apt install netcat-openbsd
@@ -81,13 +75,11 @@ Comme au chapitre 4, ajoutez temporairement une carte réseau en **NAT** pour in
 
 ### Plusieurs terminaux
 
-Plusieurs commandes doivent rester actives en même temps. Ouvrez donc **plusieurs sessions** sur chaque machine, par exemple avec des connexions SSH depuis PowerShell sur le poste Windows :
+Plusieurs commandes doivent rester actives en même temps. Ouvrez donc **plusieurs sessions** sur chaque machine, par exemple avec des connexions SSH depuis le terminal sur le poste Windows :
 
-```powershell
-ssh utilisateur@192.168.X.10
+```bash
+ssh student@192.168.20.10
 ```
-
-Vous pouvez aussi utiliser des consoles supplémentaires dans VMware (`Alt+F2`, `Alt+F3`).
 
 ### Pare-feu de SERVEUR
 
@@ -138,7 +130,7 @@ Vous devriez obtenir une ligne similaire à :
 
 ```text
 State   Recv-Q  Send-Q  Local Address:Port   Peer Address:Port  Process
-LISTEN  0       10            0.0.0.0:5000        0.0.0.0:*      users:(("ncat",pid=1842,fd=3))
+LISTEN  0       10            0.0.0.0:5000        0.0.0.0:*      users:(("nc",pid=6049,fd=4))
 ```
 
 {{%notice style="info" title="Remarque"%}}
@@ -165,7 +157,7 @@ tcp.port == 5000
 Sur **CLIENT** (session 1) :
 
 ```bash
-nc 192.168.X.10 5000
+nc 192.168.20.10 5000
 ```
 
 Tapez un message, par exemple `bonjour`, puis `Entrée`. Le message doit s'afficher sur SERVEUR.
@@ -198,7 +190,7 @@ Complétez le tableau :
 Sans fermer la première connexion, sur **CLIENT** (session 3) :
 
 ```bash
-nc 192.168.X.10 5000
+nc 192.168.20.10 5000
 ```
 
 Envoyez un message différent.
@@ -237,11 +229,10 @@ tcp.port == 6000
 Sur **CLIENT** :
 
 ```bash
-nc -v 192.168.X.10 6000
+nc -v 192.168.20.10 6000
 ```
 
-1. Quel message affiche `nc`?
-2. Quels segments observez-vous dans Wireshark? Quels bits de contrôle sont activés dans la réponse de SERVEUR?
+1. Quels segments observez-vous dans Wireshark? Quels bits de contrôle sont activés dans la réponse de SERVEUR?
 
 ### 2. UDP
 
@@ -254,13 +245,13 @@ udp.port == 6001 || icmp
 Sur **CLIENT** :
 
 ```bash
-nc -u 192.168.X.10 6001
+nc -u 192.168.20.10 6001
 ```
 
 Tapez un message, puis `Entrée`.
 
-1. `nc` affiche-t-il une erreur au moment de l'envoi?
-2. Quels paquets observez-vous dans Wireshark? Développez la réponse de SERVEUR : de quel protocole s'agit-il et quel est son type?
+<!-- 1. `nc` affiche-t-il une erreur au moment de l'envoi? -->
+Quels paquets observez-vous dans Wireshark? Développez la réponse de SERVEUR : de quel protocole s'agit-il et quel est son type?
 
 {{%notice style="info" title="Remarque"%}}
 Selon la version de `nc`, le client peut se fermer lorsque vous envoyez un deuxième message. Ce n'est pas UDP qui l'en informe : c'est la réception du message **ICMP** envoyé par SERVEUR.
@@ -295,7 +286,7 @@ udp.port == 5001
 Sur **CLIENT** (session 1) :
 
 ```bash
-nc -u 192.168.X.10 5001
+nc -u 192.168.20.10 5001
 ```
 
 Envoyez deux ou trois messages.
@@ -325,6 +316,8 @@ Fermez `nc` sur les deux machines (`Ctrl+C`).
 1. Expliquez avec vos propres mots la différence entre un **socket** et une **paire de sockets**. Illustrez avec les valeurs relevées dans ce laboratoire.
 2. Pourquoi un serveur peut-il accepter plusieurs clients sur un seul port, alors qu'un client utilise un port différent pour chaque connexion?
 3. Résumez dans un tableau les différences observées entre TCP et UDP dans ce laboratoire : établissement de connexion, accusés de réception, réaction à un port fermé, état affiché par `ss`.
+
+<!-- 
 4. Un service ne répond pas. La commande `nc -v` vers son port affiche *Connection refused*. Qu'est-ce que cela indique : la machine est-elle joignable? Le service est-il démarré?
 
 ## Validation
@@ -338,4 +331,4 @@ Fermez `nc` sur les deux machines (`Ctrl+C`).
 + [ ] La réponse à un port TCP fermé (RST) est observée.
 + [ ] La réponse à un port UDP fermé (ICMP) est observée.
 + [ ] L'absence de connexion en UDP est vérifiée avec `ss` et Wireshark.
-+ [ ] Les questions de synthèse sont complétées.
++ [ ] Les questions de synthèse sont complétées. -->

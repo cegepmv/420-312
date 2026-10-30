@@ -3,7 +3,7 @@ pre = "<b>6. </b>"
 title = "Laboratoires"
 slug = '6-laboratoires'
 weight = "560"
-draft = true
+draft = false
 +++
 -------------
 

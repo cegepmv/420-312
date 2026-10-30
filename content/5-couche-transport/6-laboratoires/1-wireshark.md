@@ -3,7 +3,7 @@ pre = '1- '
 title = "Introduction à Wireshark"
 slug = '1-wireshark'
 weight = "561"
-draft = true
+draft = false
 +++
 -------------
 
@@ -11,24 +11,24 @@ draft = true
 
 **Wireshark** est un analyseur de trafic réseau. Il capture les trames qui passent par une interface et décode chaque couche : Ethernet, IP, TCP ou UDP, puis le protocole d'application.
 
-Dans ce laboratoire, vous allez capturer et analyser deux échanges entre votre poste et le serveur web du département :
+Dans ce laboratoire, vous allez capturer et analyser deux échanges entre votre poste et un serveur web du département :
 
 1. une **requête DNS** (UDP), pour obtenir l'adresse IP du serveur;
 2. une **requête HTTP** (TCP), pour obtenir une page web.
 
-Vous observerez ainsi, dans du vrai trafic, les notions vues dans ce chapitre : ports, en-tête UDP, établissement de connexion, numéros d'ordre et d'accusé de réception, fermeture de connexion.
+Vous observerez ainsi, dans du vrai trafic, les notions vues dans ce chapitre : ports, en-tête TCP et UDP, établissement de connexion, numéros d'ordre et d'accusé de réception, fermeture de connexion.
 
 <!-- Remplacer SERVEUR_WEB par le nom du serveur HTTP du département. -->
 
 | Élément | Valeur |
 |---------|--------|
-| **Serveur web** | `SERVEUR_WEB` |
+| **Serveur web** | `ftp.lan` |
 | **Protocole** | HTTP (port `80`) |
 | **Poste** | Poste Windows du laboratoire, avec Wireshark |
 
-{{%notice style="note" title="Important"%}}
+<!-- {{%notice style="note" title="Important"%}}
 Utilisez **`curl.exe`** et non `curl` dans PowerShell : dans certaines versions de PowerShell, `curl` correspond à une autre commande.
-{{%/notice%}}
+{{%/notice%}} -->
 
 ## 1- Préparation
 
@@ -40,7 +40,7 @@ Dans une invite de commandes :
 ipconfig /all
 ```
 
-Complétez le tableau :
+Complétez le tableau (interface `Ethernet`) :
 
 | Élément | Valeur |
 |---------|--------|
@@ -69,17 +69,17 @@ Vous comparerez vos prédictions aux résultats à la fin du laboratoire.
     ipconfig /flushdns
     ```
 2. Ouvrez **Wireshark**.
-3. Sélectionnez l'interface correspondant à l'adresse IP relevée à l'étape 1 (le petit graphique d'activité à côté de chaque interface peut vous aider).
+3. Sélectionnez l'interface `Ethernet`
 4. Démarrez la capture.
 5. Dans l'invite de commandes, exécutez :
     ```powershell
-    nslookup SERVEUR_WEB
-    curl.exe -4 http://SERVEUR_WEB/
+    nslookup ftp.lan
+    curl.exe http://ftp.lan/
     ```
 6. Arrêtez la capture.
 
 {{%notice style="tip" title="Conseil"%}}
-Enregistrez votre capture (**File → Save As**). Vous pourrez la rouvrir si vous devez poursuivre l'analyse plus tard.
+Enregistrez votre capture (**Fichier → Sauvegarder Sous**). Vous pourrez la rouvrir si vous devez poursuivre l'analyse plus tard.
 {{%/notice%}}
 
 ## 2- Requête DNS (UDP)
@@ -92,7 +92,7 @@ Dans la barre de filtre, saisissez :
 dns
 ```
 
-Repérez la requête (*Standard query*) de type **A** pour `SERVEUR_WEB`, ainsi que sa réponse (*Standard query response*).
+Repérez la requête (*Standard query*) de type **A** pour `ftp.lan`, ainsi que sa réponse (*Standard query response*).
 
 {{%notice style="info" title="Remarque"%}}
 Vous pourriez voir plusieurs requêtes : par exemple une de type **A** (adresse IPv4) et une de type **AAAA** (adresse IPv6), ou des requêtes avec le suffixe DNS du réseau ajouté au nom. Concentrez-vous sur la requête de type **A** qui a reçu une réponse contenant une adresse.
@@ -115,7 +115,7 @@ Complétez le tableau :
 | | Port destination | |
 | | Longueur | |
 
-**Faites une capture d'écran** du volet de détails montrant l'en-tête UDP développé.
+<!-- **Faites une capture d'écran** du volet de détails montrant l'en-tête UDP développé. -->
 
 ### 3. Analyser la réponse
 
@@ -126,10 +126,10 @@ Sélectionnez la réponse DNS.
 
 ### Questions
 
+<!-- 2. Le champ **Longueur** d'UDP inclut-il l'en-tête? Vérifiez en soustrayant 8 octets : combien d'octets occupe la requête DNS elle-même? -->
+<!-- 3. À quel équipement correspond l'adresse MAC de destination de la requête? Comparez avec l'adresse IP de destination et expliquez la différence (rappel du chapitre 4). -->
 1. Combien de champs l'en-tête UDP contient-il? Lesquels?
-2. Le champ **Longueur** d'UDP inclut-il l'en-tête? Vérifiez en soustrayant 8 octets : combien d'octets occupe la requête DNS elle-même?
-3. Avant la requête DNS, y a-t-il un échange préalable entre le poste et le serveur DNS? Qu'est-ce que cela confirme au sujet d'UDP?
-4. À quel équipement correspond l'adresse MAC de destination de la requête? Comparez avec l'adresse IP de destination et expliquez la différence (rappel du chapitre 4).
+2. Avant la requête DNS, y a-t-il un échange préalable entre le poste et le serveur DNS? Qu'est-ce que cela confirme au sujet d'UDP?
 
 ## 3- Connexion TCP
 
@@ -153,7 +153,7 @@ Pour chacun, développez l'en-tête TCP puis la section **Flags**. Complétez le
 | 2 | | | | | | |
 | 3 | | | | | | |
 
-**Faites une capture d'écran** de l'en-tête TCP du premier segment, avec les bits de contrôle développés.
+<!-- **Faites une capture d'écran** de l'en-tête TCP du premier segment, avec les bits de contrôle développés. -->
 
 Dans le premier segment, relevez aussi :
 
@@ -187,7 +187,7 @@ ACK de la réponse = SEQ de la requête + longueur de la requête
 
 ### 2. Lire la conversation
 
-Faites un clic droit sur un segment de la conversation, puis **Follow → TCP Stream**.
+Faites un clic droit sur un segment de la conversation, puis **Suivre → TCP Flux**.
 
 Wireshark reconstitue les données échangées : la requête du client et la réponse du serveur.
 
@@ -206,11 +206,13 @@ Repérez les derniers segments de la conversation.
 
 ### 4. Vue d'ensemble
 
-Ouvrez **Statistics → Flow Graph** et cochez **Limit to display filter**.
+Ouvrez **Statistiques → Graphique des flux** et cochez **Limiter au filtre d'affichage**.
 
 Wireshark affiche la conversation sous forme de diagramme, semblable à ceux de ce chapitre.
 
-**Faites une capture d'écran** du diagramme et identifiez-y les trois étapes : établissement, échange de données, fermeture.
+<!-- **Faites une capture d'écran** du diagramme et -->
+
+Identifiez-y les trois étapes : établissement, échange de données, fermeture.
 
 ## Questions de synthèse
 
@@ -219,7 +221,7 @@ Wireshark affiche la conversation sous forme de diagramme, semblable à ceux de 
 3. Combien de segments TCP ont été échangés au total pour obtenir une seule page web? Combien de datagrammes UDP pour la requête DNS? Qu'est-ce que cela illustre?
 4. Pourquoi la requête DNS utilise-t-elle UDP, alors que la page web utilise TCP?
 
-## Validation
+<!-- ## Validation
 
 + [ ] La configuration du poste est relevée.
 + [ ] Les prédictions sont complétées avant la capture.
@@ -228,4 +230,4 @@ Wireshark affiche la conversation sous forme de diagramme, semblable à ceux de 
 + [ ] La relation entre SEQ, ACK et longueur des données est vérifiée.
 + [ ] La fermeture de connexion est identifiée.
 + [ ] Le *Flow Graph* de la conversation est obtenu.
-+ [ ] Les quatre captures d'écran demandées sont faites.
++ [ ] Les quatre captures d'écran demandées sont faites. -->
