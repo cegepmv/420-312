@@ -12,7 +12,7 @@ enableEmoji = true
   alwaysopen = false
   linkTitle = 'RÉSEAUX INFORMATIQUES'
   [params.logo]
-    src = '/images/logo.png'
+    src = 'images/logo.png'
     direction = 'row'
   [params.search]
     disable = true
