@@ -1,812 +1,1208 @@
 # 5. Couche transport
 -------------------
 
-Dans le chapitre précédent, nous avons vu que la couche Internet permettait (entre autres) de transmettre des paquets d'un périphérique source à un périphérique de destination grâce à l'adressage IP.
+Dans le chapitre précédent, nous avons vu que la **couche Internet** permet d'acheminer un paquet jusqu'à l'hôte de destination grâce à l'adresse IP.
 
-Mais lorsqu'une donnée arrive à un ordinateur, comment savoir à quelle application est-elle destinée ?   
+Mais un hôte exécute généralement plusieurs applications réseau en même temps : un navigateur, un client de courriel, un service SSH, etc.
 
-La couche transport est chargée de l’établissement d’une session de communication temporaire **entre deux applications** et de l’acheminement des données entre ces deux applications.
+Lorsqu'un paquet arrive, comment l'hôte sait-il à **quelle application** les données sont destinées ?
 
-## Rôle
+C'est le rôle de la **couche transport**.
 
-![role-transport](images/04-01-01.png)
+Elle permet notamment :
 
-La couche tranport est responsable de trois tâches :
+- d'identifier les applications à l'aide de **numéros de port**;
+- de faire circuler plusieurs conversations en même temps sur une même interface réseau;
+- de découper les données des applications en blocs adaptés au réseau;
+- de fournir, selon le protocole utilisé, une communication **fiable** ou une communication **rapide et légère**.
 
-+ Suivi des conversations individuelles
-+ Segmentation des données et reconstruction des segments
-+ Identification de l’application appropriée pour chaque flux de communication
+Les deux principaux protocoles de cette couche sont **TCP (*Transmission Control Protocol*)** et **UDP (*User Datagram Protocol*)**.
 
+## Rôle de la couche transport
 
-### Suivi des conversations individuelles
+La couche transport assure la communication **entre deux applications**, alors que la couche Internet assure la communication **entre deux hôtes**.
 
-![role-transport-01](images/04-01-02.png)
+| Couche | Communication | Identifiant |
+|--------|---------------|-------------|
+| **Internet** | d'un hôte à un autre hôte | Adresse IP |
+| **Transport** | d'une application à une autre application | Numéro de port |
 
-Chaque ensemble de données transitant entre une application source et une application de destination est appelé *une conversation*. Un hôte peut héberger plusieurs applications qui communiquent sur le réseau simultanément. Chacune de ces applications communique avec une ou plusieurs applications sur un ou plusieurs hôtes distants. La couche transport est chargée de **garantir ces multiples conversations** et d’**en effectuer le suivi**.
+### Suivi des conversations
 
-### Segmentation et reconstitution de données
-![role-transport-02](images/04-01-03.png)
+Chaque échange de données entre une application source et une application de destination est appelé une **conversation**.
 
-+ **Lors de l'encapsulation :** la couche transport segmentent les données d’application en blocs de données de taille appropriée. Un en-tête, (utilisé pour la réorganisation), est ajouté à chaque bloc de données.
+Un même hôte peut mener plusieurs conversations simultanément, avec un ou plusieurs hôtes distants.
 
-+ **Au niveau du destinataire (désencapsulation):** La couche transport reconstitue le flux de données à partir de ses segments, grâce aux informations contenues dans les en-têtes.
+Exemple :
+![Schéma représentant plusieurs conversations](/images/05/05-conversation.png)
 
-#### Multiplexage
-![multiplexage](images/04-01-05.png)
+La couche transport doit garder ces conversations séparées : les données de l'onglet 1 ne doivent pas être remises au client de courriel.
 
-+ L’envoi de certains types de données (par exemple, un flux vidéo en continu) sur le réseau en tant que flux de communication complet peut utiliser toute la bande passante disponible et empêcher d’autres communications d’avoir lieu en même temps.
+### Segmentation et reconstitution
 
-+ La segmentation des données en parties plus petites permet d'avoirs plusieurs communications différentes provenant de nombreux utilisateurs, d’être imbriquées (*multiplexées*) sur le même réseau. 
-+ Sans segmentation, une seule application pourrait recevoir des données.
-    + Exemple: Pour un flux vidéo en continu (*stream*), le support serait monopolisé par le flux de communication au lieu d’être partagé. Il serait impossible de recevoir des e-mails, de parler sur une messagerie instantanée et d’afficher des pages Web tout en regardant la vidéo.
+Les données d'une application (un fichier, une page web) peuvent être beaucoup trop volumineuses pour être transmises en un seul bloc.
 
-### Identification des applications
-![role-couche-transport-04](images/04-01-04.png)
+- **À l'envoi**, la couche transport découpe les données en blocs et ajoute un **en-tête** à chacun.
+- **À la réception**, elle utilise les informations de l'en-tête pour reconstituer les données et les remettre à la bonne application.
 
-De nombreux services ou applications peuvent s’exécuter en même temps sur chaque hôte du réseau. Pour que les flux de données atteignent la bonne application, la couche transport identifie l'application en lui affectant un identificateur qu'on appelle **numéro de port**. Chaque processus logiciel ayant besoin d’accéder au réseau se voit affecter un numéro de port unique sur son hôte.
+L'unité de données de la couche transport s'appelle :
 
-### Le bon protocole pour une application
+- un **segment** avec TCP;
+- un **datagramme** avec UDP.
 
-![Bon-Protocole-Pour-Bonne-App](images/04-01-07.png)
+![Encapsulation d'un segment](/images/05/05-encapsulation.png)
+{{%center%}}
+*Encapsulation : les données de l'application sont placées dans un segment, lui-même placé dans un paquet IP, puis dans une trame.*
+{{%/center%}}
 
-+ **TCP** et **UDP** sont les deux protocoles de la couche transport, chacun ayant des caractéristiques spécifiques.
+{{%notice style="note" title="Rappel"%}}
+Au chapitre 4, nous avons vu que le champ **Protocole** de l'en-tête IP indique le contenu du paquet : `6` pour TCP et `17` pour UDP. C'est grâce à ce champ que l'hôte de destination sait à quel protocole de transport remettre les données.
+{{%/notice%}}
 
-+ Le choix entre TCP et UDP dépend des besoins et des exigences des applications ; les développeurs doivent décider quel protocole est le plus approprié dépendamment des besoins de leur application
+### Multiplexage
 
+Grâce à la segmentation, les segments de plusieurs applications peuvent être **entremêlés** sur la même interface réseau. C'est le **multiplexage**.
 
-#### TCP (Transmission Control Protocol)
+![Multiplexage](/images/05/05-multiplexage.png)
 
-+ Assure que les segments de données arrivent dans le bon ordre et que toutes les informations sont reçues correctement.
-+ Garantit l’intégrité et la fiabilité des données transmises.
-+ Convient aux applications qui nécessitent que toutes les données soient présentes et intactes pour fonctionner correctement.
-+ Exemples d’applications : bases de données, navigateurs web, clients de messagerie électronique.
-+ Avantages : assure la fiabilité de la communication et prévient toute perte de données.
-+ Inconvénients : génère une surcharge réseau supplémentaire en raison des mécanismes d’accusés de réception et de retransmission des paquets manquants.
+À la réception, l'opération inverse (**démultiplexage**) consiste à lire le **port de destination** de chaque segment pour le remettre à la bonne application.
 
-#### UDP (User Datagram Protocol) :
+Sans ce mécanisme, une seule application pourrait utiliser le réseau à la fois. Par exemple, un téléchargement monopoliserait le lien et empêcherait de consulter ses courriels en même temps.
 
-+ Offre une transmission plus rapide en réduisant la surcharge réseau.
-+ Ne garantit pas la livraison de tous les paquets, mais privilégie la rapidité plutôt que la fiabilité.
-+ Adapté aux applications qui peuvent tolérer la perte de quelques données sans impact significatif sur l’expérience utilisateur.
+{{%notice style="tip" title="À retenir"%}}
+L'adresse IP permet d'atteindre le bon **hôte**. Le numéro de port permet d'atteindre la bonne **application** sur cet hôte.
+{{%/notice%}}
 
-+ Exemples d’applications : streaming vidéo et audio, VoIP (voix sur IP).
+# 5.1. Ports et sockets
+----------------
 
-+ Cas pratiques :
-    + Flux vidéo : la perte de quelques segments peut entraîner une légère distorsion ou interruption momentanée, mais le flux global continue sans retard.
-    + Radio sur Internet : si des paquets sont perdus, le son peut subir de petites interruptions, mais l’expérience reste acceptable ; l’utilisation de TCP ralentirait le flux et amplifierait les interruptions à cause des retransmissions.
+## Numéros de port
 
-#### Conclusion : TCP vs. UDP
-+ TCP est privilégié pour les applications nécessitant une fiabilité totale.
+Un **numéro de port** est une valeur de **16 bits** (de `0` à `65535`) qui identifie une application sur un hôte.
 
-+ UDP est privilégié pour les applications où la rapidité et la fluidité de la transmission sont plus importantes que la perte occasionnelle de données.
+Chaque segment TCP et chaque datagramme UDP contient :
 
+- un **port source** : identifie l'application qui envoie;
+- un **port de destination** : identifie l'application qui doit recevoir.
 
-# 4.1. Adressage de port
--------------------
+### Client et serveur
 
-+ Les protocoles de transport (TCP et UDP) utilisent des **numéros de port** pour permettre à plusieurs applications/processus de communiquer simultanément sur un même hôte. 
+Un **serveur** attend les requêtes sur un port connu à l'avance. Par exemple, un serveur web écoute sur le port `80`.
 
-+ Chaque segment ou datagramme contient : un port source et un port de destination. Le port de destination informe le service (application) demandé. 
+Un **client** utilise comme port source un numéro choisi automatiquement par son système d'exploitation, appelé **port éphémère**.
 
-+ **Exemple -** si un client demande un service web, il envoie un message vers le port de destination 80 (HTTP) sur le serveur. Le serveur sait alors qu’il doit traiter un service Web. 
+Dans la réponse, les ports sont **inversés** :
 
-+ Le port source est généré aléatoirement (dans une certaine plage) par le client afin d’identifier sa propre application et permettre le retour de la réponse vers la bonne application. 
+![Ports source et destination entre un client et un serveur](/images/05/05-ports-client-serveur.png)
+
+Le port éphémère permet au client de recevoir la réponse dans la bonne application.
 
 ## Plages de ports
 
-+ L’IANA (*Internet Assigned Numbers Authority*) est responsable de l’attribution des numéros de port. 
+L'**IANA (*Internet Assigned Numbers Authority*)** est responsable de l'attribution des numéros de port.
 
-Il existe trois plages principales :
-|Plage de numéros de ports|Groupe de ports  |
-|--------------------|-----------------|
-|0 à 1023                 | Ports réservés  |
-|1024 à 49151             | Ports inscrits  |
-|49152 à 65535            | Ports dynamiques|
+| Plage | Nom | Utilisation |
+|-------|-----|-------------|
+| `0` à `1023` | **Ports réservés** (*well-known*) | Services courants (HTTP, SSH, DNS, etc.) |
+| `1024` à `49151` | **Ports enregistrés** | Applications ou services moins universels |
+| `49152` à `65535` | **Ports dynamiques** | Ports éphémères des clients |
 
-+ **Ports réservés (0 à 1023):** utilisés pour des services serveurs bien connus (HTTP : 80, FTP : 21, SMTP : 25, etc.). 
+### Ports à connaître
 
-+ **Ports inscrits (1024 à 49151) :** affectés à des applications utilisateurs ou moins standardisées. 
-
-+ **Ports dynamiques/privés (49152 à 65535):** souvent utilisés comme ports sources par les clients, dits "*éphémères*". 
-
-+ Exemples de ports:
-    + TCP : 21, 23, 25, 80, 443 sont dans la plage "réservée". 
-    + UDP : 69 (TFTP), 520 (RIP) sont dans "réservés". 
-    + TCP & UDP : 53 (DNS), 161 (SNMP). 
+| Port | Protocole de transport | Service |
+|------|------------------------|---------|
+| `20`, `21` | TCP | FTP (données, contrôle) |
+| `22` | TCP | SSH |
+| `23` | TCP | Telnet |
+| `25` | TCP | SMTP (envoi de courriels) |
+| `53` | UDP et TCP | DNS |
+| `67`, `68` | UDP | DHCP (serveur, client) |
+| `69` | UDP | TFTP |
+| `80` | TCP | HTTP |
+| `123` | UDP | NTP (synchronisation de l'heure) |
+| `161` | UDP | SNMP |
+| `443` | TCP | HTTPS |
+| `3389` | TCP | RDP (bureau à distance) |
 
 ## Sockets
 
-Une socket est la combinaison de : l’adresse IP (source ou destination) + numéro de port (source ou destination) + protocole de transport (TCP ou UDP) — ce qui permet d’identifier de façon unique un point de communication. 
+Un **socket** est l'association d'une **adresse IP** et d'un **numéro de port**, pour un protocole de transport donné.
 
-+ Une paire de sockets (source & destination) **identifie une conversation spécifique entre deux hôtes** : par exemple, client `192.168.1.5:1099` et serveur `192.168.1.7:80` constituent une paire. 
+```text
+192.168.1.25:51544    (TCP)
+```
 
-+ Les sockets permettent simultanément :
-    + à plusieurs processus sur le client de mener diverses requêtes (chacun avec un port source différent)
+Un socket représente l'une des deux extrémités d'une conversation.
 
-    + au serveur de distinguer plusieurs connexions entrantes vers le même service (du même client ou de clients différents) grâce à la combinaison adresses/ports. 
+Une conversation est donc identifiée par une **paire de sockets** :
 
-### Exemple de communication
+```text
+Socket client :  192.168.1.25:51544
+Socket serveur : 203.0.113.80:80
+Protocole :      TCP
+```
 
-![Exemple adressage de port](../images/04-01-08.png)
+### Plusieurs conversations vers un même service
 
-## Vérification/surveillance de ports
+Si l'utilisateur ouvre deux onglets vers le même serveur web, les deux conversations utilisent le même socket serveur.
 
-L’utilitaire `netstat` permet de voir les connexions actives, les adresses locales/distantes + numéros de ports + état de la connexion. 
+C'est le **port source du client** qui les distingue :
 
-Cela permet de détecter des connexions "inexpliquées" ou suspectes, ou d’analyser des performances réseau. 
+```text
+Onglet 1 : 192.168.1.25:51544  ⇄  203.0.113.80:80
+Onglet 2 : 192.168.1.25:51545  ⇄  203.0.113.80:80
+```
 
-# 4.2. Protocoles
+De la même façon, un serveur peut servir des milliers de clients sur le port `80` : chaque paire de sockets est unique.
 
-# 4.2.1. TCP
--------------------
+## Observer les sockets d'un hôte
 
+### Sous Linux : `ss`
 
-Le protocole TCP (*Transmission Control Protocol*) a été initialement décrit dans le document [RFC 793](https://datatracker.ietf.org/doc/html/rfc793). 
+```bash
+ss -tan     # sockets TCP (t), tous les états (a), adresses numériques (n)
+ss -uan     # sockets UDP
+sudo ss -tlnp   # sockets TCP en écoute (l), avec le processus associé (p)
+```
 
-## Caractéristiques
+Exemple :
 
-+ **Encapsulation**
-+ **Reconstitution ordonée :** Les segments envoyés peuvent emprunter des routes différentes et risquent donc d'arriver dans le désordre. Certaines applications ont besoin que les segments arrivent dans un ordre donné pour être traités correctement (une page web par exemple)
-+ **Acheminement fiable :** le récepteur doit envoyer à l'émetteur un accusé de réception;
-+ **Contrôle de flux :** le récepteur peut demander à l'émetteur de réduire le nombre de segments transférés et à demander l'accusé de réception.
-+ **Orienté connexion :** Avant le début de l'envoie de segments, l'émetteur doit établir une connexion bidirectionnelle avec le récepteur.
+```text
+State   Recv-Q  Send-Q   Local Address:Port    Peer Address:Port
+LISTEN  0       128            0.0.0.0:22           0.0.0.0:*
+ESTAB   0       0         192.168.1.10:22      192.168.1.42:51544
+```
 
-### Reconstitution ordonée
+- `LISTEN` : une application attend des connexions sur ce port (ici, le serveur SSH);
+- `ESTAB` (*established*) : une connexion est établie; la ligne montre la paire de sockets.
 
-Étant donné que les réseaux peuvent fournir plusieurs routes dont les débits de transmission varient, il se peut que les données arrivent dans le désordre. En numérotant et en ordonnant les segments, le protocole TCP s'assure que ces segments sont remis dans le bon ordre.
+### Sous Windows : `netstat`
 
+```powershell
+netstat -ano
+```
 
-+ C'est le **numéro d'ordre** de chaque segment *(voir en-tête d'un segment TCP)* qui assure la fiabilité en indiquant comment réassembler et réorganiser les segments reçus lorsqu'ils arrivent à destination.
-+ Le processus TCP récepteur place les données d'un segment dans une mémoire tampon de réception (*buffer*). 
-+ Les segments sont remis dans l'ordre correct et sont transmis à la couche application une fois qu'ils ont été réassemblés. 
-+ Tous les segments reçus dont les numéros d'ordre ne sont pas contigus (*qui se suivent*) sont conservés en vue d'un traitement ultérieur. 
+Les colonnes *Adresse locale* et *Adresse distante* indiquent les sockets; la dernière colonne indique le numéro du processus (PID).
 
-### Acheminement fiable
+{{%notice style="tip" title="À retenir"%}}
+**Socket** = adresse IP + port. Une **paire de sockets** identifie une conversation de façon unique.
+{{%/notice%}}
 
-La fiabilité consiste à **veiller à ce que chaque bloc de données envoyé par la source parvienne à destination**. 
-TCP peut garantir que tous les blocs atteignent leur destination en demandant au périphérique source de retransmettre les données perdues ou endommagées.
-Les services TCP sur l'hôte de destination accusent réception des données reçues à l'application source.
 
-+ **Le numéro d'ordre (*SEQ, Sequence Number*)** et **le numéro d'accusé de réception (*ACK, Acknowledgement Number*)** sont utilisés ensemble pour confirmer la réception des octets de données contenus dans les segments envoyés. 
+## Exercices
+----------------
 
-+ Le numéro *SEQ*  indique le nombre relatif d'octets qui ont été transmis dans cette session, y compris les octets dans le segment actuel. 
+### 1. Classer des ports
 
-+ Le protocole TCP utilise le numéro *ACK* renvoyé à la source pour indiquer l'octet suivant que le destinataire s'attend à recevoir. C'est ce que l'on appelle un **accusé de réception prévisionnel**.
+Pour chaque port, indiquez sa plage (réservé, enregistré ou dynamique) et, s'il y a lieu, le service associé :
 
-+ L'hôte expéditeur est **censé envoyer un segment qui utilise un numéro d'ordre égal au numéro ACK**.
+```text
+22   53   443   3389   51544   8080   67   60123
+```
 
-### Contrôle de flux
+{{% expand title="Solution" %}}
+| Port | Plage | Service |
+|------|-------|---------|
+| `22` | Réservé | SSH |
+| `53` | Réservé | DNS |
+| `443` | Réservé | HTTPS |
+| `3389` | Enregistré | RDP |
+| `51544` | Dynamique | Port éphémère d'un client |
+| `8080` | Enregistré | Souvent utilisé comme port HTTP alternatif |
+| `67` | Réservé | DHCP (serveur) |
+| `60123` | Dynamique | Port éphémère d'un client |
+{{% /expand %}}
 
-Les hôtes du réseau disposent de ressources limitées, par exemple en ce qui concerne (mémoire, bande passante, etc.). Quand le protocole TCP détermine que ces ressources sont surexploitées, il peut demander à l'application qui envoie les données d'en réduire le flux. Cette opération consiste à réguler la quantité de données transmises par la source, ce qui permet d'éviter la perte de segments sur le réseau et à rendre inutiles les retransmissions.
+### 2. Lire une sortie de `ss`
 
-Le protocole TCP inclut également des **mécanismes de contrôle de flux**. Le contrôle de flux aide à maintenir la fiabilité des transmissions TCP en réglant le flux de données entre la source et la destination pour une session donnée. Cela consiste à limiter la quantité de données de segments transférées en une seule fois et à demander des accusés de réception avant de transmettre davantage de données.
+La commande `ss -tan` exécutée sur une machine Linux affiche :
 
-Pour effectuer le contrôle de flux, la première chose que le protocole TCP doit déterminer est la quantité de données de segments que le périphérique de destination peut accepter. L'**en-tête TCP comprend un champ de 16 bits appelé la taille de fenêtre**. Il s'agit du nombre d'octets que le périphérique de destination d'une session TCP peut accepter et traiter en une seule fois. La taille de fenêtre initiale est convenue lors du démarrage de la session (*voir la section Connexion*). Une fois cette taille approuvée, le périphérique source doit limiter la quantité de données de segments envoyées au périphérique de destination en fonction de la taille de fenêtre.
+```text
+State   Recv-Q  Send-Q   Local Address:Port     Peer Address:Port
+LISTEN  0       128            0.0.0.0:22            0.0.0.0:*
+LISTEN  0       511            0.0.0.0:80            0.0.0.0:*
+ESTAB   0       0             10.0.0.5:22          10.0.0.42:51544
+ESTAB   0       0             10.0.0.5:80          10.0.0.42:51560
+ESTAB   0       0             10.0.0.5:80          10.0.0.77:49170
+ESTAB   0       0             10.0.0.5:59812       93.184.216.34:443
+```
 
-### Orienté connexion
+1. Quels services cette machine offre-t-elle?
+2. Combien de conversations sont établies?
+3. Pour chaque conversation, la machine `10.0.0.5` joue-t-elle le rôle de client ou de serveur? Justifiez.
+4. Les lignes 4 et 5 utilisent le même socket local `10.0.0.5:80`. Comment la machine distingue-t-elle ces deux conversations?
 
-+ TCP **négocie et établit une connexion permanente** (ou *session*) entre les périphériques source et de destination avant de transmettre du trafic. L'établissement de session prépare les périphériques à communiquer entre eux. 
-+ Grâce à ce mécanisme, les périphériques négocient la quantité de trafic pouvant être transmise à un moment donné (*MSS*). 
-+ La session est interrompue une fois que toutes les communications sont terminées.
+{{% expand title="Solution" %}}
+1. SSH (port `22`) et HTTP (port `80`) : ce sont les ports à l'état `LISTEN`.
+2. Quatre conversations (lignes `ESTAB`).
+3. Elle est **serveur** pour les trois premières : le port local est un port réservé (`22`, `80`) et le port distant est éphémère. Elle est **client** pour la dernière : son port local `39812` est éphémère et le port distant `443` est celui d'un serveur HTTPS.
+4. Par le socket distant : `10.0.0.42:51560` et `10.0.0.77:49170` sont différents, donc les deux paires de sockets sont différentes.
+{{% /expand %}}
 
 
+# 5.2. TCP
+-------------
 
-## Entête TCP
+**TCP (*Transmission Control Protocol*)** est un protocole de transport **fiable** et **orienté connexion**, défini à l'origine dans la [RFC 793](https://datatracker.ietf.org/doc/html/rfc793).
 
-!["Segment-TCP"](../../images/04-03-01.png)
+Il ajoute au-dessus d'IP les garanties qu'IP n'offre pas.
 
-L'entête TCP comprend :
+| Caractéristique | Signification |
+|-----------------|---------------|
+| **Orienté connexion** | Une connexion est établie entre les deux hôtes avant l'échange de données, puis fermée à la fin. |
+| **Acheminement fiable** | Le récepteur accuse réception des données; les données perdues sont retransmises. |
+| **Reconstitution ordonnée** | Les données sont remises à l'application dans l'ordre d'envoi, même si les segments arrivent dans le désordre. |
+| **Contrôle de flux** | L'émetteur n'envoie pas plus de données que le récepteur ne peut en accepter. |
 
-+ **Numéro d'ordre (32 bits) (*SEQ*)** – utilisé pour identifier la position de chaque segment dans le message d'origine. (*Propriété 2 : Reconstitution ordonnée*)
-+ **Numéro d'accusé de réception (32 bits) (*ACK*)** – indique les données qui ont été reçues (*Propriété 3 - Acheminement fiable*).
-+ **Longueur d'en-tête (4 bits) (*OFFSET*)** – Indique la longueur de l'en-tête du segment TCP.
-+ **Réservé (6 bits)** - pour un futur usage.
-+ **Bits de contrôle (6 bits) (code ou *flags*)** – des indicateurs indiquant la fonction du segment (la nature du segment) :
-+ **Taille de fenêtre (16 bits)** – taille du buffer de réception (*Propritété 4 : Contrôle de flux*).
-+ **Somme de contrôle (16 bits) (*Checksum*)** – utilisée pour le contrôle des erreurs sur l'en-tête et les données de segment.
-+ **Urgent (16 bits)** – indique la position des données sont urgentes (lorsque le bit URG est activé).
-+ **Options (taille variable):** sa présence est détectée lorsque l'offset est supérieur à 5. On trouve dans ce champ :
-    + **MSS :** au moment de l'établiseement d'une connexion, chaque partie annonce sa taille de *MSS* (*Maximum Segment Size*) ou longueur maximum de segment.
-    + ***Timestamp* (estampille temporelle)** : permet de calculer la durée qu'un segment prend aller et retour (RTT, Round Trip Time)
-    + **Wscale (*Window Scale*)** : pour augmenter la taille de la fenêtre. 
+{{%notice style="note" title="Rappel"%}}
+IP est un protocole **best effort** : il ne garantit ni la livraison, ni l'ordre d'arrivée des paquets (chapitre 4). TCP compense ces limites au niveau des hôtes, sans rien exiger des routeurs.
+{{%/notice%}}
 
-### Bits de contrôle
-Les bits de contrôle représentent la fonction du segment TCP : 
-+ **URG (*Urgent pointer*):** Le segment transporte des données urgentes dont la place est indiquée par le champ Pointeur d'urgence.
-+ **ACK (*Akcnowledgment*):** Le segment transporte un accusé de reception.
-+ **PSH (*Push*):** Le segment devra être délivré immédiatement. Le récepteur ne doit pas attendre que son tampon de réception soit plein pour délivrer les données à l'application.
-+ **RST (*Reset*):** Réinitialisation de la connexion
-+ **SYN (*Synchronize*):** Indique qu'il s'agit de l'ouverture de connexion. Le champ Numéro d'ordre contient la valeur de début de la connexion (ISN ou *initial sequence number*).
-+ **FIN (*Final*):** Pour initier une fermeture de connexion.
+## En-tête TCP
 
-## Communication TCP
+![En-tête TCP](/images/05/05-entete-tcp.png)
 
-La communication TCP suit 3 étapes :
-1. Connexion
-2. Envoie de segments et d'accusés de réception (ACK)
-3. Fermeture de connexion
+| Champ | Fonction |
+|-------|----------|
+| **Port source** | Port de l'application qui envoie le segment |
+| **Port destination** | Port de l'application qui doit recevoir le segment |
+| **Numéro d'ordre (SEQ)** | Position, dans le flux, du premier octet de données du segment |
+| **Numéro d'accusé de réception (ACK)** | Numéro du **prochain octet attendu** de l'autre hôte |
+| **Longueur d'en-tête** | Taille de l'en-tête, en mots de 32 bits (minimum `5`, soit 20 octets) |
+| **Bits de contrôle** |  Indiquent la fonction du segment |
+| **Fenêtre** |  Nombre d'octets que l'émetteur de ce segment peut encore recevoir |
+| **Somme de contrôle** | Détection d'erreurs sur l'en-tête et les données |
+| **Options** |  Notamment le **MSS**, annoncé à l'ouverture de la connexion |
 
-### Connexion
-!["Segment-TCP"](../../images/04-03-13.png)
+L'en-tête TCP mesure **au minimum 20 octets**.
 
-Communément appelé *3-Way-TCP-Handshake* car elle se fait en 3 étapes. Les trois étapes de l'établissement d'une connexion TCP :
-1. Le client demande l'établissement d'une session de communication *client->serveur* avec le serveur.
-2. Le serveur accuse réception de la session de communication *client->serveur* et demande l'établissement d'une session de communication *serveur->client*.
-3. Le client accuse réception de la session de communication *serveur->client*.
+{{%notice style="info" title="Remarque"%}}
+Les autres champs de l'en-tête (bits réservés, pointeur d'urgence, autres options) ne sont pas étudiés dans ce cours.
+{{%/notice%}}
 
-La communication entre les deux hôtes est **bi-directionnelle**, c'est pourquoi chacun d'eux demande un établissement de session. D'ailleurs, le client possède un *ISN* (x dans la figure) différent du serveur (y).
+## Bits de contrôle
 
-### Envoie de segments et d'accusés de réception
+Les bits de contrôle (*flags*) indiquent la nature du segment. Plusieurs bits peuvent être activés dans un même segment.
 
-!["Segment-TCP"](../../images/04-03-12.png)
+| Bit | Nom | Signification |
+|-----|-----|---------------|
+| **SYN** | *Synchronize* | Demande d'ouverture de connexion |
+| **ACK** | *Acknowledgment* | Le champ ACK contient un accusé de réception valide |
+| **FIN** | *Finish* | L'émetteur n'a plus de données à envoyer : demande de fermeture |
+| **RST** | *Reset* | Interruption immédiate de la connexion, ou refus de connexion |
+| **PSH** | *Push* | Les données doivent être remises sans attendre à l'application |
 
 
-#### Taille de fenêtre et accusé de réception
 
-L'utilisation de **tailles de fenêtres** dynamiques permet de contrôler le flux de données. Quand les ressources réseau sont soumises à de fortes contraintes, le protocole TCP peut réduire la taille de fenêtre afin d'imposer l'envoi plus fréquent d'accusés de réception pour les segments reçus. Ceci a pour effet de ralentir le taux de transmission car la source attend des accusés de réception des données plus fréquents.
+# 5.2.1. Établissement de connexion
+-------------
 
-L'hôte destinataire renvoie la valeur de taille de fenêtre à l'hôte expéditeur pour indiquer le nombre d'octets qu'il est prêt à recevoir. Si la destination doit ralentir le débit de communication parce que la mémoire tampon est limitée, elle peut envoyer une valeur de taille de fenêtre plus petite à la source en l'intégrant à un accusé de réception.
+Avant d'échanger des données, le client et le serveur établissent une connexion en trois étapes : c'est le ***3-way handshake***.
 
-!["Segment-TCP"](../../images/04-03-11.png)
+![TCP 3-Way Handshake](/images/05/05-tcp-handshake.png)
 
-### Fermeture de connexion
+1. Le client demande l'ouverture de la connexion (**SYN**) et annonce son numéro d'ordre initial `x`.
+2. Le serveur accepte : il accuse réception (**ACK** = `x+1`) et demande à son tour l'ouverture dans l'autre sens (**SYN**), avec son propre numéro d'ordre initial `y`.
+3. Le client accuse réception (**ACK** = `y+1`).
 
-!["Segment-TCP"](../../images/04-03-14.png)
+La connexion est **bidirectionnelle** : chaque hôte peut envoyer des données à l'autre. C'est pourquoi chacun envoie un SYN et chacun reçoit un ACK.
 
-1. Quand le client n'a plus de données à envoyer dans le flux, il envoie un segment dont l'indicateur *FIN* est défini.
+Les numéros d'ordre initiaux `x` et `y` sont choisis **aléatoirement** par chaque hôte.
 
-2. Le serveur envoie un segment *ACK* pour informer de la bonne réception du segment *FIN*, afin de fermer la session *client -> serveur*.
+{{%notice style="info" title="Pourquoi x+1?"%}}
+Un segment SYN ne contient pas de données, mais il **compte pour un octet** dans la numérotation. Le prochain octet attendu est donc `x+1`. Il en va de même pour le segment FIN.
+{{%/notice%}}
 
-3. le serveur envoie un segment *FIN* au client pour mettre fin à la session *serveur -> client*.
+Pendant l'établissement de la connexion, chaque hôte annonce aussi son **MSS (*Maximum Segment Size*)** : la quantité maximale de données qu'il accepte dans un seul segment. 
 
-4. le client répond à l'aide d'un segment *ACK* pour accuser réception du segment *FIN* envoyé par le serveur.
+{{%notice style="tip" title="Dans Wireshark"%}}
+Wireshark affiche par défaut des numéros **relatifs** : il soustrait le numéro initial pour que chaque côté commence à `0`. Le handshake apparaît donc ainsi : `SEQ=0`, puis `SEQ=0 ACK=1`, puis `SEQ=1 ACK=1`.
+{{%/notice%}}
 
-## Services utilisant TCP
-+ HTTP (80)
-+ HTTPS (443)
-+ FTP (*File transfer protocol*) (20 + 21)
-+ Telnet (23)
-+ SSH (22)
-+ etc...
 
+# 5.2.2. Fiabilité et contrôle de flux
+-------------
 
-# 4.2.2. UDP
+## Numéros d'ordre et accusés de réception
 
-Le protocole **UDP** (*User Datagram Protocol*) est un protocole de transport d’*acheminement au mieux*, décrit dans le document [RFC 768](https://datatracker.ietf.org/doc/html/rfc768). C'est un protocole de transport **léger** qui offre les mêmes fonctions de segmentation et de réorganisation des données que le protocole TCP, mais sans la fiabilité et le contrôle de flux du protocole TCP.
+TCP numérote chaque **octet** envoyé.
 
-## Caractéristiques
-![Caractéristiques du protocole UDP](../../images/04-04-01.png)
+- Le **SEQ** d'un segment indique le numéro de son premier octet de données.
+- L'**ACK** indique le numéro du **prochain octet attendu**. Il confirme donc la réception de tous les octets précédents.
 
-+ **Sans connexion –** le protocole UDP n’établit pas de connexion entre les hôtes avant que les données puissent être envoyées et reçues.
+On a donc toujours :
 
-+ **Acheminement non fiable –** le protocole UDP ne fournit pas de services garantissant que les données sont acheminées de façon fiable. Il n’existe pas de processus dans le protocole UDP permettant de faire retransmettre à l’expéditeur les données perdues ou endommagées.
+```text
+ACK renvoyé = SEQ reçu + nombre d'octets de données reçus
+```
 
-+ **Aucune reconstitution ordonnée des données –**  n’offre aucun mécanisme permettant de réorganiser les données dans leur ordre initial. Les données sont simplement remises à l’application dans l’ordre où elles arrivent.
+### Exemple
 
-+ **Aucun contrôle de flux –** le protocole UDP ne propose aucun service permettant de contrôler la quantité de données envoyées par la source pour éviter de submerger le périphérique de destination. La source envoie les données. Si les ressources sur l’hôte de destination sont surexploitées, l’hôte de destination abandonne généralement les données envoyées jusqu’à ce que des ressources soient disponibles.
+Après le handshake (en numéros relatifs), le client envoie une requête de 100 octets. Le serveur répond avec 500 octets.
 
-{{% notice title=Remarque style="info"%}}
-En général, on définit UDP par ce qu'il n'a pas par rapport à TCP.
-{{% /notice %}}
+![Numéros d'ordre et accusés de réception](/images/05/05-tcp-seq-ack.png)
+{{%center%}}
+*L'ACK indique le prochain octet attendu : SEQ reçu + nombre d'octets reçus.*
+{{%/center%}}
+
+- Le serveur a reçu les octets `1` à `100` : il attend l'octet `101` → `ACK=101`.
+- Le client a reçu les octets `1` à `500` : il attend l'octet `501` → `ACK=501`.
+- Le prochain segment du client commencera à l'octet `101` → `SEQ=101`.
+
+{{%notice style="tip" title="SEQ différent pour le client et le serveur"%}}
+Chaque côté a sa **propre numérotation** : le SEQ du client et le SEQ du serveur évoluent indépendamment.
+{{%/notice%}}
+## Retransmission
+
+Lorsqu'il envoie un segment, l'émetteur démarre un délai d'attente.
+
+Si l'accusé de réception n'arrive pas avant la fin de ce délai, il considère que le segment est perdu et le **retransmet**.
+
+![Retransmission TCP](/images/05/05-tcp-retransmission.png)
+{{%center%}}
+*Sans accusé de réception avant la fin du délai, l'émetteur retransmet le segment.*
+{{%/center%}}
+
+
+## Reconstitution ordonnée
+
+Les segments peuvent arriver dans le désordre, par exemple s'ils empruntent des chemins différents.
+
+Le récepteur place les segments reçus dans une **mémoire tampon** et utilise les numéros d'ordre pour les remettre dans le bon ordre avant de transmettre les données à l'application.
+
+## Contrôle de flux : la fenêtre
+
+Le récepteur dispose d'une mémoire tampon de taille limitée.
+
+Dans chaque segment, il indique dans le champ **Fenêtre** combien d'octets il peut encore recevoir. L'émetteur peut envoyer cette quantité de données **sans attendre d'accusé de réception**.
+
+
+### Exemple
+
+Avec une fenêtre de `3000` octets et un MSS de `1000` octets, l'émetteur peut envoyer 3 segments avant de devoir attendre un ACK :
+
+![Exemple de taille de fenêtre](/images/05/05-taille-de-fenetre.png?width=45rem)
+
+
+Si le récepteur est surchargé, il annonce une fenêtre plus petite, ce qui ralentit l'émetteur. Une fenêtre de `0` lui demande d'arrêter temporairement d'envoyer :
+
+![Exemple de changement de taille de fenêtre après encombrement du serveur](/images/05/05-changement-taille-de-fenetre.png)
+
+{{%notice style="tip" title="MSS ou fenêtre?"%}}
+Le **MSS** limite la taille d'**un** segment; il est annoncé une fois, à l'ouverture de la connexion. La **fenêtre** limite la quantité de données envoyées **sans accusé de réception**; elle est annoncée dans chaque segment et peut varier.
+{{%/notice%}}
+
+# 5.2.3. Fermeture de connexion
+-------------
+
+Chaque sens de la connexion est fermé séparément.
+
+![Fermeture de connexion TCP](/images/05/05-tcp-fermeture.png)
+
+1. Le client n'a plus de données à envoyer : il envoie un segment **FIN**.
+2. Le serveur accuse réception.
+3. Lorsqu'il a lui aussi terminé, le serveur envoie son propre **FIN**.
+4. Le client accuse réception.
+
+{{%notice style="info" title="Remarque"%}}
+En pratique, le serveur combine souvent les étapes 2 et 3 dans un seul segment `FIN, ACK`. On observe alors seulement **trois segments**.
+{{%/notice%}}
+
+## Le segment RST
+
+Un segment **RST** interrompt une connexion immédiatement, sans l'échange FIN/ACK.
+
+Le cas le plus courant : un client tente de se connecter à un port sur lequel **aucune application n'écoute**. Le système de l'hôte de destination répond au SYN par un RST.
+
+![Segment RST et refus de connexion](/images/05/05-tcp-rst.png)
+
+{{%notice style="tip" title="À retenir"%}}
+Une communication TCP suit toujours trois étapes : **établissement** (SYN, SYN-ACK, ACK), **échange de données** (SEQ/ACK), **fermeture** (FIN/ACK).
+{{%/notice%}}
+
+
+# 5.2.4. Exercices
+-------------
+
+### 1 — Compléter un échange
+
+Après l'établissement d'une connexion (numéros relatifs), on observe l'échange suivant. Complétez les valeurs manquantes.
+
+| # | Sens | SEQ | ACK | Données (octets) |
+|---|------|-----|-----|------------------|
+| 1 | Client → Serveur | `1` | `1` | 80 |
+| 2 | Serveur → Client | `1` | ? | 1200 |
+| 3 | Client → Serveur | ? | ? | 0 |
+| 4 | Client → Serveur | ? | ? | 40 |
+| 5 | Serveur → Client | ? | ? | 0 |
+
+{{% expand title="Solution" %}}
+| # | Sens | SEQ | ACK | Données (octets) |
+|---|------|-----|-----|------------------|
+| 1 | Client → Serveur | `1` | `1` | 80 |
+| 2 | Serveur → Client | `1` | `81` | 1200 |
+| 3 | Client → Serveur | `81` | `1201` | 0 |
+| 4 | Client → Serveur | `81` | `1201` | 40 |
+| 5 | Serveur → Client | `1201` | `121` | 0 |
+
+Le segment 3 ne contient pas de données : il ne fait pas avancer le SEQ du client. Le segment 4 commence donc aussi à `81`.
+{{% /expand %}}
+
+
+### 2 — Identifier un segment
+
+Pour chaque segment, indiquez sa fonction.
+
+1. Bits de contrôle : `SYN`
+2. Bits de contrôle : `SYN, ACK`
+3. Bits de contrôle : `ACK`, 0 octet de données, juste après un SYN-ACK
+4. Bits de contrôle : `PSH, ACK`, 350 octets de données
+5. Bits de contrôle : `FIN, ACK`
+6. Bits de contrôle : `RST, ACK`, en réponse à un SYN
+
+{{% expand title="Solution" %}}
+1. Demande d'ouverture de connexion (étape 1 du handshake).
+2. Acceptation de la connexion par le serveur (étape 2).
+3. Dernière étape du handshake : la connexion est établie.
+4. Envoi de données (avec accusé de réception des données reçues).
+5. Demande de fermeture d'un sens de la connexion.
+6. Connexion refusée : aucune application n'écoute sur le port demandé.
+{{% /expand %}}
+
+### 3 — Raisonner
+
+1. Pourquoi TCP a-t-il besoin d'un échange en trois étapes plutôt qu'en deux?
+2. Un client reçoit un segment avec `ACK=5001`. Que peut-il en conclure?
+3. Un serveur annonce une fenêtre de `0`. Que doit faire le client?
+
+{{% expand title="Solution" %}}
+1. La connexion est bidirectionnelle : chaque hôte doit annoncer son numéro d'ordre initial (SYN) **et** recevoir la confirmation que l'autre l'a reçu (ACK). Le SYN du serveur et son ACK sont combinés dans un seul segment, ce qui donne trois segments au total.
+2. L'autre hôte a reçu correctement tous les octets jusqu'au numéro `5000` et attend maintenant l'octet `5001`.
+3. Il doit cesser temporairement d'envoyer des données, jusqu'à ce que le serveur annonce une fenêtre plus grande.
+{{% /expand %}}
+
+
+
+### 4 — Compléter un échange (2)
+
+Après l'établissement d'une connexion (numéros relatifs), on observe l'échange suivant. Complétez les valeurs manquantes.
+
+| # | Sens | SEQ | ACK | Données (octets) |
+|---|------|-----|-----|------------------|
+| 1 | Client → Serveur | `1` | `1` | 250 |
+| 2 | Serveur → Client | `1` | ? | 0 |
+| 3 | Serveur → Client | ? | ? | 900 |
+| 4 | Serveur → Client | ? | ? | 600 |
+| 5 | Client → Serveur | ? | ? | 0 |
+| 6 | Client → Serveur | ? | ? | 30 |
+| 7 | Serveur → Client | ? | ? | 0 |
+
+{{% expand title="Solution" %}}
+| # | Sens | SEQ | ACK | Données (octets) |
+|---|------|-----|-----|------------------|
+| 1 | Client → Serveur | `1` | `1` | 250 |
+| 2 | Serveur → Client | `1` | `251` | 0 |
+| 3 | Serveur → Client | `1` | `251` | 900 |
+| 4 | Serveur → Client | `901` | `251` | 600 |
+| 5 | Client → Serveur | `251` | `1501` | 0 |
+| 6 | Client → Serveur | `251` | `1501` | 30 |
+| 7 | Serveur → Client | `1501` | `281` | 0 |
+
+- Le segment 2 ne contient pas de données : le segment 3 commence donc aussi à `SEQ=1`.
+- Le segment 4 suit le segment 3 : `1 + 900 = 901`.
+- Avec le segment 5, le client confirme avoir reçu les octets `1` à `1500` du serveur (`900 + 600`).
+- Le client n'a rien reçu de nouveau entre les segments 5 et 6 : son ACK reste `1501`.
+{{% /expand %}}
+
+### 5 — Du handshake à la fermeture
+
+Cette fois, les numéros sont **bruts** : le client a choisi le numéro d'ordre initial `4000` et le serveur, `9000`. Complétez les valeurs manquantes.
+
+| # | Sens | Bits | SEQ | ACK | Données (octets) |
+|---|------|------|-----|-----|------------------|
+| 1 | Client → Serveur | SYN | `4000` | — | 0 |
+| 2 | Serveur → Client | SYN, ACK | `9000` | ? | 0 |
+| 3 | Client → Serveur | ACK | ? | ? | 0 |
+| 4 | Client → Serveur | PSH, ACK | ? | ? | 120 |
+| 5 | Serveur → Client | ACK | ? | ? | 1460 |
+| 6 | Serveur → Client | PSH, ACK | ? | ? | 540 |
+| 7 | Client → Serveur | ACK | ? | ? | 0 |
+| 8 | Client → Serveur | FIN, ACK | ? | ? | 0 |
+| 9 | Serveur → Client | ACK | ? | ? | 0 |
+
+{{%notice style="tip" title="Astuce"%}}
+Les segments SYN et FIN ne contiennent pas de données, mais chacun **compte pour un octet** dans la numérotation.
+{{%/notice%}}
+
+{{% expand title="Solution" %}}
+| # | Sens | Bits | SEQ | ACK | Données (octets) |
+|---|------|------|-----|-----|------------------|
+| 1 | Client → Serveur | SYN | `4000` | — | 0 |
+| 2 | Serveur → Client | SYN, ACK | `9000` | `4001` | 0 |
+| 3 | Client → Serveur | ACK | `4001` | `9001` | 0 |
+| 4 | Client → Serveur | PSH, ACK | `4001` | `9001` | 120 |
+| 5 | Serveur → Client | ACK | `9001` | `4121` | 1460 |
+| 6 | Serveur → Client | PSH, ACK | `10461` | `4121` | 540 |
+| 7 | Client → Serveur | ACK | `4121` | `11001` | 0 |
+| 8 | Client → Serveur | FIN, ACK | `4121` | `11001` | 0 |
+| 9 | Serveur → Client | ACK | `11001` | `4122` | 0 |
+
+- Le SYN compte pour un octet : `4000 + 1 = 4001` et `9000 + 1 = 9001`.
+- Le segment 3 ne contient pas de données : le segment 4 commence donc aussi à `4001`.
+- Le segment 6 suit le segment 5 : `9001 + 1460 = 10461`.
+- Le client a reçu les octets `9001` à `11000` du serveur (`1460 + 540 = 2000` octets) : il attend l'octet `11001`.
+- Le FIN compte pour un octet : le serveur répond `ACK = 4121 + 1 = 4122`.
+- Le segment 1 n'a pas de valeur ACK, car le bit ACK n'y est pas activé.
+{{% /expand %}}
+
+
+# 5.3. UDP
+-------------
+
+**UDP (*User Datagram Protocol*)** est un protocole de transport **léger**, défini dans la [RFC 768](https://datatracker.ietf.org/doc/html/rfc768).
+
+Comme TCP, il utilise des numéros de port pour identifier les applications. Mais il n'offre **aucune** des autres garanties de TCP.
+
+| Caractéristique | TCP | UDP |
+|-----------------|-----|-----|
+| Établissement de connexion | Oui (handshake) | **Non** : les données sont envoyées immédiatement |
+| Accusés de réception et retransmission | Oui | **Non** : un datagramme perdu est perdu |
+| Reconstitution ordonnée | Oui | **Non** : les données sont remises dans l'ordre d'arrivée |
+| Contrôle de flux | Oui (fenêtre) | **Non** : un récepteur surchargé abandonne les datagrammes |
+
+{{%notice style="info" title="Remarque"%}}
+On décrit généralement UDP par ce qu'il **ne fait pas** par rapport à TCP. Cette simplicité est justement son avantage : moins d'en-tête, aucun échange préalable, aucune attente d'accusé de réception.
+{{%/notice%}}
 
 ## En-tête UDP
 
-![En-tête UDP](../../images/04-04-02.png)
+![En-tête UDP](/images/05/05-entete-udp.png)
 
-## Exemples de services
+| Champ | Fonction |
+|-------|----------|
+| **Port source**  | Port de l'application qui envoie |
+| **Port destination** | Port de l'application qui doit recevoir |
+| **Longueur** | Taille totale du datagramme (en-tête + données), en octets |
+| **Somme de contrôle** | Détection d'erreurs |
 
-+ Système de noms de domaine (*DNS*)
-+ SNMP (*Simple Network Management Protocol*)
-+ Protocole DHCP (*Dynamic Host Configuration Protocol*)
-+ Protocole RIP (*Routing Information Protocol*)
-+ TFTP (*Trivial File Transfer Protocol*)
-+ Téléphonie IP ou voix sur IP (*VoIP*)
-+ Jeux en ligne
+L'en-tête UDP mesure **8 octets**, contre **20 octets minimum** pour TCP.
 
+## Fiabilité gérée par l'application
 
-# 4.3. Ateliers
--------------------
+Si une application utilisant UDP a besoin de fiabilité, c'est **l'application elle-même** qui doit la gérer.
 
-# 4.3.1. Introduction à Wireshark
--------------------
+Exemple : un client DNS qui ne reçoit pas de réponse à sa requête après un certain délai envoie simplement une nouvelle requête.
 
-{{% notice style="tip" title=".docx"%}}
-+ [Version Word du laboratoire](../../lab-wireshark.docx) (utile pour garder une trace de votre travail) !
-{{% /notice%}}
-Dans ce travail pratique, vous utiliserez Wireshark pour examiner les paquets échangés entre votre ordinateur et internet lorsque vous allez sur la page www.google.com. La première partie couvrira l’ouverture de connexion TCP en trois étapes, tandis que la deuxième couvrira la communication UDP avec un serveur DNS pour récupérer l’adresse IP associée au domaine www.google.com.
+## Exemples de services utilisant UDP
 
-## Partie I - Préparation de l’environnement
-Pour commencer, utilisez la commande `ipconfig /all` sur l’ordinateur de la salle de laboratoire pour trouver et enregistrer les adresses MAC et IP de la carte réseau et l’adresse IP de la passerelle par défaut et du serveur DNS. Enregistrez ces informations dans le tableau ci-dessous. Elles seront utilisées dans les prochaines sections. Si vous ne terminez pas le laboratoire durant la première séance, assurez-vous de prendre le même poste à la prochaine.
+- **DNS** (`53`) : requêtes et réponses courtes (chapitre suivant);
+- **DHCP** (`67`, `68`) : attribution automatique d'adresses (chapitre suivant);
+- **NTP** (`123`) : synchronisation de l'heure;
+- **TFTP** (`69`) : transfert de fichiers simplifié;
+- la **voix sur IP**, la **visioconférence** et les **jeux en ligne**.
 
-|||
-|-|-------------------|
-|**Adresse IP**|                            |
-|**Adresse MAC**|                           |
-|**Adresse IP de la passerelle par défaut**|        |
-|**Adresse IP du serveur DNS**|              |
 
-+ **Faites une capture d’écran des résultats de votre commande** 
+{{%notice style="tip" title="À retenir"%}}
+UDP = ports + longueur + somme de contrôle. Pas de connexion, pas d'accusé de réception, pas de retransmission, pas d'ordre.
+{{%/notice%}}
 
 
-Ensuite, allez sur `Wireshark` et sélectionnez l’interface associée aux adresses IP et MAC du PC enregistrées ci-haut pour capturer les paquets.
+# 5.4. Choisir entre TCP et UDP
+-------------
 
-Après avoir sélectionné l’interface, cliquez sur `Démarrer` pour commencer à capturer les paquets. Ensuite, ouvrez un navigateur Web et rendez-vous à l’adresse `www.google.com`. Réduisez la fenêtre *Google* et retournez dans *Wireshark*. Appuyez sur `Stop` (Arrêter) pour arrêter la capture *Wireshark*.
+Le choix du protocole de transport est fait par les **développeurs de l'application**, selon ses besoins.
 
-## Partie II - Examiner une connexion TCP en trois étapes
-Dans *Wireshark*, localisez les colonnes `Source`, `Destination`, et `Protocol`.
+| Critère | TCP | UDP |
+|---------|-----|-----|
+| Fiabilité | Toutes les données arrivent, dans l'ordre | Des données peuvent être perdues ou désordonnées |
+| Délai avant le premier envoi | Handshake nécessaire | Aucun |
+| Taille de l'en-tête | 20 octets minimum | 8 octets |
+| Réaction à une perte | Retransmission (introduit un délai) | Aucune |
+| Usage typique | Les données doivent être **complètes et exactes** | Les données doivent être **à temps** |
 
-Recherchez le premier paquet de la connexion en trois étapes. Dans l’exemple ci-dessous il s’agit de la **trame 61**: 
+## Exemples
 
-![Wireshark-01](../../images/04-05-01.png)
+**TCP** convient lorsqu'il manque une seule donnée et que le résultat est inutilisable :
 
-*2.1. Quelle est l’adresse IP du serveur Web de Google dans le cas ci-dessus?* 
+- une page web (HTTP, HTTPS);
+- un courriel (SMTP);
+- un transfert de fichier (FTP);
+- une session d'administration à distance (SSH).
 
-Si vous avez de nombreux paquets qui ne sont pas liés à la connexion TCP, il peut être nécessaire d’utiliser la fonction de **filtre** de *Wireshark*. Saisissez `tcp` dans la zone de saisie du filtre dans *Wireshark* et appuyez sur Entrée.
+**UDP** convient lorsqu'une donnée arrivée en retard est aussi inutile qu'une donnée perdue :
 
-Dans notre exemple, la **trame 61** correspond au début de la connexion en trois étapes entre l’ordinateur et le serveur Web de Google. Dans le volet de la liste des paquets (section supérieure de la fenêtre principale), sélectionnez la trame correspondante. Cette action met en surbrillance la ligne et affiche les informations décodées de ce paquet dans les deux volets inférieurs. 
+- un appel vocal ou vidéo : retransmettre un morceau de son d'il y a une seconde n'aurait aucun sens, il vaut mieux continuer;
+- un jeu en ligne : seule la position actuelle des joueurs compte;
+- une requête courte (DNS, DHCP, NTP) : établir une connexion coûterait plus cher que l'échange lui-même; en cas de perte, on renvoie simplement la requête.
 
-Cliquez sur l’icône `+` à gauche du protocole TCP (Transmission Control Protocol) dans le volet de détails des paquets pour développer l’affichage des informations TCP.
+## DNS : un service qui utilise les deux
 
-Cliquez sur l’icône `+` à gauche des bits de contrôle. 
+Le service **DNS** utilise le port `53` avec les deux protocoles :
 
-Examinez les ports source et de destination ainsi que les bit de contrôles définis.
+- **UDP** pour les requêtes courantes, courtes et nombreuses;
+- **TCP** lorsque la réponse est trop volumineuse pour un datagramme, ou pour copier l'ensemble des informations d'un serveur DNS vers un autre.
 
-![Wireshark-02](../../images/04-05-02.png)
+Le choix dépend donc du **type d'échange**, et pas seulement de l'application.
 
-+ **Faites une capture d’écran de vos résultats**
+{{%notice style="tip" title="À retenir"%}}
+TCP privilégie la **fiabilité**. UDP privilégie la **rapidité** et la **légèreté**. Aucun n'est meilleur que l'autre : chacun répond à des besoins différents.
+{{%/notice%}}
 
-*2.2. Quel est le numéro du port source TCP ?*
 
-*2.3. Comment classifieriez-vous le port source ?*
+# 5.5. Exercices
+-------------
 
-*2.4. Quel est le numéro du port de destination TCP ?*
+### 1. Choisir le protocole
 
-*2.5. Comment classifieriez-vous le port de destination ?*
+Pour chaque situation, indiquez le protocole le plus approprié et justifiez votre choix.
 
-*2.6. Quel bit de contrôle est défini ? (plusieurs réponses possibles)*
+1. Téléchargement d'une mise à jour de système d'exploitation.
+2. Capteur de température qui envoie une mesure chaque seconde à un serveur.
+3. Appel en visioconférence.
+4. Envoi d'un formulaire d'inscription sur un site web.
+5. Demande d'adresse IP par un poste qui vient de démarrer.
+6. Copie d'une base de données vers un serveur de sauvegarde.
 
-*2.7. Sur quoi le numéro d’ordre relatif est-il défini ?*
+{{% expand title="Solution" %}}
+1. **TCP** : un fichier incomplet ou corrompu est inutilisable.
+2. **UDP** : une mesure perdue n'est pas grave, la suivante arrive une seconde plus tard; l'en-tête léger convient aussi aux petits appareils.
+3. **UDP** : une image ou un son retransmis arriverait trop tard; mieux vaut une courte distorsion qu'un délai.
+4. **TCP** : toutes les données du formulaire doivent arriver intactes.
+5. **UDP** : c'est DHCP; le poste n'a pas encore d'adresse IP et l'échange est court.
+6. **TCP** : la copie doit être complète et exacte.
+{{% /expand %}}
 
-Pour sélectionner la trame suivante dans la connexion en trois étapes, sélectionnez `Go` dans le menu *Wireshark* et sélectionnez `Next Packet In Conversation`. Dans cet exemple, il s’agit de la **trame 87**. C’est la réponse du serveur Web Google à la requête initiale (*SYN*) de démarrage d’une session :
+### 2. Synthèse
 
-![Wireshark-03](../../images/04-05-03.png)
-
-
-*2.8. Quelles sont les valeurs des ports source et de destination ?*
-
-*2.9. Sur quoi les numéros d’ordre relatif et d’accusé de réception sont-ils définis ?*
-
-Enfin, examinez le troisième paquet de la connexion en trois étape. Dans l’exemple ci-dessous, c’est la **trame 88** :
-
-![Wireshark-04](../../images/04-05-04.png)
-
-*2.10. Quel bit de contrôle est défini ? (plusieurs réponses possibles)*
-
-
-+ **Faites une capture d’écran de votre résultat.** 
-
-Les numéros d’ordre relatif et d’accusé de réception sont définis sur 1 comme point de départ. La connexion TCP est désormais établie, et la communication entre l’ordinateur source et le serveur Web peut commencer.
-
-## Partie III - Examiner une capture DNS UDP
-Dans cette partie, vous examinerez les paquets *UDP* générés lors de la communication avec le serveur DNS afin de récupérer les adresses IP associées au domaine `www.google.com`.
-
-Dans la fenêtre principale de Wireshark, tapez `dns` dans la zone de saisie de la barre de filtre. Cliquez sur `Apply` ou appuyez sur Entrée.
-
-{{% notice style="info" title="Remarque" %}}
-Si vous ne voyez aucun résultat après l’application du filtre DNS, fermez le navigateur web et dans la fenêtre d’invite de commandes, tapez `ipconfig /flushdns` pour supprimer tous les résultats DNS précédents. Redémarrez la capture *Wireshark* et répétez les instructions de la partie I. Si cela ne résout pas le problème, dans la fenêtre d’invite de commandes, vous pouvez taper `nslookup www.google.com` au lieu d’utiliser le navigateur Web.
-{{% /notice %}}
-
-![Wireshark-05](../../images/04-05-05.png)
-
-Dans le volet de la liste des paquets (section supérieure) de la fenêtre principale, localisez le paquet qui inclut « **standard query** » et « **A www.google.com** » (voir la **trame 25** ci-dessus comme exemple).
-
-Examinez le segment UDP de la requête DNS capturée par *Wireshark*. Dans cet exemple, la **trame 25** est sélectionnée pour l’analyse. Les protocoles dans cette requête apparaissent Les entrées de protocole sont mises en surbrillance en gris : 
-
-![Wireshark-06](../../images/04-05-06.png)
-
-Dans le volet de détails des paquets, on peut voir que la **trame 25** possède 74 octets de données sur le câble comme indiqué à la première ligne. C’est le nombre d’octets nécessaires pour envoyer une requête DNS à un serveur et demander les adresses IP de `www.google.com`.
-
-La ligne `Ethernet II` affiche les adresses MAC source et de destination. L’adresse MAC provient de votre PC, car c’est lui qui a émis la requête DNS. L’adresse MAC de destination provient de la passerelle par défaut, car c’est le dernier arrêt avant la sortie de cette requête du réseau local.
-
-+ **Effectuez une capture d’écran de votre résultat**
-
-*3.1 L’adresse MAC source est-elle identique à celle enregistrée dans la première partie pour le PC ?*
-
-Sur la ligne `Internet Protocol Version 4`, la capture Wireshark de paquets IP indique que l’adresse IP source de cette requête DNS est `192.168.0.43` et l’adresse IP de destination est `192.168.0.1`. Dans cet exemple, l’adresse de destination est la passerelle par défaut. Le routeur est la passerelle par défaut sur ce réseau. Associez les adresses MAC et IP pour les périphériques source et destination : 
-
-||||
-|----|----|----|
-|Périphérique|Adresse IP| Adresse MAC|
-|Votre PC|||
-|Passerelle par défaut|||
-
-+ **Faites une capture d’écran montrant où vous avez trouvé les informations entrées dans le tableau ci-dessus.**
-
-
-Développez le protocole *UDP (User Datagram Protocol)* dans le volet de détails des paquets en cliquant sur le signe plus (`+`). Notez qu’il n’existe que quatre champs. Le numéro du port source dans cet exemple est `49430`. Le port source a été généré aléatoirement par votre PC au moyen des numéros de port qui ne sont pas réservés. Le port de destination est le `53`. Le port `53` est un port réservé destiné à une utilisation avec DNS. Les serveurs DNS écoutent sur le port `53` les requêtes DNS provenant des clients.
-
-![Wireshark-07](../../images/04-05-07.png)
-
-Dans cet exemple, la longueur de ce segment UDP est de 40 octets. Sur 40 octets, 8 sont utilisés pour l’en-tête. Les 32 autres octets sont utilisés par les données de requête DNS. Les 32 octets de données de requête DNS sont mis en surbrillance dans l’illustration suivante du volet d’octets des paquets (section inférieure) de la fenêtre principale de *Wireshark*.
-
-![Wireshark-08](../../images/04-05-08.png)
-
-+ **Faites une capture d’écran de votre résultat.**
-
-La somme de contrôle est utilisée pour déterminer l’intégrité du paquet une fois qu’il a transité par Internet. L’en-tête UDP surcharge peu le réseau parce que le protocole UDP n’a pas de champs associés à l’échange en trois étapes du protocole TCP. Tous les problèmes de fiabilité liés au transfert des données doivent être gérés par la couche application.
-
-Notez les résultats de Wireshark dans la table ci-dessous.
-
-|||
-|---|---|
-|Taille de la trame||
-|Adresse MAC source||
-|Adresse MAC de destination||
-|Adresse IP source||
-|Adresse IP de destination||
-|Port source||
-|Port de destination||
-
-Ensuite, examinez le paquet de réponse DNS et vérifiez que ce paquet utilise aussi le protocole UDP.
-
-Dans cet exemple, la **trame 29** est le paquet de réponse DNS. Notez que le nombre d’octets sur le câble correspond à 90 octets. Il s’agit d’un paquet plus gros par rapport au paquet de
-requête.
-
-![Wireshark-09](../../images/04-05-09.png)
-
-
-+ **Faites une capture d’écran de votre résultat**
-
-*Dans la trame Ethernet II de la réponse DNS, de quel périphérique provient l’adresse MAC source et à quel périphérique correspond l’adresse MAC de destination ?*
-
-*Notez les adresses IP source et de destination du paquet IP. Quelle est l’adresse IP de destination ? Quelle est l’adresse IP source ?*
-
-Dans le segment UDP, le rôle des numéros de port a également été inversé. Le numéro du port de destination est `49430`. Le numéro de port `49430` est le même port que celui qui a été généré par votre PC lorsque la requête DNS a été envoyée au serveur DNS. Votre PC a attendu une réponse DNS sur ce port.
-
-Le numéro du port source est `53`. Le serveur DNS attend une requête DNS sur le port `53`, puis envoie une réponse DNS avec le numéro de port source 53 à l’émetteur de la requête DNS. Lorsque la réponse DNS est développée, examinez les adresses IP résolues pour `www.google.com` dans la section `Answers` (Réponses).
-
-![Wireshark-10](../../images/04-05-10.png)
-
-+ **Faites une capture d’écran de votre résultat.**
-
-# 4.3.2. Socket TCP/UDP
--------------------
-
-Une des façons de créer une communication entre deux hôtes d'un réseau est d'utiliser l'approche client-serveur :
-
-+ Le serveur est celui qui reçoit les messages
-+ Le client est celui qui envoit les messages
-
-Les deux protocoles de la couche transport, TCP et UDP, peuvent être utilisés pour envoyer des messages entre un client et un serveur.
-
-+ TCP: une connexion est établie entre client et serveur. Cette connexion est ensuite utilisée pour que les deux s’échangent des messages. Lorsqu’un des deux termine la connexion, celle-ci est fermée.
-+ UDP: le client envoit des messages au serveur sans établir de connexion préalable. Il n’est donc pas possible de savoir si le serveur est en ligne et prêt à recevoir les messages.
-+ Pour communiquer en utilisant TCP ou UDP, il faut utiliser les *sockets*.
-
-{{% notice title="Rappel" style="tip" %}}
-Un socket représente le point terminal d’une communication entre deux hôtes sur un réseau. Il peut être la source ou la destination d’un message. Les sockets sont définis par une adresse IP et un port et sont utilisés par les programmes pour envoyer et recevoir des messages.
-{{% /notice %}}
-
-Dans cet atelier nous allons explorer comment créer une architecture client-serveur en utilisant le langage de programmation Python et la librairie standard `socket`.
-
-## Client
-### UDP
-Le programme suivant envoit un message par UDP sur un réseau. L’adresse de destination est `127.0.0.1` et le port est `8888`:
-```python
-import socket
-
-DEST_IP = "127.0.0.1" # localhost
-DEST_PORT = 8888
-MESSAGE = "Salut !\n"
-
-try:
-    # Ouverture d'un socket 
-    # se ferme lorsqu'on sort du bloc with
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as socket:
-        # Envoyer le message
-        socket.sendto(MESSAGE.encode(), (DEST_IP, DEST_PORT))
-except Exception as err:
-    print(f"Erreur: {err}")
-except KeyboardInterrupt:
-    print("Fin du programme")
-```
-
-Vous pouvez tester ce programme comme suit: à partir d’un hôte sur le même réseau que le client, ouvrez un port UDP en mode “listen” avec la commande `nc` (`netcat`). Cet hôte joue donc le rôle de serveur. Par exemple, pour ouvrir le port UDP `8888` la commande est la suivante :
-
-```bash
-nc -ulp 8888
-```
-
-Assurez-vous que la variable `DEST_IP` du programme a bien comme valeur l’adresse de l’hôte où vous avez lancé la commande `nc`.
-
-### TCP
-Le programme suivant envoit un message par TCP sur un réseau. L’adresse de destination est `127.0.0.1` (*localhost*) et le port est `8888`:
-```python
-import socket
-
-DEST_IP="127.0.0.1"
-DEST_PORT = 8888
-MESSAGE = "abcdefg!\n"
-
-try:
-    # Ouverture d'un socket (se ferme lorsqu'on sort du bloc with)
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket:
-        # Demande de connexion
-        socket.connect((DEST_IP, DEST_PORT))
-        
-        # Envoie du message
-        socket.send(MESSAGE.encode())
-
-# Erreur de connexion
-except ConnectionRefusedError:
-    print("Erreur: Serveur indisponible")
-# Autres erreurs
-except Exception as err:
-    print(f"Erreur: {err}")
-# Fin du programme avec CTRL+C
-except KeyboardInterrupt:
-    print("Fin du programme")
-```
-
-Vous pouvez aussi tester ce programme avec la commande `nc`. À partir d’un hôte sur le même réseau que la machine client (qui aura le rôle de serveur), ouvrez un port TCP en mode “listen” au port TCP `8888`:
-```bash
-nc -lp 8888
-```
-
-{{% notice style="tip" title=Remarque %}}
-+ Les commandes `nc` ou `python` sont introuvables? Essayez de les installer :
-```bash
-sudo dnf install nc # Alma/Rocky/Centos
-sudo apt install netcat-openbsd # Ubuntu/Debian
-
-sudo dnf install python # Alma/Rocky/Centos
-sudo apt install python # Ubuntu/Debian
-```
-{{% /notice %}}
-
-Assurez-vous que la variable `DEST_IP` du programme a bien comme valeur l’adresse de l’hôte où vous avez lancé la commande `nc`; ensuite exécutez-le.
-
-## Serveur
-### UDP
-Le programme suivant ouvre un socket au port UDP `8888` et affiche les messages entrants:
-
-```python
-import socket
-
-IP = "" # Écoute sur toutes les IPs du serveur
-PORT = 8888
-BUFFER_SIZE = 1024
-
-try: 
-    # Ouverture d'un socket (se ferme quand on sort du bloc with)
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as socket:
-        # Lie le socket à l'adresse et au port d'écoute
-        socket.bind((IP, PORT))
-        print(f"Attente de messages UDP sur le port {PORT}...")
-
-        # Réception des messages
-        while True:
-            # Réception des données
-            message, adr_dist = socket.recvfrom(BUFFER_SIZE)
-            
-            # Décodage binaire -> texte
-            # Suppression des "impuretés"
-            message = message.decode().strip()
-            print(f"Message reçu: {message}")
-
-except Exception as err:
-    print(f"Erreur: {err}")
-except KeyboardInterrupt:
-    print(f"Fin du programme")
-
-```
-
-Pour tester ce programme à partir d’un autre hôte (qui agit comme client), lancez la commande `nc` (remplacez `1.2.3.4` par l’adresse IP du serveur) et tapez le message que vous voulez envoyer:
-
-```bash
-nc -u 1.2.3.4 8888
-abcdefg!
-```
-
-### TCP
-Le programme suivant ouvre un socket au port TCP `8888` et attend les connexions entrantes. Lorsque la connexion est établie il affiche les messages et termine la connexion lorsque le message reçu est vide (taille 0):
-```python
-import socket
-
-IP = "" # Écoute sur toutes les IPs du serveur
-PORT = 8888
-BUFFER_SIZE = 1024
-try: 
-    # Ouverture d'un socket (se ferme quand on sort du bloc with)
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket:
-        # Lie le socket à l'adresse et au port d'écoute
-        socket.bind((IP, PORT))
-        
-        # Attend une connexion (écoute)
-        socket.listen()
-        print(f"Serveur TCP en attente de connexion sur le port {PORT}...")
-        
-        # Accepte la connexion reçue
-        conn, addr = socket.accept()
-        with conn:
-            print(f"Client connecté : {addr}")
-            while True:
-                # Attend de recevoir un message
-                data = conn.recv(BUFFER_SIZE)
-                if not data :
-                    print("Déconnecté")
-                    break
-                # Décodage binaire -> texte
-                # Suppression des "impuretés"
-                message = data.decode().strip()
-                print(f"Reçu : {message}")
-except Exception as err:
-    print(f"Erreur: {err}")
-except KeyboardInterrupt:
-    print(f"Fin du programme")
-    exit(1)
-
-```
-
-Pour tester ce programme à partir d’un autre hôte (qui agit comme client), lancez la commande `nc` (remplacez `1.2.3.4` par l’adresse IP du serveur) et tapez le message que vous voulez envoyer:
-
-```bash
-nc 1.2.3.4 8888
-abcdefg!
-```
-
-{{%notice style="note" title="Note"%}}
-Si vous n'arrivez pas à faire communiquer le client et le serveur, essayez de désactiver le pare-feu (ce n'est pas une très bonne pratique, mais nous n'allons pas couvrir les règles de pare-feu dans ce cours) :
-
-```bash
-sudo systemctl stop firewalld # arrêter le service du pare-feu
-sudo systemctl disable firewalld # désactiver le service (ne démarre pas au prochain reboot)
-sudo systemctl status firewalld # vérifier
-```
-{{%/notice %}}
-
-## Exercices
-### Exercice 1
-1. Créez un serveur TCP qui :
-    + écoute sur le port `5000`,
-    + accepte une connexion,
-    + reçoit un message du client,
-    + affiche le message,
-    + répond "Bonjour client, j'ai bien reçu ton message : <Message reçu>".
-
-2. Créez un client TCP qui :
-    + se connecte au serveur,
-    + demande à l'utilisateur d'entrer un message
-    + envoie le message au serveur
-    + lorsque le message envoyé est "quit", le client met fin à la connexion et le programme se termine.
-
-{{% expand title="Solution"%}}
-1. **Serveur** 
-```python
-import socket
-
-IP = ""
-PORT = 5000
-BUFFER_SIZE = 1024
-
-try:
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket:
-        socket.bind((IP, PORT))
-        socket.listen()
-        print(f"Serveur TCP en attente de connexion sur le port {PORT}...")
-        conn, addr = socket.accept()
-        with conn:
-            print(f"Client connecté : {addr}")
-            while True:
-                data = conn.recv(1024)
-                if not data:
-                    break
-                
-                request = data.decode().strip()
-                print(f"Reçu : {request}")
-                
-                if request == "quit":
-                    break
-                
-                response = f"Bonjour client, j'ai bien reçu ton message : {request}"
-                conn.sendall(response.encode('utf-8'))
-        print("Fin de la conversation")
-except ConnectionRefusedError as e:
-    print("Erreur: serveur indisponible")
-except Exception as err:
-    print(f"Erreur: {err}")
-except KeyboardInterrupt:
-    print("Fin de la conversation")
-```
-2. **Client** 
-```python
-import socket
-
-IP="192.168.121.226"
-PORT = 5000
-BUFFER_SIZE = 1024
-
-try:
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.connect((IP, PORT))
-
-        while True:
-            user_input = input(">>> ")
-            sock.send(user_input.strip().encode())
-            if user_input == "quit":
-                print("Fin de la conversation")
-                break 
-            data = sock.recv(BUFFER_SIZE)
-            if not data :
-                print("Déconnecté")
-                break
-            else:
-                message = data.decode("utf-8")
-                print(f"Serveur: {message}")
-except ConnectionRefusedError as e:
-    print("Erreur: serveur indisponible")
-except Exception as err:
-    print(f"Erreur: {err}")
-except KeyboardInterrupt:
-    print("Fin de la conversation")
-```
+1. Expliquez pourquoi un serveur web peut servir plusieurs clients en même temps sur le seul port `80`.
+2. Un client envoie un datagramme UDP à un serveur qui est éteint. Le client en est-il informé par UDP? Comparez avec la même situation en TCP.
+3. Calculez le nombre d'octets d'en-tête de transport économisés en envoyant 1000 petits messages avec UDP plutôt qu'avec TCP (en-tête TCP de 20 octets).
+4. Une application de clavardage doit garantir que les messages arrivent tous et dans l'ordre. Un développeur propose d'utiliser UDP « parce que c'est plus rapide ». Que lui répondez-vous?
+
+{{% expand title="Solution" %}}
+1. Chaque conversation est identifiée par une paire de sockets. Le socket du serveur (`IP:80`) est le même, mais le socket de chaque client (adresse IP et port éphémère) est différent.
+2. Non : UDP n'attend aucune réponse et n'envoie aucun accusé de réception, donc le client ne sait pas si le datagramme est arrivé. En TCP, le client n'obtiendrait jamais de réponse à son SYN : après plusieurs tentatives, la connexion échouerait et l'application serait informée de l'erreur.
+3. `20 × 1000 - 8 × 1000  = 12 000 octets`.
+4. Avec UDP, l'application devrait elle-même gérer les accusés de réception, les retransmissions et la remise en ordre, c'est-à-dire réimplémenter TCP. TCP est le choix approprié.
 {{% /expand %}}
 
 
-### Exercice 2
-Reproduire le comportement du client-serveur de l'exercice 1, cette fois-ci avec UDP.
+# 5.6. Laboratoires
 
-{{% expand title="Solution"%}}
-1. **Serveur**
-```python
-import socket
+# 5.6.1. Introduction à Wireshark
+-------------
 
-IP = ""
-PORT = 5000
-BUFFER_SIZE = 1024
+## Contexte
 
-try:
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as socket:
-        socket.bind((IP, PORT))
-        print(f"Serveur UDP en écoute de messages sur le port {PORT}...")
-        while True:
-            data, address = socket.recvfrom(BUFFER_SIZE)
-            request = data.decode().strip()
-            print(f"Reçu : {request}")
-            
-            response = f"Bonjour client, j'ai bien reçu ton message : {request}"
-            socket.sendto(response.encode(), address)
-except Exception as err:
-    print(f"Erreur: {err}")
-except KeyboardInterrupt:
-    print("Fin du serveur UDP")
+**Wireshark** est un analyseur de trafic réseau. Il capture les trames qui passent par une interface et décode chaque couche : Ethernet, IP, TCP ou UDP, puis le protocole d'application.
+
+Dans ce laboratoire, vous allez capturer et analyser deux échanges entre votre poste et un serveur web du département :
+
+1. une **requête DNS** (UDP), pour obtenir l'adresse IP du serveur;
+2. une **requête HTTP** (TCP), pour obtenir une page web.
+
+Vous observerez ainsi, dans du vrai trafic, les notions vues dans ce chapitre : ports, en-tête TCP et UDP, établissement de connexion, numéros d'ordre et d'accusé de réception, fermeture de connexion.
+
+| Élément | Valeur |
+|---------|--------|
+| **Serveur web** | `ftp.lan` |
+| **Protocole** | HTTP (port `80`) |
+| **Poste** | Poste Windows du laboratoire, avec Wireshark |
+
+
+## 1- Préparation
+
+### 1. Relever la configuration du poste
+
+Dans une invite de commandes :
+
+```powershell
+ipconfig /all
 ```
 
-+ **Client**
-```python
-import socket
+Complétez le tableau (interface `Ethernet`) :
 
-IP="192.168.121.226"
-PORT = 5000
-BUFFER_SIZE = 1024
+| Élément | Valeur |
+|---------|--------|
+| **Adresse IPv4 du poste** | |
+| **Adresse MAC du poste** | |
+| **Passerelle par défaut** | |
+| **Serveur DNS** | |
 
-try:
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
-        while True:
-            user_input = input(">>> ")
-            sock.sendto(
-                user_input.strip().encode(),
-                (IP, PORT)
-            )
-            if user_input == "quit":
-                break 
-            data = sock.recv(BUFFER_SIZE)
-            message = data.decode()
-            print(f"Serveur: {message}")
-        print("Fin du client UDP")
-except Exception as err:
-    print(f"Erreur: {err}")
-except KeyboardInterrupt:
-    print("Fin du client UDP")
+### 2. Prédire avant d'observer
+
+Avant toute capture, complétez le tableau à partir de ce que vous savez du chapitre.
+
+| Question | Requête DNS | Requête HTTP |
+|----------|-------------|--------------|
+| Protocole de transport utilisé | | |
+| Port de destination | | |
+| Plage du port source | | |
+| Y aura-t-il un établissement de connexion? | | |
+
+Vous comparerez vos prédictions aux résultats à la fin du laboratoire.
+
+### 3. Démarrer la capture
+
+1. Videz le cache DNS du poste :
+    ```powershell
+    ipconfig /flushdns
+    ```
+2. Ouvrez **Wireshark**.
+3. Sélectionnez l'interface `Ethernet`
+4. Démarrez la capture.
+5. Dans l'invite de commandes, exécutez :
+    ```powershell
+    nslookup ftp.lan
+    curl.exe http://ftp.lan/
+    ```
+6. Arrêtez la capture.
+
+{{%notice style="tip" title="Conseil"%}}
+Enregistrez votre capture (**Fichier → Sauvegarder Sous**). Vous pourrez la rouvrir si vous devez poursuivre l'analyse plus tard.
+{{%/notice%}}
+
+## 2- Requête DNS (UDP)
+
+### 1. Trouver la requête
+
+Dans la barre de filtre, saisissez :
+
+```text
+dns
 ```
-{{% /expand %}}
+
+Repérez la requête (*Standard query*) de type **A** pour `ftp.lan`, ainsi que sa réponse (*Standard query response*).
+
+{{%notice style="info" title="Remarque"%}}
+Vous pourriez voir plusieurs requêtes : par exemple une de type **A** (adresse IPv4) et une de type **AAAA** (adresse IPv6), ou des requêtes avec le suffixe DNS du réseau ajouté au nom. Concentrez-vous sur la requête de type **A** qui a reçu une réponse contenant une adresse.
+{{%/notice%}}
+
+### 2. Analyser la requête
+
+Sélectionnez la requête et développez chaque couche dans le volet de détails.
+
+Complétez le tableau :
+
+| Couche | Champ | Valeur |
+|--------|-------|--------|
+| **Ethernet II** | MAC source | |
+| | MAC destination | |
+| **IPv4** | IP source | |
+| | IP destination | |
+| | Protocole | |
+| **UDP** | Port source | |
+| | Port destination | |
+| | Longueur | |
+
+
+### 3. Analyser la réponse
+
+Sélectionnez la réponse DNS.
+
+1. Comparez les ports source et destination avec ceux de la requête. Que constatez-vous?
+2. Dans la section **Answers** de la réponse DNS, relevez l'adresse IP du serveur web.
+
+### Questions
+
+1. Combien de champs l'en-tête UDP contient-il? Lesquels?
+2. Avant la requête DNS, y a-t-il un échange préalable entre le poste et le serveur DNS? Qu'est-ce que cela confirme au sujet d'UDP?
+
+## 3- Connexion TCP
+
+### 1. Isoler la conversation
+
+Remplacez le filtre par (en utilisant l'adresse IP relevée dans la réponse DNS) :
+
+```text
+ip.addr == ADRESSE_IP_DU_SERVEUR && tcp.port == 80
+```
+
+### 2. Analyser l'établissement de connexion
+
+Repérez les trois premiers segments de la conversation.
+
+Pour chacun, développez l'en-tête TCP puis la section **Flags**. Complétez le tableau :
+
+| Segment | Sens | Port source | Port destination | Bits activés | SEQ (relatif) | ACK (relatif) |
+|---------|------|-------------|------------------|--------------|---------------|---------------|
+| 1 | | | | | | |
+| 2 | | | | | | |
+| 3 | | | | | | |
+
+Dans le premier segment, relevez aussi :
+
+- le **numéro d'ordre brut** (*Sequence Number (raw)*) : c'est le numéro initial réel, choisi aléatoirement;
+- la valeur du **MSS** annoncée dans les **Options**.
+
+### Questions
+
+1. Le port source du client correspond-il à votre prédiction? Dans quelle plage se trouve-t-il?
+2. Dans le segment 2, pourquoi l'ACK vaut-il `1` alors que le segment 1 ne contenait aucune donnée?
+3. Comparez le numéro d'ordre brut du client avec celui du serveur. Pourquoi sont-ils différents?
+
+## 4- Échange de données et fermeture
+
+### 1. Vérifier les numéros d'ordre et d'accusé de réception
+
+Repérez le segment qui contient la requête HTTP (`GET / HTTP/1.1`), puis le premier segment de la réponse du serveur.
+
+Complétez :
+
+| Segment | Sens | SEQ | ACK | Longueur des données (*TCP Segment Len*) |
+|---------|------|-----|-----|------------------------------------------|
+| Requête `GET` | Client → Serveur | | | |
+| Réponse du serveur | Serveur → Client | | | |
+
+Vérifiez que :
+
+```text
+ACK de la réponse = SEQ de la requête + longueur de la requête
+```
+
+### 2. Lire la conversation
+
+Faites un clic droit sur un segment de la conversation, puis **Suivre → TCP Flux**.
+
+Wireshark reconstitue les données échangées : la requête du client et la réponse du serveur.
+
+1. Quelle méthode HTTP le client utilise-t-il?
+2. Quel code de réponse le serveur renvoie-t-il?
+
+Fermez la fenêtre (le filtre de la conversation reste appliqué).
+
+### 3. Observer la fermeture
+
+Repérez les derniers segments de la conversation.
+
+1. Quels bits de contrôle sont activés?
+2. Combien de segments observez-vous pour la fermeture : trois ou quatre? Expliquez.
+3. Qui (client ou serveur) a demandé la fermeture en premier?
+
+### 4. Vue d'ensemble
+
+Ouvrez **Statistiques → Graphique des flux** et cochez **Limiter au filtre d'affichage**.
+
+Wireshark affiche la conversation sous forme de diagramme, semblable à ceux de ce chapitre.
+
+Identifiez-y les trois étapes : établissement, échange de données, fermeture.
+
+## Questions de synthèse
+
+1. Comparez vos résultats avec vos prédictions de la partie 1. Lesquelles étaient correctes?
+2. Comparez la taille de l'en-tête UDP de la requête DNS avec celle de l'en-tête TCP du premier segment (champ *Header Length*). Pourquoi l'en-tête TCP est-il plus grand?
+3. Combien de segments TCP ont été échangés au total pour obtenir une seule page web? Combien de datagrammes UDP pour la requête DNS? Qu'est-ce que cela illustre?
+4. Pourquoi la requête DNS utilise-t-elle UDP, alors que la page web utilise TCP?
+
+
+# 5.6.2. Ports et sockets
+-------------
+
+## Contexte
+
+Dans ce laboratoire, vous allez mettre en place une communication **client/serveur** entre deux machines Linux à l'aide de la commande **`nc` (*netcat*)**.
+
+`nc` permet :
+
+- côté serveur, d'**ouvrir un port** et d'attendre des connexions ou des messages;
+- côté client, de **se connecter** à un port et d'envoyer du texte.
+
+Vous observerez les sockets avec `ss` et le trafic avec Wireshark, afin de comparer concrètement TCP et UDP.
+
+## Préparation
+
+### Machines nécessaires
+
+Réutilisez les machines virtuelles des chapitres précédents :
+
+| Machine | Rôle | VM | Configuration |
+|---------|------|----|---------------|
+| **SERVEUR** | Serveur | `rocky-10.2.ova` | `nmcli` / `firewall-cmd` |
+| **CLIENT** | Client | `ubuntu-server-26.04.ova` | `Netplan` |
+
+### Configuration VMware
+
+Dans les paramètres des deux machines, connectez la carte réseau au réseau **Host-only (VMnet1)**.
+
+{{%notice style="info" title="Pourquoi Host-only?"%}}
+Contrairement à un *LAN Segment*, le réseau **Host-only** est aussi relié au poste Windows par une carte virtuelle (*VMware Network Adapter VMnet1*). Wireshark, installé sur Windows, peut donc capturer le trafic échangé entre les deux machines virtuelles.
+{{%/notice%}}
+
+### Plan d'adressage
+
+Sur le poste Windows, relevez l'adresse de la carte **VMware Network Adapter VMnet1** avec `ipconfig`. Elle devrait avoir l'adresse IP `192.168.20.1`.
+
+Utilisez ensuite le plan d'adressage suivant :
+
+| Machine | Interface | Adresse |
+|---------|-----------|---------|
+| **Poste Windows** | VMware Network Adapter VMnet1 | `192.168.20.1/24` (déjà configurée) |
+| **SERVEUR** | `ens160` | `192.168.20.10/24` |
+| **CLIENT** | `ens160` | `192.168.20.20/24` |
+
+1. Configurez **SERVEUR** et **CLIENT** avec `nmcli`, comme au chapitre 4. Aucune passerelle n'est nécessaire.
+2. Vérifiez depuis **CLIENT** :
+    ```bash
+    ping 192.168.20.10
+    ```
+
+### Outils
+
+Sur **SERVEUR**, installez `nc` :
+
+```bash
+sudo dnf install nmap-ncat
+```
+
+Sur **CLIENT** (Ubuntu), `nc` est normalement déjà installé. Sinon :
+
+```bash
+sudo apt install netcat-openbsd
+```
+
+{{%notice style="tip" title="Pas d'accès Internet?"%}}
+Comme au chapitre 4, ajoutez temporairement une carte réseau en **NAT** pour installer les paquets, puis retirez-la.
+{{%/notice%}}
+
+### Plusieurs terminaux
+
+Plusieurs commandes doivent rester actives en même temps. Ouvrez donc **plusieurs sessions** sur chaque machine, par exemple avec des connexions SSH depuis le terminal sur le poste Windows :
+
+```bash
+ssh student@192.168.20.10
+```
+
+### Pare-feu de SERVEUR
+
+Ouvrez les ports utilisés dans ce laboratoire :
+
+```bash
+sudo firewall-cmd --add-port=5000/tcp --add-port=5001/udp --add-port=6000/tcp --add-port=6001/udp
+```
+
+Vérifiez :
+
+```bash
+sudo firewall-cmd --list-ports
+```
+
+{{%notice style="info" title="Pourquoi ouvrir 6000 et 6001?"%}}
+Aucune application n'écoutera sur ces deux ports. On les ouvre quand même dans le pare-feu pour observer la réaction normale du **système** lorsqu'aucune application n'écoute. Si le port était bloqué, c'est le **pare-feu** qui répondrait à sa place, avec un message différent.
+{{%/notice%}}
+
+Ces règles sont temporaires : elles disparaîtront au prochain redémarrage.
+
+### Capture
+
+Sur le poste Windows, démarrez une capture Wireshark sur l'interface **VMware Network Adapter VMnet1**.
+
+## 1- Ouvrir un service TCP
+
+### 1. Lancer le serveur
+
+Sur **SERVEUR** (session 1) :
+
+```bash
+nc -l -k 5000
+```
+
+- `-l` : écoute (*listen*);
+- `-k` : accepte plusieurs connexions et reste ouvert après la fin d'une connexion.
+
+### 2. Observer le socket en écoute
+
+Sur **SERVEUR** (session 2) :
+
+```bash
+sudo ss -tlnp
+```
+
+Vous devriez obtenir une ligne similaire à :
+
+```text
+State   Recv-Q  Send-Q  Local Address:Port   Peer Address:Port  Process
+LISTEN  0       10            0.0.0.0:5000        0.0.0.0:*      users:(("nc",pid=6049,fd=4))
+```
+
+{{%notice style="info" title="Remarque"%}}
+Vous verrez probablement aussi une ligne `[::]:5000` : `nc` écoute également en IPv6. Vous verrez aussi le port `22`, sur lequel le serveur SSH écoute.
+{{%/notice%}}
+
+### Questions
+
+1. Dans quel état se trouve le socket du port `5000`?
+2. Que signifie l'adresse locale `0.0.0.0`?
+3. Quel processus utilise ce port? Quel est son PID?
+4. Quel autre service est en écoute sur SERVEUR? Sur quel port?
+
+## 2- Connexion d'un client
+
+### 1. Se connecter
+
+Dans Wireshark, appliquez le filtre :
+
+```text
+tcp.port == 5000
+```
+
+Sur **CLIENT** (session 1) :
+
+```bash
+nc 192.168.20.10 5000
+```
+
+Tapez un message, par exemple `bonjour`, puis `Entrée`. Le message doit s'afficher sur SERVEUR.
+
+### 2. Relever la paire de sockets
+
+Sur **SERVEUR** (session 2) et sur **CLIENT** (session 2) :
+
+```bash
+ss -tn | grep 5000
+```
+
+Complétez le tableau :
+
+| | Adresse IP | Port |
+|---|-----------|------|
+| **Socket client** | | |
+| **Socket serveur** | | |
+
+### 3. Observer dans Wireshark
+
+1. Repérez les trois segments de l'établissement de connexion. Ont-ils été envoyés au moment de la commande `nc` ou au moment où vous avez tapé le message?
+2. Repérez le segment contenant votre message. Combien d'octets de données contient-il? Pourquoi un octet de plus que le nombre de lettres tapées?
+3. Repérez l'accusé de réception du serveur. Vérifiez la valeur de son ACK.
+
+## 3- Plusieurs clients sur le même port
+
+### 1. Ouvrir une deuxième connexion
+
+Sans fermer la première connexion, sur **CLIENT** (session 3) :
+
+```bash
+nc 192.168.20.10 5000
+```
+
+Envoyez un message différent.
+
+### 2. Observer les sockets
+
+Sur **SERVEUR** (session 2) :
+
+```bash
+ss -tn | grep 5000
+```
+
+### 3. Fermer une connexion
+
+Dans la session 1 de **CLIENT**, appuyez sur `Ctrl+C`. Observez les segments correspondants dans Wireshark.
+
+### Questions
+
+1. Combien de connexions établies voyez-vous sur SERVEUR? Quel élément de la paire de sockets est différent?
+2. Comment le système de SERVEUR sait-il à quelle connexion appartient chaque message reçu?
+3. Quels bits de contrôle observez-vous lors de la fermeture de la première connexion?
+4. La deuxième connexion est-elle toujours active? Vérifiez avec `ss`.
+
+Fermez ensuite la deuxième connexion (`Ctrl+C`), puis arrêtez le serveur (`Ctrl+C` dans la session 1 de SERVEUR).
+
+## 4- Port fermé : TCP et UDP
+
+### 1. TCP
+
+Dans Wireshark, appliquez le filtre :
+
+```text
+tcp.port == 6000
+```
+
+Sur **CLIENT** :
+
+```bash
+nc -v 192.168.20.10 6000
+```
+
+1. Quels segments observez-vous dans Wireshark? Quels bits de contrôle sont activés dans la réponse de SERVEUR?
+
+### 2. UDP
+
+Dans Wireshark, appliquez le filtre :
+
+```text
+udp.port == 6001 || icmp
+```
+
+Sur **CLIENT** :
+
+```bash
+nc -u 192.168.20.10 6001
+```
+
+Tapez un message, puis `Entrée`.
+
+Quels paquets observez-vous dans Wireshark? Développez la réponse de SERVEUR : de quel protocole s'agit-il et quel est son type?
+
+{{%notice style="info" title="Remarque"%}}
+Selon la version de `nc`, le client peut se fermer lorsque vous envoyez un deuxième message. Ce n'est pas UDP qui l'en informe : c'est la réception du message **ICMP** envoyé par SERVEUR.
+{{%/notice%}}
+
+### Questions
+
+1. En TCP, comment le client apprend-il qu'aucune application n'écoute sur le port?
+2. En UDP, le protocole UDP lui-même informe-t-il le client? Quel protocole le fait à sa place?
+3. Le message UDP a-t-il été envoyé, même si personne ne pouvait le recevoir? Qu'est-ce que cela montre?
+
+Appuyez sur `Ctrl+C` pour fermer `nc`.
+
+## 5- Service UDP
+
+### 1. Lancer le serveur
+
+Sur **SERVEUR** (session 1) :
+
+```bash
+nc -u -l 5001
+```
+
+Dans Wireshark, appliquez le filtre :
+
+```text
+udp.port == 5001
+```
+
+### 2. Envoyer des messages
+
+Sur **CLIENT** (session 1) :
+
+```bash
+nc -u 192.168.20.10 5001
+```
+
+Envoyez deux ou trois messages.
+
+### 3. Observer
+
+Sur **SERVEUR** (session 2) :
+
+```bash
+sudo ss -uanp | grep 5001
+```
+
+{{%notice style="info" title="Remarque"%}}
+Sur CLIENT, `ss -uan` peut afficher l'état `ESTAB` pour le socket UDP. Cela signifie seulement que `nc` a mémorisé **localement** l'adresse de destination. Aucun échange n'a eu lieu pour l'établir : Wireshark le confirme.
+{{%/notice%}}
+
+### Questions
+
+1. Quel est l'état du socket UDP sur SERVEUR? Comparez avec l'état d'un socket TCP en écoute.
+2. Observez-vous un établissement de connexion dans Wireshark? Un accusé de réception après chaque message?
+3. Combien de paquets ont été nécessaires pour envoyer un message en UDP? Comparez avec la partie 2 en TCP (établissement de connexion, message, accusé de réception).
+
+Fermez `nc` sur les deux machines (`Ctrl+C`).
+
+## Questions de synthèse
+
+1. Expliquez avec vos propres mots la différence entre un **socket** et une **paire de sockets**. Illustrez avec les valeurs relevées dans ce laboratoire.
+2. Pourquoi un serveur peut-il accepter plusieurs clients sur un seul port, alors qu'un client utilise un port différent pour chaque connexion?
+3. Résumez dans un tableau les différences observées entre TCP et UDP dans ce laboratoire : établissement de connexion, accusés de réception, réaction à un port fermé, état affiché par `ss`.

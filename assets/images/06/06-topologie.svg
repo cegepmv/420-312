@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" font-family="Helvetica, Arial, sans-serif">
+  <title>Topologie du réseau du chapitre 6</title>
+  <rect width="960" height="640" fill="#ffffff"/>
+
+  <!-- Poste Windows / VMware -->
+  <rect x="20" y="120" width="920" height="500" rx="12" fill="#f8fafc" stroke="#64748b" stroke-width="1.5" stroke-dasharray="8 5"/>
+  <text x="40" y="146" font-size="14" font-weight="bold" fill="#475569">Poste Windows · VMware Workstation</text>
+
+  <!-- Internet -->
+  <path d="M640,90 A22,22 0 0 1 638,50 A30,30 0 0 1 690,30 A30,30 0 0 1 745,45 A24,24 0 0 1 760,90 Z" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+  <text x="700" y="74" font-size="15" font-weight="bold" fill="#1e293b" text-anchor="middle">Internet</text>
+  <line x1="700" y1="90" x2="700" y2="200" stroke="#334155" stroke-width="2"/>
+  <text x="710" y="165" font-size="12" fill="#475569">NAT de VMware</text>
+
+  <!-- VMnet8 -->
+  <line x1="270" y1="200" x2="780" y2="200" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+  <text x="792" y="205" font-size="13" font-weight="bold" fill="#334155">VMnet8 (NAT)</text>
+
+  <!-- Système hôte -->
+  <rect x="50" y="170" width="180" height="60" rx="8" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+  <text x="140" y="194" font-size="14" font-weight="bold" fill="#1e293b" text-anchor="middle">Système Windows</text>
+  <text x="140" y="214" font-size="12" fill="#334155" text-anchor="middle">PowerShell · ssh · Wireshark</text>
+  <line x1="230" y1="200" x2="270" y2="200" stroke="#334155" stroke-width="2"/>
+
+  <!-- dhcp-router -->
+  <line x1="480" y1="200" x2="480" y2="245" stroke="#334155" stroke-width="2"/>
+  <text x="490" y="228" font-size="12" fill="#475569"><tspan font-weight="bold">ens160</tspan> · WAN · adresse automatique</text>
+  <rect x="360" y="245" width="240" height="120" rx="10" fill="#ffedd5" stroke="#c2410c" stroke-width="2"/>
+  <text x="480" y="272" font-size="16" font-weight="bold" fill="#7c2d12" text-anchor="middle">dhcp-router</text>
+  <text x="480" y="290" font-size="12" font-style="italic" fill="#9a3412" text-anchor="middle">Rocky Linux</text>
+  <text x="480" y="314" font-size="13" fill="#1e293b" text-anchor="middle">Routeur et NAT</text>
+  <text x="480" y="332" font-size="13" fill="#1e293b" text-anchor="middle">Serveur DHCP (Kea)</text>
+  <text x="480" y="350" font-size="13" fill="#1e293b" text-anchor="middle">Machine de rebond SSH</text>
+  <line x1="480" y1="365" x2="480" y2="430" stroke="#334155" stroke-width="2"/>
+  <text x="470" y="402" font-size="12" fill="#475569" text-anchor="end"><tspan font-weight="bold">ens224</tspan> · 172.16.10.1/24</text>
+
+  <!-- LAN-SERVICES -->
+  <line x1="110" y1="430" x2="850" y2="430" stroke="#334155" stroke-width="4" stroke-linecap="round"/>
+  <text x="850" y="420" font-size="13" font-weight="bold" fill="#334155" text-anchor="end">LAN-SERVICES (LAN Segment) · 172.16.10.0/24</text>
+
+  <!-- dns-server -->
+  <line x1="230" y1="430" x2="230" y2="475" stroke="#334155" stroke-width="2"/>
+  <rect x="120" y="475" width="220" height="110" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="230" y="502" font-size="16" font-weight="bold" fill="#1e3a8a" text-anchor="middle">dns-server</text>
+  <text x="230" y="520" font-size="12" font-style="italic" fill="#1e40af" text-anchor="middle">Rocky Linux</text>
+  <text x="230" y="546" font-size="13" fill="#1e293b" text-anchor="middle">172.16.10.2/24 (statique)</text>
+  <text x="230" y="566" font-size="13" fill="#1e293b" text-anchor="middle">Serveur DNS (BIND)</text>
+
+  <!-- web-server -->
+  <line x1="480" y1="430" x2="480" y2="475" stroke="#334155" stroke-width="2"/>
+  <rect x="370" y="475" width="220" height="110" rx="10" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="480" y="502" font-size="16" font-weight="bold" fill="#1e3a8a" text-anchor="middle">web-server</text>
+  <text x="480" y="520" font-size="12" font-style="italic" fill="#1e40af" text-anchor="middle">Ubuntu Server</text>
+  <text x="480" y="546" font-size="13" fill="#1e293b" text-anchor="middle">172.16.10.3/24 (statique)</text>
+  <text x="480" y="566" font-size="13" fill="#1e293b" text-anchor="middle">Serveur web (nginx)</text>
+
+  <!-- client -->
+  <line x1="730" y1="430" x2="730" y2="475" stroke="#334155" stroke-width="2"/>
+  <rect x="620" y="475" width="220" height="110" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="730" y="502" font-size="16" font-weight="bold" fill="#14532d" text-anchor="middle">client</text>
+  <text x="730" y="520" font-size="12" font-style="italic" fill="#166534" text-anchor="middle">Rocky Linux</text>
+  <text x="730" y="546" font-size="13" fill="#1e293b" text-anchor="middle">Adresse par DHCP</text>
+  <text x="730" y="566" font-size="13" fill="#1e293b" text-anchor="middle">172.16.10.100 à .199</text>
+
+  <!-- Jonctions -->
+  <g fill="#334155">
+    <circle cx="270" cy="200" r="5"/>
+    <circle cx="480" cy="200" r="5"/>
+    <circle cx="700" cy="200" r="5"/>
+    <circle cx="230" cy="430" r="5"/>
+    <circle cx="480" cy="430" r="5"/>
+    <circle cx="730" cy="430" r="5"/>
+  </g>
+</svg>
