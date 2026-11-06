@@ -58,7 +58,7 @@
   <line x1="730" y1="430" x2="730" y2="475" stroke="#334155" stroke-width="2"/>
   <rect x="620" y="475" width="220" height="110" rx="10" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
   <text x="730" y="502" font-size="16" font-weight="bold" fill="#14532d" text-anchor="middle">client</text>
-  <text x="730" y="520" font-size="12" font-style="italic" fill="#166534" text-anchor="middle">Rocky Linux</text>
+  <text x="730" y="520" font-size="12" font-style="italic" fill="#166534" text-anchor="middle">Ubuntu Desktop</text>
   <text x="730" y="546" font-size="13" fill="#1e293b" text-anchor="middle">Adresse par DHCP</text>
   <text x="730" y="566" font-size="13" fill="#1e293b" text-anchor="middle">172.16.10.100 à .199</text>
 

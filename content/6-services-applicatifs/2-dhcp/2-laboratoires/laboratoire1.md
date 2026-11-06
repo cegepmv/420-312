@@ -1,7 +1,7 @@
 +++
-title = "Laboratoire - Routeur DHCP"
+title = "1- Routeur DHCP"
 weight = "622"
-draft = true
+draft = false
 +++
 ----------------
  
@@ -35,7 +35,7 @@ L'étendue à configurer :
 - `dhcp-router` et `dns-server` sont configurés selon le laboratoire 6.1.1.
 - La VM `client` est créée (section 6.0), avec sa carte réseau dans **LAN-SERVICES**. **Ne la démarrez pas encore.**
 - Ouvrez une session `ssh routeur` depuis le poste Windows.
-### Prédire avant d'observer
+<!-- ### Prédire avant d'observer
  
 Avant toute configuration, complétez le tableau à partir de la théorie :
  
@@ -44,7 +44,7 @@ Avant toute configuration, complétez le tableau à partir de la théorie :
 | DISCOVER | | | | |
 | OFFER | | | | |
 | REQUEST | | | | |
-| ACK | | | | |
+| ACK | | | | | -->
  
 ## 1- Activer le routage
  
@@ -161,23 +161,25 @@ sudo ss -ulnp | grep :67
 1. Sur quel port et quel protocole Kea écoute-t-il?
 2. Pourquoi le serveur DHCP ne doit-il **pas** répondre sur l'interface `ens160`?
 3. Pourquoi la plage distribuée commence-t-elle à `172.16.10.100`?
+
+<!--
 ## 3- Capturer l'échange DORA
  
 ### 1. Démarrer la capture
  
-Sur **dhcp-router** :
+ Sur **dhcp-router** :
  
 ```bash
-sudo tcpdump -i ens224 -n -w /tmp/dora.pcap udp port 67 or udp port 68
-```
+sudo tcpdump -i ens224 -n -w /tmp/dora.pcap udp port 67 or udp port 68 
+```-->
+<!-- ### 2. Démarrer le client -->
  
-### 2. Démarrer le client
+## 3- Tester le fonctionnement 
+
+### 1. Vérifier la configuration du client
  
-Démarrez la VM **client**. Attendez qu'elle ait terminé son démarrage, puis arrêtez la capture (`Ctrl+C`).
  
-### 3. Vérifier la configuration du client
- 
-Sur la console de **client** :
+Démarrez la VM **client**,ouvrez une session, puis un terminal (`Ctrl+Alt+T`) :
  
 ```bash
 ip a
@@ -195,7 +197,8 @@ Complétez le tableau :
 | Durée du bail (`dhcp_lease_time`) | |
 | Serveur DHCP (`dhcp_server_identifier`) | |
  
-### 4. Le bail côté serveur
+ 
+### 2. Le bail côté serveur
  
 Sur **dhcp-router** :
  
@@ -205,7 +208,7 @@ sudo cat /var/lib/kea/kea-leases4.csv
  
 Kea ajoute une ligne à chaque attribution ou renouvellement. Repérez la **dernière** ligne correspondant au client : son adresse IP, son adresse MAC et la date d'expiration (`expire`, en secondes depuis le 1<sup>er</sup> janvier 1970).
  
-### 5. Tester la connectivité
+### 3. Tester la connectivité
  
 Sur **client** :
  
@@ -220,7 +223,7 @@ ping -c 3 www.google.com
 1. Le client a-t-il reçu la première adresse de la plage? Comparez l'adresse MAC du fichier des baux avec celle de `ip a`.
 2. Pourquoi `ping 8.8.8.8` fonctionne-t-il, mais pas `ping www.google.com`?
 3. Ajoutez une entrée `client` à votre `~/.ssh/config` (section 6.1) avec cette adresse. Pourquoi une adresse attribuée dynamiquement est-elle peu pratique pour administrer une machine?
-## 4- Analyser l'échange
+<!-- ## 4- Analyser l'échange
  
 Récupérez la capture sur le poste Windows :
  
@@ -268,4 +271,4 @@ Repérez les options **(50) Requested IP Address** et **(54) DHCP Server Identif
  
 1. Décrivez le rôle de chacun des quatre messages DORA en une phrase, et expliquez pourquoi le client utilise le broadcast.
 2. Dans ce laboratoire, `dhcp-router` assure trois fonctions pour les clients. Lesquelles? Pour chacune, indiquez la commande ou le fichier de configuration correspondant.
-3. Le serveur DNS distribué (`172.16.10.2`) n'est pas encore configuré. Quelles conséquences cela a-t-il pour le client? Que faudra-t-il faire à la section 6.3?
+3. Le serveur DNS distribué (`172.16.10.2`) n'est pas encore configuré. Quelles conséquences cela a-t-il pour le client? Que faudra-t-il faire à la section 6.3? -->

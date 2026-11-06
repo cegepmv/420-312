@@ -8,27 +8,26 @@ draft = false
  
 ## Contexte
  
-Dans ce laboratoire, vous allez mettre en place les deux premières machines du réseau du chapitre (section 6.0) : `dhcp-router` et `dns-server`.
+Dans ce laboratoire, vous allez mettre en place les premières machines du réseau du chapitre (section 6.0) : `dhcp-router`, `dns-server` et `web-server`.
  
-Vous allez ensuite :
- 
-- administrer les deux machines depuis le poste Windows, grâce à un **rebond SSH**;
-- en bonus, comparer dans une capture une communication **en clair** (`nc`) et une communication **chiffrée** (SSH).
+Vous allez ensuite administrer ces machines depuis le poste Windows, grâce à un **rebond SSH**;
+<!-- - en bonus, comparer dans une capture une communication **en clair** (`nc`) et une communication **chiffrée** (SSH). -->
 | Machine | Interface | Adresse |
 |---------|-----------|---------|
 | **Poste Windows** | Carte réseau du poste | Attribuée automatiquement |
 | **dhcp-router** | `ens160` (WAN, NAT) | Attribuée automatiquement (à relever) |
 | **dhcp-router** | `ens224` (LAN-SERVICES) | `172.16.10.1/24` |
 | **dns-server** | `ens160` (LAN-SERVICES) | `172.16.10.2/24` |
+| **web-server** | `ens33` (LAN-SERVICES) | `172.16.10.3/24` |
  
 Les machines doivent avoir été créées et leurs paquets installés selon la section 6.0.
  
-{{%notice style="info" title="Client SSH de Windows"%}}
+<!-- {{%notice style="info" title="Client SSH de Windows"%}}
 Le client OpenSSH est installé par défaut sous Windows 10 et 11. Vérifiez dans un terminal PowerShell :
 ```powershell
 ssh -V
 ```
-{{%/notice%}}
+{{%/notice%}} -->
  
 ## Préparation
  
@@ -54,6 +53,22 @@ Vérifiez :
 ```bash
 ping 172.16.10.1
 ```
+
+### 2. Configurer web-server
+ 
+Sur la console de **web-server**, configurez son interface avec `Netplan` :
+ 
+- adresse : `172.16.10.3/24`;
+- passerelle : `172.16.10.1`;
+- méthode : `manual`.
+Le serveur Web sera configuré à la section 6.4.
+ 
+Vérifiez :
+ 
+```bash
+ping 172.16.10.1
+```
+
  
 Complétez le tableau :
  
@@ -64,7 +79,7 @@ Complétez le tableau :
  
 ## 1- Le service SSH
  
-Sur **dhcp-router** et sur **dns-server** :
+Sur **dhcp-router**, **dns-server** et **web-server** :
  
 ```bash
 systemctl status sshd
@@ -137,13 +152,14 @@ Sur le poste Windows, créez le fichier de configuration :
 notepad $env:USERPROFILE\.ssh\config
 ```
  
-Ajoutez les alias `routeur` et `dns` (section 6.1), avec l'adresse WAN relevée en préparation. Enregistrez.
+Ajoutez les alias `routeur`, `dns` et `web` (section 6.1), avec l'adresse WAN relevée en préparation. Enregistrez.
  
 ### 2. Tester
  
 ```powershell
 ssh routeur
 ssh dns
+ssh web
 ```
  
 ### Questions
@@ -151,6 +167,7 @@ ssh dns
 1. Combien de mots de passe la commande `ssh dns` vous demande-t-elle? Pour quelles machines?
 2. Quelle directive du fichier remplace l'option `-J`?
 3. À la prochaine séance, l'adresse WAN de dhcp-router a changé. Que devez-vous modifier?
+
 ## Questions de synthèse
  
 1. Lors de la commande `ssh dns`, combien de connexions TCP et combien de sessions SSH sont établies? Entre quelles machines? Appuyez-vous sur les sorties de `ss` relevées dans la partie 2.

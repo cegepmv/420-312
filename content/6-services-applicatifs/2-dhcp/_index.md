@@ -2,7 +2,7 @@
 pre = '<b>2. </b>'
 title = "DHCP"
 weight = "620"
-draft = true
+draft = false
 +++
 -------------------
  
@@ -14,7 +14,7 @@ Jusqu'ici, toutes les interfaces ont été configurées **manuellement** : adres
 - la **passerelle par défaut**;
 - l'adresse des **serveurs DNS**;
 - la **durée** pendant laquelle il peut utiliser cette adresse (le **bail**);
-- d'autres options au besoin (nom de domaine, serveur NTP, etc.).
+- d'autres options au besoin (nom de domaine, etc.).
 
 DHCP utilise **UDP** :
  
@@ -58,19 +58,19 @@ Le serveur, lui, a une adresse IP **statique** et répond depuis cette adresse.
 | **REQUEST** | `0.0.0.0` | `255.255.255.255` | `68` → `67` |
 | **ACK** | IP du serveur | `255.255.255.255` ou adresse proposée | `67` → `68` |
  
-{{%notice style="info" title="OFFER et ACK : broadcast ou unicast?"%}}
+<!-- {{%notice style="info" title="OFFER et ACK : broadcast ou unicast?"%}}
 Selon le client, le serveur envoie l'OFFER et l'ACK en **broadcast**, ou en **unicast** directement vers l'adresse MAC du client et l'adresse proposée. Le client l'indique dans son DISCOVER. Vous observerez le choix de votre client dans le laboratoire.
-{{%/notice%}}
+{{%/notice%}} -->
  
-### Comment le client est-il reconnu?
+<!-- ### Comment le client est-il reconnu?
  
 Puisque le client n'a pas d'adresse IP, chaque message DHCP contient :
  
 - l'**adresse MAC du client**, dans le message DHCP lui-même (et pas seulement dans l'en-tête Ethernet);
 - un **identifiant de transaction** (*Transaction ID*), choisi au hasard par le client, qui permet d'associer chaque réponse à la bonne demande.
-C'est grâce à l'adresse MAC que le serveur reconnaît un client d'une fois à l'autre.
+C'est grâce à l'adresse MAC que le serveur reconnaît un client d'une fois à l'autre. -->
  
-### Pourquoi un REQUEST en broadcast?
+<!-- ### Pourquoi un REQUEST en broadcast?
  
 Plusieurs serveurs DHCP peuvent répondre au même DISCOVER. Le client choisit une offre, puis envoie son REQUEST **en broadcast**, avec l'identifiant du serveur choisi. Ainsi :
  
@@ -82,7 +82,7 @@ Plusieurs serveurs DHCP peuvent répondre au même DISCOVER. Le client choisit u
 |---------|------|------|
 | **NAK** | Serveur → client | Refus : l'adresse demandée n'est pas valide. Le client doit recommencer un DORA. |
 | **RELEASE** | Client → serveur | Le client libère son adresse avant la fin du bail. |
-| **DECLINE** | Client → serveur | Le client refuse l'adresse, car il a détecté qu'une autre machine l'utilise déjà. |
+| **DECLINE** | Client → serveur | Le client refuse l'adresse, car il a détecté qu'une autre machine l'utilise déjà. | -->
  
 ## Le bail
  
@@ -195,7 +195,7 @@ Avec Kea, l'adresse réservée peut se trouver **en dehors** de la plage distrib
 Les messages DISCOVER et REQUEST sont envoyés en **broadcast**. Or un routeur **ne transmet pas** les broadcasts d'un réseau à un autre (chapitre 4).
  
 Un serveur DHCP ne reçoit donc que les demandes de son propre réseau.
- 
+<!--  
 ### Le relais DHCP
  
 Dans une organisation comptant plusieurs réseaux, on n'installe pas un serveur DHCP par réseau. On configure plutôt, sur chaque routeur, un **relais DHCP** (*DHCP relay*) :
@@ -207,7 +207,7 @@ Dans une organisation comptant plusieurs réseaux, on n'installe pas un serveur 
 3. Grâce à cette adresse, le serveur sait de quel réseau provient la demande et choisit la bonne étendue.
 {{%notice style="info" title="Remarque"%}}
 Le relais DHCP n'est pas mis en œuvre dans les laboratoires de ce cours. Dans notre réseau, le serveur DHCP est installé directement sur le routeur, qui possède une interface dans le réseau des clients.
-{{%/notice%}}
+{{%/notice%}} -->
  
 ## Côté client
  
@@ -222,7 +222,11 @@ Un poste Windows qui ne reçoit aucune réponse DHCP s'attribue lui-même une ad
 {{%/notice%}}
  
 {{%notice style="tip" title="À retenir"%}}
-DHCP utilise **UDP 67/68**. Le client obtient son adresse par l'échange **DORA**, en broadcast, car il n'a pas encore d'adresse. L'adresse est attribuée pour la durée d'un **bail**, renouvelé à **T1** (unicast) puis à **T2** (broadcast). Le serveur ne reçoit que les demandes de son réseau, à moins d'utiliser un **relais**.
++ DHCP utilise **UDP 67/68**. 
++ Le client obtient son adresse par l'échange **DORA**, en broadcast, car il n'a pas encore d'adresse. 
++ L'adresse est attribuée pour la durée d'un **bail**, renouvelé à **T1** (unicast) puis à **T2** (broadcast). 
++ Le serveur ne reçoit que les demandes de son réseau.
+<!-- à moins d'utiliser un **relais**. -->
 {{%/notice%}}
  
  

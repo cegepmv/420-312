@@ -48,14 +48,14 @@ ESTAB  0       0       172.16.10.1:39114       172.16.10.2:22
 4. Non. `dhcp-router` ne transfère pas de paquets : il ouvre sa propre connexion TCP vers `dns-server` et relaie les données au niveau applicatif.
 {{% /expand %}} -->
 
-### 3. Configuration et copie
+<!-- ### 3. Configuration et copie
  
 L'adresse WAN de `dhcp-router` est `192.168.110.142`. Le fichier `~/.ssh/config` du poste contient l'alias `routeur`.
  
 1. Écrivez l'entrée `client` du fichier `~/.ssh/config` pour une machine dont l'adresse est `172.16.10.50`.
 2. Écrivez la commande qui copie le fichier `/tmp/dns.pcap` de `dns-server` vers le répertoire courant du poste.
 3. Écrivez la commande qui copie le répertoire local `site/` vers `/tmp/` sur `web-server`.
-4. Sans fichier de configuration, écrivez la commande `ssh` complète pour vous connecter à `172.16.10.3` avec l'utilisateur `student`.
+4. Sans fichier de configuration, écrivez la commande `ssh` complète pour vous connecter à `172.16.10.3` avec l'utilisateur `student`. -->
 
 <!-- {{% expand title="Solution" %}}
 1. Entrée du fichier :

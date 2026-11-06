@@ -20,8 +20,8 @@ Le réseau `172.16.10.0/24` est un *LAN Segment* nommé **LAN-SERVICES**. La mac
 |---------|----|---------------|------------------|---------------------|
 | **dhcp-router** | `rocky-10.2.ova` | `ens160` → NAT (WAN)<br>`ens224` → LAN-SERVICES | WAN : automatique<br>LAN : `172.16.10.1/24` | 6.1 |
 | **dns-server** | `rocky-10.2.ova` | `ens160` → LAN-SERVICES | `172.16.10.2/24` (statique) | 6.1 |
-| **client** | `rocky-10.2.ova` | `ens160` → LAN-SERVICES | Automatique (DHCP) | 6.2 |
-| **web-server** | `ubuntu-server-26.04.ova` | `ens160` → LAN-SERVICES | `172.16.10.3/24` (statique) | 6.4 |
+| **client** | `ubuntu-desktop-26.04.ova` | `ensX` → LAN-SERVICES | Automatique (DHCP) | 6.2 |
+| **web-server** | `ubuntu-server-26.04.ova` | `ens33` → LAN-SERVICES | `172.16.10.3/24` (statique) | 6.4 |
  
 {{%notice style="note" title="Important"%}}
 Les noms d'interfaces peuvent varier. Identifiez-les avec `ip a` et adaptez les commandes à votre environnement.
@@ -45,21 +45,24 @@ Les machines du *LAN Segment* n'ont pas accès à Internet tant que le routeur n
 |---------|----------|
 | **dhcp-router** | `sudo dnf install kea tcpdump nmap-ncat` |
 | **dns-server** | `sudo dnf install bind bind-utils tcpdump nmap-ncat` |
-| **client** | `sudo dnf install bind-utils tcpdump nmap-ncat` |
+| **client** | `sudo apt install bind9-dnsutils tcpdump netcat-openbsd curl openssh-server` |
 | **web-server** | `sudo apt install nginx tcpdump netcat-openbsd curl` |
  
+{{%notice style="info" title="Ubuntu Desktop et SSH"%}} Contrairement aux versions serveur, Ubuntu Desktop n'inclut pas de serveur SSH. Le paquet openssh-server permet d'administrer `client` par rebond depuis le poste Windows, comme les autres machines. {{%/notice%}}
+
 `dhcp-router` a accès à Internet par son interface WAN. Pour les autres machines, comme au chapitre 4, ajoutez **temporairement** une carte réseau en **NAT**, installez les paquets, puis retirez la carte.
  
 {{%notice style="tip" title="Après la section 6.2"%}}
 Une fois le routeur configuré (*forwarding* et NAT), les machines du LAN accèdent à Internet par `dhcp-router`. La carte NAT temporaire ne sera plus nécessaire.
 {{%/notice%}}
- 
+
+
 ## Accéder aux machines
  
 Le poste Windows ne peut joindre que l'interface WAN de `dhcp-router`. Les autres machines sont sur un *LAN Segment*, invisible depuis Windows.
  
 Pour administrer toutes les machines depuis le terminal de Windows, on utilise un **rebond SSH** à travers `dhcp-router`. Sa mise en place fait l'objet de la section 6.1.
- 
+<!--  
 ## Capturer le trafic avec tcpdump
  
 Wireshark, installé sur Windows, ne voit pas le trafic d'un *LAN Segment*. On capture donc le trafic **sur une machine Linux** avec `tcpdump`, puis on analyse la capture dans Wireshark.
@@ -104,7 +107,7 @@ Par sécurité, `tcpdump` abandonne les privilèges de `root` après avoir ouver
     scp routeur:/tmp/capture.pcap .
 ```
 2. Ouvrez le fichier dans Wireshark (**Fichier → Ouvrir**).
-Toutes les fonctions vues au chapitre 5 (filtres d'affichage, **Suivre → TCP Flux**, **Graphique des flux**) sont disponibles.
+Toutes les fonctions vues au chapitre 5 (filtres d'affichage, **Suivre → TCP Flux**, **Graphique des flux**) sont disponibles. -->
  
 ## Diagnostiquer un service
  

@@ -8,7 +8,7 @@ draft = false
  
 Dans le chapitre précédent, nous avons vu que la **couche transport** remet les données à la bonne application grâce au **numéro de port**.
  
-Mais que font ces applications? Comment un poste qui vient de démarrer obtient-il son adresse IP? Comment le nom `www.wikipedia.org` devient-il une adresse IP? Comment un navigateur obtient-il une page web?
+<!-- Mais que font ces applications? Comment un poste qui vient de démarrer obtient-il son adresse IP? Comment le nom `www.wikipedia.org` devient-il une adresse IP? Comment un navigateur obtient-il une page web? -->
  
 Ce chapitre porte sur les **services applicatifs** : les programmes qui écoutent sur ces ports et les protocoles qu'ils utilisent pour dialoguer avec leurs clients.
  

@@ -1,7 +1,7 @@
 +++
-title = "Laboratoire - exclusions, réservations et baux"
+title = "(bonus) Exclusions, réservations et baux"
 weight = "623"
-draft = true
+draft = false
 +++
 -------------
  
