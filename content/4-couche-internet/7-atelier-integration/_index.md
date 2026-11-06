@@ -44,7 +44,7 @@ La liaison entre les deux routeurs est une liaison **point à point**.
 
 ### Topologie logique
 
-![Topologie de l'atelier synthèse](/images/04-atelier-synthese-topologie.png)
+![Topologie de l'atelier synthèse](/images/04/04-atelier-synthese-topologie.png)
 <!-- 
 
 ```text

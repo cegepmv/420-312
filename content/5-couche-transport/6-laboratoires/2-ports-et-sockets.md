@@ -39,20 +39,20 @@ Contrairement à un *LAN Segment*, le réseau **Host-only** est aussi relié au 
 
 ### Plan d'adressage
 
-Sur le poste Windows, relevez l'adresse de la carte **VMware Network Adapter VMnet1** avec `ipconfig`. Elle devrait avoir l'adresse IP `192.168.20.1`.
+Sur le poste Windows, relevez l'adresse de la carte **VMware Network Adapter VMnet1** avec `ipconfig`. Elle devrait avoir une adresse IP dans ce format : `192.168.X.1`. La valeur de `X` dépend du poste sur lequel vous êtes connecté.
 
 Utilisez ensuite le plan d'adressage suivant :
 
 | Machine | Interface | Adresse |
 |---------|-----------|---------|
-| **Poste Windows** | VMware Network Adapter VMnet1 | `192.168.20.1/24` (déjà configurée) |
-| **SERVEUR** | `ens160` | `192.168.20.10/24` |
-| **CLIENT** | `ens160` | `192.168.20.20/24` |
+| **Poste Windows** | VMware Network Adapter VMnet1 | `192.168.X.1/24` (déjà configurée) |
+| **SERVEUR** | `ens160` | `192.168.X.10/24` |
+| **CLIENT** | `ens33` | `192.168.X.20/24` |
 
 1. Configurez **SERVEUR** et **CLIENT** avec `nmcli`, comme au chapitre 4. Aucune passerelle n'est nécessaire.
 2. Vérifiez depuis **CLIENT** :
     ```bash
-    ping 192.168.20.10
+    ping 192.168.X.10
     ```
 
 ### Outils
@@ -78,7 +78,7 @@ Comme au chapitre 4, ajoutez temporairement une carte réseau en **NAT** pour in
 Plusieurs commandes doivent rester actives en même temps. Ouvrez donc **plusieurs sessions** sur chaque machine, par exemple avec des connexions SSH depuis le terminal sur le poste Windows :
 
 ```bash
-ssh student@192.168.20.10
+ssh student@192.168.X.10
 ```
 
 ### Pare-feu de SERVEUR
@@ -157,7 +157,7 @@ tcp.port == 5000
 Sur **CLIENT** (session 1) :
 
 ```bash
-nc 192.168.20.10 5000
+nc 192.168.X.10 5000
 ```
 
 Tapez un message, par exemple `bonjour`, puis `Entrée`. Le message doit s'afficher sur SERVEUR.
@@ -190,7 +190,7 @@ Complétez le tableau :
 Sans fermer la première connexion, sur **CLIENT** (session 3) :
 
 ```bash
-nc 192.168.20.10 5000
+nc 192.168.X.10 5000
 ```
 
 Envoyez un message différent.
@@ -229,7 +229,7 @@ tcp.port == 6000
 Sur **CLIENT** :
 
 ```bash
-nc -v 192.168.20.10 6000
+nc -v 192.168.X.10 6000
 ```
 
 1. Quels segments observez-vous dans Wireshark? Quels bits de contrôle sont activés dans la réponse de SERVEUR?
@@ -245,7 +245,7 @@ udp.port == 6001 || icmp
 Sur **CLIENT** :
 
 ```bash
-nc -u 192.168.20.10 6001
+nc -u 192.168.X.10 6001
 ```
 
 Tapez un message, puis `Entrée`.
@@ -286,7 +286,7 @@ udp.port == 5001
 Sur **CLIENT** (session 1) :
 
 ```bash
-nc -u 192.168.20.10 5001
+nc -u 192.168.X.10 5001
 ```
 
 Envoyez deux ou trois messages.

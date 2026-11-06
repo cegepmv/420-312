@@ -17,7 +17,7 @@ Dans *Cisco Packet Tracer*, créez une topologie comprenant :
 
 La topologie doit respecter la structure suivante :
 
-![Topologie de l'atelier sur Packet Tracer](/images/04-atelier-synthese-topologie-packet-tracer.png)
+![Topologie de l'atelier sur Packet Tracer](/images/04/04-atelier-synthese-topologie-packet-tracer.png)
 <!-- 
 ```text
  PC(s)             PC(s)

@@ -23,7 +23,7 @@ Les numéros d'ordre initiaux `x` et `y` sont choisis **aléatoirement** par cha
 Un segment SYN ne contient pas de données, mais il **compte pour un octet** dans la numérotation. Le prochain octet attendu est donc `x+1`. Il en va de même pour le segment FIN.
 {{%/notice%}}
 
-Pendant l'établissement de la connexion, chaque hôte annonce aussi son **MSS (*Maximum Segment Size*)** : la quantité maximale de données qu'il accepte dans un seul segment. 
+<!-- Pendant l'établissement de la connexion, chaque hôte annonce aussi son **MSS (*Maximum Segment Size*)** : la quantité maximale de données qu'il accepte dans un seul segment.  -->
 
 <!-- Sur un réseau Ethernet, il est généralement de **1460 octets** (1500 octets de données dans une trame Ethernet, moins 20 octets d'en-tête IP et 20 octets d'en-tête TCP). -->
 

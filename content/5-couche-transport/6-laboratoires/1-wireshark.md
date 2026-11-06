@@ -155,10 +155,8 @@ Pour chacun, développez l'en-tête TCP puis la section **Flags**. Complétez le
 
 <!-- **Faites une capture d'écran** de l'en-tête TCP du premier segment, avec les bits de contrôle développés. -->
 
-Dans le premier segment, relevez aussi :
-
-- le **numéro d'ordre brut** (*Sequence Number (raw)*) : c'est le numéro initial réel, choisi aléatoirement;
-- la valeur du **MSS** annoncée dans les **Options**.
+Dans le premier segment, relevez aussi le **numéro d'ordre brut** (*Sequence Number (raw)*) : c'est le numéro initial réel, choisi aléatoirement;
+<!-- - la valeur du **MSS** annoncée dans les **Options**. -->
 
 ### Questions
 

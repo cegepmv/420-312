@@ -23,7 +23,7 @@ ping 192.168.1.1
 
 Échange simplifié :
 
-![Diagramme d'échange ICMP entre deux hôtes lors d'un ping](/images/04-ping.png)
+![Diagramme d'échange ICMP entre deux hôtes lors d'un ping](/images/04/04-ping.png)
 {{% center %}}
 *Échange ICMP lors d'un ping*
 {{% /center %}}

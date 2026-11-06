@@ -36,7 +36,7 @@ IP est un protocole **best effort** : il ne garantit ni la livraison, ni l'ordre
 | **Bits de contrôle** |  Indiquent la fonction du segment |
 | **Fenêtre** |  Nombre d'octets que l'émetteur de ce segment peut encore recevoir |
 | **Somme de contrôle** | Détection d'erreurs sur l'en-tête et les données |
-| **Options** |  Notamment le **MSS**, annoncé à l'ouverture de la connexion |
+| **Options** |  Informations supplémentaires à fournir (notamment le **MSS**, annoncé à l'ouverture de la connexion) |
 
 L'en-tête TCP mesure **au minimum 20 octets**.
 

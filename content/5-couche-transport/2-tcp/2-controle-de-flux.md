@@ -63,7 +63,7 @@ Dans chaque segment, il indique dans le champ **Fenêtre** combien d'octets il p
 
 ### Exemple
 
-Avec une fenêtre de `3000` octets et un MSS de `1000` octets, l'émetteur peut envoyer 3 segments avant de devoir attendre un ACK :
+Avec une fenêtre de `3000` octets et des segments de `1000` octets, l'émetteur peut envoyer 3 segments avant de devoir attendre un ACK :
 
 ![Exemple de taille de fenêtre](/images/05/05-taille-de-fenetre.png?width=45rem)
 
@@ -72,6 +72,7 @@ Si le récepteur est surchargé, il annonce une fenêtre plus petite, ce qui ral
 
 ![Exemple de changement de taille de fenêtre après encombrement du serveur](/images/05/05-changement-taille-de-fenetre.png)
 
-{{%notice style="tip" title="MSS ou fenêtre?"%}}
-Le **MSS** limite la taille d'**un** segment; il est annoncé une fois, à l'ouverture de la connexion. La **fenêtre** limite la quantité de données envoyées **sans accusé de réception**; elle est annoncée dans chaque segment et peut varier.
-{{%/notice%}}
+<!-- {{%notice style="tip" title="Taille"%}}
+<!-- Le **MSS** limite la taille d'**un** segment; il est annoncé une fois, à l'ouverture de la connexion.  
+La **fenêtre** limite la quantité de données envoyées **sans accusé de réception**; elle est annoncée dans chaque segment et peut varier.
+{{%/notice%}} -->
