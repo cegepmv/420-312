@@ -77,7 +77,7 @@ Dans les réseaux résidentiels et de nombreuses organisations, le NAT permet no
 
 Exemple :
 
-![Exemple de fonctionnement d'un routeur NAT](/images/04-NAT.png)
+![Exemple de fonctionnement d'un routeur NAT](/images/04/04-NAT.png)
 {{%center%}}
 *Fonctionnement d'un routeur NAT (traduction de l'adresse privée vers son adresse publique*
 {{%/center%}}
