@@ -1,7 +1,7 @@
 +++
 title = "Exercices"
 weight = "631"
-draft = true
+draft = false
 +++
 ----------------
  

@@ -2,7 +2,7 @@
 pre = '<b>3. </b>'
 title = "DNS"
 weight = "630"
-draft = true
+draft = false
 +++
 -------------------
  
