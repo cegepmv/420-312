@@ -9,6 +9,8 @@ draft = true
 À la fin du laboratoire DHCP, le client pouvait joindre `8.8.8.8`, mais pas `www.google.com`. Les machines communiquent avec des **adresses IP**; les humains, eux, retiennent des **noms**.
  
 **DNS (*Domain Name System*)** traduit un nom en adresse IP (et inversement). C'est un service indispensable : presque toutes les communications commencent par une requête DNS.
+
+Il a été défini à l'origine dans la [RFC 1035](https://www.rfc-editor.org/rfc/rfc1035.txt).
  
 DNS utilise le port **53** :
  
@@ -17,9 +19,9 @@ DNS utilise le port **53** :
 | **UDP 53** | Requêtes et réponses courantes |
 | **TCP 53** | Réponses trop volumineuses pour un datagramme, et copie d'une zone entre serveurs |
  
-{{%notice style="note" title="Rappel"%}}
+<!-- {{%notice style="note" title="Rappel"%}}
 DNS est l'exemple d'un service qui utilise les deux protocoles de transport, selon le type d'échange (chapitre 5).
-{{%/notice%}}
+{{%/notice%}} -->
  
 ## Noms de domaine
  
@@ -40,7 +42,7 @@ Il se lit **de droite à gauche**, du plus général au plus précis :
 | `cegepmv` | Domaine de deuxième niveau |
 | `www` | Nom de l'hôte |
  
-Chaque partie, appelée **étiquette**, est séparée par un point.
+Chaque partie, appelée **étiquette** (ou *label*), est séparée par un point.
  
 ### Une base de données hiérarchique
  
@@ -170,7 +172,7 @@ www     IN  CNAME  web
 | `SOA` | Serveur principal de la zone (`ns1.votrenom.lan.`), puis adresse du responsable, où le premier `.` remplace le `@` (`admin.votrenom.lan.` = `admin@votrenom.lan`) |
 | **serial** | **Numéro de version** de la zone, à **incrémenter à chaque modification**. Convention : `AAAAMMJJnn` |
 | refresh, retry, expire | Utilisés par les serveurs secondaires (non étudiés dans ce cours) |
-| Dernière valeur | Durée pendant laquelle un serveur récursif garde en cache une réponse « ce nom n'existe pas » |
+<!-- | Dernière valeur | Durée pendant laquelle un serveur récursif garde en cache une réponse « ce nom n'existe pas » | -->
  
 ### Le point final
  
