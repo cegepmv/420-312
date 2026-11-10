@@ -149,7 +149,10 @@ ss -tn | grep :22
 Sur le poste Windows, créez le fichier de configuration :
  
 ```powershell
-notepad $env:USERPROFILE\.ssh\config
+mkdir $env:USERPROFILE\.ssh
+cd $env:USERPROFILE\.ssh
+type "config"
+notepad "config"
 ```
  
 Ajoutez les alias `routeur`, `dns` et `web` (section 6.1), avec l'adresse WAN relevée en préparation. Enregistrez.
