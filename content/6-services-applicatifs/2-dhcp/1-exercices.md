@@ -71,7 +71,7 @@ Une PME utilise le réseau `192.168.50.0/24` :
 4. Le **routeur** (passerelle par défaut) et les **serveurs DNS**. Le masque est déduit de l'étendue.
 {{% /expand %}}
 
-### 4. Raisonner
+### 3. Raisonner
  
 1. Pourquoi l'adresse IP du serveur DHCP doit-elle être statique?
 2. Un utilisateur branche sur le réseau de l'entreprise un petit routeur Wi-Fi dont le serveur DHCP est activé. Que peut-il arriver aux postes qui démarrent ensuite?

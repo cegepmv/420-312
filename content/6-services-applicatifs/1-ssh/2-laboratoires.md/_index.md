@@ -150,11 +150,10 @@ Sur le poste Windows, créez le fichier de configuration :
  
 ```powershell
 mkdir $env:USERPROFILE\.ssh
-cd $env:USERPROFILE\.ssh
-type "config"
-notepad "config"
+New-Item -Path "$env:USERPROFILE\.ssh\config" -ItemType File
+notepad "$env:USERPROFILE\.ssh\config"
 ```
- 
+
 Ajoutez les alias `routeur`, `dns` et `web` (section 6.1), avec l'adresse WAN relevée en préparation. Enregistrez.
  
 ### 2. Tester
