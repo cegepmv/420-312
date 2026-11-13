@@ -1,11 +1,8 @@
 +++
-title = "Laboratoires"
+title = "Laboratoire"
 weight = "644"
-draft = true
+draft = false
 +++
-
-
-# 6.4.1. Laboratoire : HTTP et nginx
 -------------
  
 ## Contexte
@@ -13,10 +10,10 @@ draft = true
 Dans ce laboratoire, vous allez :
  
 1. mettre en service `web-server`, la dernière machine du réseau du chapitre;
-2. dialoguer avec nginx **à la main**, avec `nc` et `curl`, pour observer les méthodes, les en-têtes et les codes de statut;
-3. héberger **deux sites** sur le même serveur, grâce aux hôtes virtuels;
+2. héberger **deux sites** sur le même serveur, grâce aux hôtes virtuels;
+3. valider le fonctionnement de **tout le réseau du chapitre**, de bout en bout.
+<!-- 2. dialoguer avec nginx **à la main**, avec `nc` et `curl`, pour observer les méthodes, les en-têtes et les codes de statut; -->
 <!-- 4. comparer HTTP et HTTPS dans Wireshark; -->
-4. valider le fonctionnement de **tout le réseau du chapitre**, de bout en bout.
 
 | Machine | Interface | Configuration |
 |---------|-----------|---------------|
@@ -54,13 +51,13 @@ sudo netplan apply
 ping -c 3 dhcp.votrenom.lan
 ```
  
-### 2. Accès SSH
+<!-- ### 2. Accès SSH
  
 Ajoutez l'alias `web` à votre `~/.ssh/config` (section 6.1), puis testez depuis le poste Windows :
  
 ```powershell
 ssh web
-```
+``` -->
  
 ## 1- Le serveur web
  
@@ -162,19 +159,20 @@ Complétez le tableau :
 3. La requête `DELETE` a-t-elle supprimé le fichier? Vérifiez sur web-server.
 4. Quel est l'avantage de `HEAD` par rapport à `GET` pour vérifier qu'une page existe? -->
 
-## 3- Deux sites sur le même serveur
+## 2- Deux sites sur le même serveur
  
 Vous allez créer deux sites sur `web-server` :
  
 | Site | Répertoire |
 |------|------------|
 | `www.votrenom.lan` | `/var/www/votrenom` |
-| `intranet.votrenom.lan` | `/var/www/intranet` |
+| `pokedex.votrenom.lan` | `/var/www/pokedex` |
  
 Le site par défaut (`/var/www/html`) reste en place : il répondra aux requêtes qui ne correspondent à aucun des deux sites.
  
 ### 1. Le contenu des sites
- 
+
+#### Le site public
 Sur le poste Windows, créez un fichier `index.html` pour votre site public, avec le contenu de votre choix, par exemple :
  
 ```html
@@ -184,8 +182,8 @@ Sur le poste Windows, créez un fichier `index.html` pour votre site public, ave
   <body><h1>Site public de votrenom.lan</h1></body>
 </html>
 ```
- 
-Copiez-le sur web-server avec `scp` (section 6.1) :
+
+Copiez-le sur `web-server` avec `scp` (section 6.1) :
  
 ```powershell
 scp index.html web:/tmp/
@@ -194,14 +192,46 @@ scp index.html web:/tmp/
 Sur **web-server** :
  
 ```bash
-sudo mkdir -p /var/www/votrenom /var/www/intranet
+sudo mkdir -p /var/www/votrenom
 sudo mv /tmp/index.html /var/www/votrenom/
-echo '<h1>Intranet de votrenom.lan</h1>' | sudo tee /var/www/intranet/index.html
 ```
+<!-- 
+echo '<h1>Intranet de votrenom.lan</h1>' | sudo tee /var/www/pokedex/index.html
+``` -->
+
+#### Le pokédex
+Pokédex est une application développée en React. Elle a déjà été utilisée dans des laboratoires du cours de *Sécurité Informatique*. 
+
+Avant de la déployer sur le serveur web, il faut la construire (*build*) à partir du code source. 
+
+Sur votre poste Windows : 
+```bash
+git clone https://github.com/gbenachour/pokedex.git # Télécharger le code de GitHub
+cd pokedex
+npm install # installer les dépendances de l'application
+npm run build # construire l'application (répertoire dist)
+```
+L'application à copier sur `web-server` se trouve dans le répertoire `dist`.
+
+Copiez son contenu sur `web-server` avec `scp` (section 6.1) :
  
+```powershell
+scp -r dist web:/tmp/
+``` 
+Sur **web-server** :
+ 
+```bash
+sudo mkdir -p  /var/www/pokedex
+sudo mv /tmp/dist/* /var/www/pokedex/
+```
+
+{{%notice style="tip" title="Même démarche pour votre application React"%}}
+Si vous désirez déployer votre propre application React (par exemple, votre projet final du cours d'*Application Web*), les mêmes étapes sont à suivre.
+{{%/notice%}}
+
 ### 2. La configuration
  
-Créez le fichier `/etc/nginx/sites-available/votrenom` avec **deux** blocs `server` : un pour `www.votrenom.lan`, un pour `intranet.votrenom.lan` (modèle dans la section 6.4).
+Créez le fichier `/etc/nginx/sites-available/votrenom` avec **deux** blocs `server` : un pour `www.votrenom.lan`, un pour `pokedex.votrenom.lan` (modèle dans la section *Nginx*).
  
 Activez les sites, validez la configuration, puis appliquez-la :
  
@@ -227,7 +257,7 @@ curl http://intranet.votrenom.lan/
 Sur **dns-server**, ajoutez à la zone `votrenom.lan` :
  
 ```text
-intranet    IN  CNAME  web
+pokedex    IN  CNAME  web
 ```
  
 N'oubliez pas d'**incrémenter le serial**. Validez la zone, puis rechargez BIND :
@@ -237,14 +267,14 @@ sudo named-checkzone votrenom.lan /var/named/votrenom.lan.zone
 sudo systemctl reload named
 ```
  
-Sur **client**, testez `curl http://intranet.votrenom.lan/`, puis ouvrez les deux sites dans Firefox.
+Sur **client**, testez `curl http://pokedex.votrenom.lan/`, puis ouvrez les deux sites dans Firefox.
  
 ### Questions
  
-1. Les trois premières commandes `curl` se connectent toutes à la même adresse IP et au même port. Pourquoi obtiennent-elles des pages différentes?
-2. Pourquoi la quatrième commande échoue-t-elle à l'étape 3? À quelle étape de la communication l'échec se produit-il?
-3. Pourquoi utiliser un `CNAME` plutôt qu'un enregistrement `A` pour `intranet`?
-4. Quelle page obtenez-vous en visitant `http://172.16.10.3/`? Pourquoi?
+1. Firefox se connecte aux deux sites en utilisant la même adresse IP et le même port. Pourquoi obtient-on des pages différentes?
+2. Pourquoi utiliser un `CNAME` plutôt qu'un enregistrement `A` pour `pokedex`?
+3. Quelle page obtenez-vous en visitant `http://172.16.10.3/`? Pourquoi?
+<!-- 2. Pourquoi la quatrième commande échoue-t-elle à l'étape 3? À quelle étape de la communication l'échec se produit-il? -->
 <!-- ## 4- HTTP et HTTPS dans Wireshark
  
 Cette partie se fait sur le **poste Windows**, avec Wireshark, comme au chapitre 5.
@@ -280,7 +310,7 @@ Un navigateur ouvre de nombreuses connexions et peut utiliser HTTP/3, qui foncti
 4. Pouvez-vous trouver le chemin demandé (`/`) ou le code de statut dans la communication HTTPS?
 5. Complétez le tableau « Ce qu'un observateur peut voir » de la section 6.4 à partir de vos propres observations. -->
 
-## 5- Validation de bout en bout
+## 3- Validation de bout en bout
  
 Tous les services du chapitre sont maintenant en place. Vous allez vérifier qu'un poste qui se connecte au réseau obtient tout ce dont il a besoin. 
 <!-- 
@@ -344,7 +374,7 @@ Vérifiez chaque élément depuis **client**, et indiquez la commande utilisée 
 | `www.votrenom.lan` est résolu par un serveur **autoritaire** | | |
 | `www.wikipedia.org` est résolu par le serveur récursif | | |
 | Le site `www.votrenom.lan` s'affiche | | |
-| Le site `intranet.votrenom.lan` s'affiche | | |
+| Le site `pokedex.votrenom.lan` s'affiche | | |
 | Le client accède à Internet | | |
 | Tous les serveurs sont administrables par SSH depuis le poste Windows | | |
  

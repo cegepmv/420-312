@@ -16,12 +16,14 @@ Le **Web** repose sur le protocole **HTTP (*HyperText Transfer Protocol*)** : un
 ## L'URL
  
 Une **URL (*Uniform Resource Locator*)** indique au client **comment** et **où** obtenir une ressource :
- 
-```text
+
+![Structure d'une URL](/images/06/06-url-structure.png)
+
+<!-- ```text
 https://www.votrenom.lan:8443/produits/liste.html?tri=prix#avis
 └─┬─┘   └──────┬───────┘ └┬─┘└─────────┬────────┘└──┬───┘└┬─┘
 schéma        hôte      port        chemin      requête fragment
-```
+``` -->
  
 | Partie | Rôle | Lien avec le réseau |
 |--------|------|---------------------|
@@ -42,14 +44,18 @@ HTTP est un protocole :
 ![Structure d'une requête et d'une réponse HTTP](/images/06/06-http-message.png)
  
 ### La requête
- 
+
+![Structure d'une requête HTTP](/images/06/06-http-requete.png)
+
+<!-- 
 ```text
 GET /produits/liste.html?tri=prix HTTP/1.1      ← ligne de requête
 Host: www.votrenom.lan                          ┐
 User-Agent: curl/8.14.1                         │ en-têtes
 Accept: */*                                     ┘
                                                 ← ligne vide : fin des en-têtes
-```
+``` 
+-->
  
 | Élément | Rôle |
 |---------|------|
@@ -58,7 +64,7 @@ Accept: */*                                     ┘
 | **Ligne vide** | Marque la fin des en-têtes |
 | **Corps** (facultatif) | Données envoyées au serveur (formulaire, JSON), surtout avec `POST` et `PUT` |
  
-L'en-tête **`Host`** est **obligatoire** en HTTP/1.1. Il indique le nom du site demandé : c'est lui qui permet à un même serveur d'héberger plusieurs sites sur une seule adresse IP (hôtes virtuels, plus bas).
+L'en-tête **`Host`** est **obligatoire** en HTTP/1.1. Il indique le nom du site demandé : c'est lui qui permet à un même serveur d'héberger plusieurs sites sur une seule adresse IP (hôtes virtuels, étudiés dans la sous-section sur *nginx*).
  
 ### Les méthodes
  
@@ -67,15 +73,19 @@ La méthode indique l'action demandée sur la ressource.
 | Méthode | Action | Corps dans la requête? | Sûre | Idempotente |
 |---------|--------|------------------------|------|-------------|
 | **GET** | Obtenir une ressource | Non | Oui | Oui |
-| **HEAD** | Comme `GET`, mais le serveur ne renvoie que les en-têtes | Non | Oui | Oui |
 | **POST** | Envoyer des données à traiter (formulaire, création d'une ressource) | Oui | Non | Non |
 | **PUT** | Créer ou remplacer une ressource | Oui | Non | Oui |
 | **DELETE** | Supprimer une ressource | Non | Non | Oui |
+<!-- | **HEAD** | Comme `GET`, mais le serveur ne renvoie que les en-têtes | Non | Oui | Oui | -->
  
 - Une méthode **sûre** ne modifie rien sur le serveur : le navigateur peut la répéter, la mettre en cache ou la précharger sans risque.
 - Une méthode **idempotente** produit le même résultat qu'on l'envoie une fois ou dix fois. Supprimer deux fois le produit `#7` laisse le serveur dans le même état; envoyer deux fois un formulaire de commande avec `POST` crée deux commandes.
+
 Lorsqu'une requête contient un corps, l'en-tête **`Content-Type`** indique son format :
- 
+
+![Requête HTTP POST avec un corps JSON](/images/06/06-http-post.png)
+
+<!-- 
 ```text
 POST /api/produits HTTP/1.1
 Host: www.votrenom.lan
@@ -84,14 +94,18 @@ Content-Length: 32
  
 {"nom": "Câble RJ45", "prix": 5}
 ```
- 
+-->
+
 <!-- {{%notice style="note" title="Rappel"%}}
 Les méthodes HTTP ont été introduites dans le cours **Applications Web**. Ici, on s'intéresse à ce qui circule sur le réseau.
 {{%/notice%}} -->
  
 ### La réponse
- 
-```text
+
+![Structure d'une réponse HTTP](/images/06/06-http-reponse.png)
+
+
+<!-- ```text
 HTTP/1.1 200 OK                                 ← ligne de statut
 Server: nginx/1.28.0                            ┐
 Content-Type: text/html                         │ en-têtes
@@ -100,8 +114,10 @@ Content-Length: 615                             ┘
 <!DOCTYPE html>                                 ┐
 <html>                                          │ corps : la ressource demandée
 ...                                             ┘
-```
- 
+``` 
+-->
+
+
 | Élément | Rôle |
 |---------|------|
 | **Ligne de statut** | Version, **code de statut** et sa description |

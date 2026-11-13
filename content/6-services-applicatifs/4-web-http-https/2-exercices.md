@@ -62,17 +62,17 @@ Pour chaque situation, indiquez la méthode HTTP utilisée par le client et le c
 1. Un navigateur affiche la page d'accueil d'un site, qui existe.
 2. Une application crée un nouveau produit avec l'API `/api/produits`.
 3. Un utilisateur demande une page qui a été supprimée.
-4. Un client envoie un `DELETE` à un serveur nginx qui ne sert que des fichiers statiques.
-5. nginx transmet une requête à un *backend* Node.js qui est arrêté.
-6. Un site a déménagé définitivement de `http://` vers `https://`; un client demande l'ancienne adresse.
+<!-- 4. Un client envoie un `DELETE` à un serveur nginx qui ne sert que des fichiers statiques. -->
+<!-- 5. nginx transmet une requête à un *backend* Node.js qui est arrêté. -->
+<!-- 6. Un site a déménagé définitivement de `http://` vers `https://`; un client demande l'ancienne adresse. -->
 
 {{% expand title="Solution" %}}
 1. `GET` → `200 OK`
 2. `POST` → `201 Created`
 3. `GET` → `404 Not Found`
-4. `DELETE` → `405 Method Not Allowed`
-5. N'importe quelle méthode → `502 Bad Gateway` (le mandataire n'obtient pas de réponse valide du *backend*)
-6. `GET` → `301 Moved Permanently`, avec l'en-tête `Location: https://...`
+<!-- 4. `DELETE` → `405 Method Not Allowed` -->
+<!-- 5. N'importe quelle méthode → `502 Bad Gateway` (le mandataire n'obtient pas de réponse valide du *backend*) -->
+<!-- 6. `GET` → `301 Moved Permanently`, avec l'en-tête `Location: https://...` -->
 {{% /expand %}}
 <!-- 
 ### 4. Hôtes virtuels
