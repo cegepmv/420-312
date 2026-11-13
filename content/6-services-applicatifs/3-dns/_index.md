@@ -97,7 +97,7 @@ Un serveur est **autoritaire** pour une zone : c'est lui qui détient les inform
 |---------|------------------------|
 | **Récursive** | doit fournir la réponse complète, quitte à interroger d'autres serveurs. |
 | **Itérative** | répond avec ce qu'il sait : la réponse, ou l'adresse d'un serveur plus proche de la réponse (un **renvoi**). |
- 
+<!--  
 ### Le cache et le TTL
  
 Chaque réponse est accompagnée d'un **TTL (*Time To Live*)**, en secondes, fixé par le serveur autoritaire. Le serveur récursif conserve la réponse dans son **cache** pendant cette durée.
@@ -111,7 +111,7 @@ Lorsqu'on change l'adresse d'un nom, les serveurs récursifs qui l'ont en cache 
 {{%notice style="info" title="Ne pas confondre"%}}
 Le TTL d'un enregistrement DNS (une durée en secondes) n'a aucun lien avec le TTL de l'en-tête IP (un nombre de routeurs, chapitre 4).
 {{%/notice%}}
- 
+  -->
 ## Types de serveurs
  
 | Serveur | Rôle | Exemples |
@@ -140,10 +140,10 @@ Une zone contient des **enregistrements** (*Resource Records*). Chacun associe u
 | **PTR** | Une adresse IP à un nom (résolution **inverse**) | `172.16.10.3` → `web.votrenom.lan.` |
 | **TXT** | Un nom à un texte libre | Souvent utilisé pour prouver la propriété d'un domaine |
  
-{{%notice style="info" title="CNAME"%}}
+<!-- {{%notice style="info" title="CNAME"%}}
 Un nom qui possède un `CNAME` ne peut avoir **aucun autre** enregistrement. Le client qui reçoit un `CNAME` doit ensuite résoudre le nom cible.
 {{%/notice%}}
- 
+  -->
 ## Le fichier de zone
  
 Avec BIND, chaque zone est décrite dans un **fichier de zone** :
@@ -166,12 +166,12 @@ www     IN  CNAME  web
  
 | Élément | Rôle |
 |---------|------|
-| `$TTL` | TTL par défaut des enregistrements de la zone |
 | `@` | Le nom de la zone elle-même (`votrenom.lan.`) |
 | `IN` | Classe *Internet* (toujours la même) |
 | `SOA` | Serveur principal de la zone (`ns1.votrenom.lan.`), puis adresse du responsable, où le premier `.` remplace le `@` (`admin.votrenom.lan.` = `admin@votrenom.lan`) |
 | **serial** | **Numéro de version** de la zone, à **incrémenter à chaque modification**. Convention : `AAAAMMJJnn` |
-| refresh, retry, expire | Utilisés par les serveurs secondaires (non étudiés dans ce cours) |
+<!-- | refresh, retry, expire | Utilisés par les serveurs secondaires (non étudiés dans ce cours) | -->
+<!-- | `$TTL` | TTL par défaut des enregistrements de la zone | -->
 <!-- | Dernière valeur | Durée pendant laquelle un serveur récursif garde en cache une réponse « ce nom n'existe pas » | -->
  
 ### Le point final
@@ -271,13 +271,17 @@ web.votrenom.lan.   3600    IN   A      172.16.10.3
 | `rd` | *Recursion Desired* : le client demande une requête récursive |
 | `ra` | *Recursion Available* : le serveur accepte les requêtes récursives |
 | `QUESTION` | La question posée |
-| `ANSWER` | La réponse, avec le **TTL** de chaque enregistrement |
+| `ANSWER` | La réponse |
 | `AUTHORITY` | Dans un renvoi : les serveurs `NS` à interroger ensuite |
 | `ADDITIONAL` | Informations utiles, par exemple l'adresse IP des serveurs de la section `AUTHORITY` |
 | `Query time`, `SERVER` | Durée de la requête et serveur qui a répondu |
+<!-- | `ANSWER` | La réponse, avec le **TTL** de chaque enregistrement | -->
  
 {{%notice style="tip" title="À retenir"%}}
-DNS utilise **UDP 53** (et TCP 53). Le client envoie une **requête récursive** à son serveur récursif, qui effectue des **requêtes itératives** auprès des serveurs racine, du TLD, puis du serveur **autoritaire** du domaine. Les réponses sont conservées en **cache** pendant leur **TTL**. Une zone est décrite par un **fichier de zone** : un `SOA`, des `NS`, puis des enregistrements `A`, `CNAME`, etc.
++ DNS utilise **UDP 53** (et TCP 53). 
++ Le client envoie une **requête récursive** à son serveur récursif, qui effectue des **requêtes itératives** auprès des serveurs racine, du TLD, puis du serveur **autoritaire** du domaine. 
++ Les réponses sont conservées en **cache** <!-- pendant leur **TTL**-->. 
++ Une zone est décrite par un **fichier de zone** : un `SOA`, des `NS`, puis des enregistrements `A`, `CNAME`, etc.
 {{%/notice%}}
  
 <!--  

@@ -212,7 +212,7 @@ ping -c 3 dhcp.votrenom.lan
 2. Que contient la réponse pour `www.votrenom.lan`? Pourquoi deux enregistrements?
 3. Quel `status` obtenez-vous pour `inconnu.votrenom.lan`? Que contient la section `AUTHORITY`?
 4. `ping web.votrenom.lan` échoue pour le moment. Est-ce un problème de DNS? Comment le vérifier?
-
+<!-- 
 ## 3- Erreurs courantes
  
 Vous allez introduire, **une à la fois**, trois erreurs fréquentes, et observer comment les détecter. Après chaque erreur, corrigez-la avant de passer à la suivante.
@@ -259,7 +259,7 @@ Complétez le tableau :
  
 1. Dans ce laboratoire, `dns-server` joue deux rôles. Pour chacun, donnez une requête qui l'illustre et le drapeau qui le prouve.
 2. Décrivez le trajet complet de la requête `ping www.google.com` exécutée sur le client : quelles machines interviennent, dans quel ordre, et avec quels protocoles?
-3. Vous ajoutez l'enregistrement `mail IN A 172.16.10.4` à la zone. Quelles sont les trois étapes à faire avant que le client puisse résoudre ce nom?
+3. Vous ajoutez l'enregistrement `mail IN A 172.16.10.4` à la zone. Quelles sont les trois étapes à faire avant que le client puisse résoudre ce nom? -->
 
 <!-- 
 
