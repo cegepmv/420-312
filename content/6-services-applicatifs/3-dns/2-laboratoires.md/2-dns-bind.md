@@ -211,7 +211,7 @@ ping -c 3 dhcp.votrenom.lan
 1. Quel drapeau apparaît maintenant dans les réponses? Que signifie-t-il?
 2. Que contient la réponse pour `www.votrenom.lan`? Pourquoi deux enregistrements?
 3. Quel `status` obtenez-vous pour `inconnu.votrenom.lan`? Que contient la section `AUTHORITY`?
-4. `ping web.votrenom.lan` échoue pour le moment. Est-ce un problème de DNS? Comment le vérifier?
+<!-- 4. `ping web.votrenom.lan` échoue pour le moment. Est-ce un problème de DNS? Comment le vérifier? -->
 <!-- 
 ## 3- Erreurs courantes
  
