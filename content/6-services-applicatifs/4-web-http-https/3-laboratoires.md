@@ -378,10 +378,9 @@ Vérifiez chaque élément depuis **client**, et indiquez la commande utilisée 
 | Le client accède à Internet | | |
 | Tous les serveurs sont administrables par SSH depuis le poste Windows | | |
  
-<!-- ## Questions de synthèse
+## Questions de synthèse
  
 1. Expliquez pourquoi chaque service du chapitre dépend du précédent : DHCP, DNS, puis HTTP.
-2. Dans votre capture, le client a-t-il dû faire une requête ARP pour `dhcp-router` avant de joindre le serveur web? Pourquoi? 
-3. Un utilisateur se plaint que `http://intranet.votrenom.lan` ne fonctionne pas, alors que `http://www.votrenom.lan` fonctionne. Proposez une démarche de diagnostic, en indiquant pour chaque étape la commande utilisée et la machine sur laquelle vous l'exécutez.
-4. Votre site doit maintenant être accessible en HTTPS. Sans le configurer, indiquez ce qu'il faudrait ajouter ou modifier : sur web-server (nginx et pare-feu), et dans le DNS.
--->
+2. Un utilisateur se plaint que `http://intranet.votrenom.lan` ne fonctionne pas, alors que `http://www.votrenom.lan` fonctionne. Proposez une démarche de diagnostic, en indiquant pour chaque étape la commande utilisée et la machine sur laquelle vous l'exécutez.
+<!-- 2. Dans votre capture, le client a-t-il dû faire une requête ARP pour `dhcp-router` avant de joindre le serveur web? Pourquoi?  -->
+<!-- 4. Votre site doit maintenant être accessible en HTTPS. Sans le configurer, indiquez ce qu'il faudrait ajouter ou modifier : sur web-server (nginx et pare-feu), et dans le DNS. -->

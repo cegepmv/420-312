@@ -39,7 +39,7 @@ schéma        hôte      port        chemin      requête fragment
 HTTP est un protocole :
  
 - **client/serveur** : le client envoie une **requête**, le serveur renvoie une **réponse**;
-- **texte** (jusqu'à HTTP/1.1) : les messages sont lisibles, comme vous le verrez avec `nc`;
+- **texte** (jusqu'à HTTP/1.1) : les messages sont lisibles;
 - **sans état** (*stateless*) : chaque requête est indépendante, le serveur ne se souvient pas des requêtes précédentes. Pour reconnaître un utilisateur d'une page à l'autre (connexion, panier), le serveur lui envoie un **cookie**, que le client renvoie ensuite dans chaque requête.
 ![Structure d'une requête et d'une réponse HTTP](/images/06/06-http-message.png)
  

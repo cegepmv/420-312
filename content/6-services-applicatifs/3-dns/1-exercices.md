@@ -23,7 +23,7 @@ Remettez les messages dans l'ordre, puis indiquez pour chacun s'il s'agit d'une 
 10. Le serveur récursif interroge un serveur de `cegepmv.ca`.
 
 Combien de messages auraient été nécessaires si le serveur récursif avait déjà eu les serveurs de `cegepmv.ca` en cache?
-<!--  
+ 
 {{% expand title="Solution" %}}
 | Ordre | Message | Type |
 |-------|---------|------|
@@ -39,7 +39,7 @@ Combien de messages auraient été nécessaires si le serveur récursif avait d�
 | 10 | Le récursif transmet l'adresse au poste (6) | Réponse finale |
  
 Avec les serveurs de `cegepmv.ca` en cache, le récursif commence directement à l'étape 6 : **6 messages** au lieu de 10.
-{{% /expand %}} -->
+{{% /expand %}}
 <!--  
 ### 2. Lire une sortie de dig
  
@@ -118,12 +118,14 @@ Pour chaque besoin, indiquez le type d'enregistrement à créer.
 3. Le nouveau serveur `ns2.exemple.lan` doit aussi répondre pour la zone `exemple.lan`.
 4. Le serveur `web` doit être joignable en IPv6.
 <!-- 3. `traceroute` doit afficher `routeur.exemple.lan` plutôt que `10.0.0.1`. -->
-<!-- {{% expand title="Solution" %}}
+
+{{% expand title="Solution" %}}
 1. **CNAME** : `intranet` → `web.exemple.lan.`
 2. **MX**
 3. **NS** (en plus d'un `A` pour `ns2`)
 4. **AAAA**
-{{% /expand %}} -->
+{{% /expand %}}
+
 <!-- 3. **PTR**, dans la zone inverse -->
 
 ### 3. Raisonner
@@ -133,8 +135,8 @@ Pour chaque besoin, indiquez le type d'enregistrement à créer.
 3. Un poste reçoit par DHCP le serveur DNS `172.16.10.2`, mais ce serveur est éteint. L'utilisateur peut-il naviguer sur `www.cegepmv.ca`? Et sur `http://<adresse IP du site>`? Justifiez.
 <!-- 2. Une entreprise déménage son site web vers une nouvelle adresse IP. Le TTL de l'enregistrement est de 2 jours. Pendant combien de temps certains clients risquent-ils d'utiliser l'ancienne adresse? Que faudrait-il faire avant le déménagement? -->
 {{% expand title="Solution" %}}
-<!-- 1. Il ne connaît que les serveurs des TLD. Il renvoie donc vers les serveurs de `ca`.
+1. Il ne connaît que les serveurs des TLD. Il renvoie donc vers les serveurs de `ca`.
 2. C'est un **résolveur ouvert**, utilisable pour des attaques par amplification. Il faut limiter les requêtes récursives aux réseaux de l'entreprise.
 3. Pas par le nom : la résolution échoue. Par l'adresse IP, oui : aucune résolution n'est nécessaire, et le réseau (IP, routage) fonctionne.
-{{% /expand %}} -->
+{{% /expand %}}
 <!-- 2. Jusqu'à **2 jours** : c'est la durée pendant laquelle les serveurs récursifs peuvent garder l'ancienne réponse en cache. Quelques jours avant, il faut réduire le TTL (par exemple à 5 minutes), attendre l'expiration de l'ancien TTL, effectuer le changement, puis rétablir un TTL normal. -->

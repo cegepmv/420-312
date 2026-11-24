@@ -15,7 +15,7 @@ Remettez les étapes suivantes dans l'ordre, puis indiquez pour chacune si elle 
 4. Le client envoie son mot de passe.
 5. Le client et le serveur choisissent leurs algorithmes.
 
-<!-- {{% expand title="Solution" %}}
+{{% expand title="Solution" %}}
 | Ordre | Étape | Visibilité |
 |-------|-------|------------|
 | 1 | Le client envoie le SYN (3) | En clair (en-têtes TCP) |
@@ -23,7 +23,7 @@ Remettez les étapes suivantes dans l'ordre, puis indiquez pour chacune si elle 
 | 3 | Choix des algorithmes (5) | En clair (la liste des algorithmes est visible, mais pas la clé de session calculée) |
 | 4 | Le client envoie son mot de passe (4) | Chiffrée |
 | 5 | Le client envoie `ls` (1) | Chiffrée |
-{{% /expand %}} -->
+{{% /expand %}}
  
 ### 2. Lire un rebond
  
@@ -41,12 +41,12 @@ ESTAB  0       0       172.16.10.1:39114       172.16.10.2:22
 3. Quelle adresse IP source `dns-server` voit-il pour cette connexion?
 4. Faut-il activer le *forwarding* IPv4 sur `dhcp-router` pour que ce rebond fonctionne? Justifiez.
 
-<!-- {{% expand title="Solution" %}}
+{{% expand title="Solution" %}}
 1. La troisième ligne. `dhcp-router` est **client** : son port local `39114` est éphémère et le port distant est `22`.
 2. Une connexion sert au rebond vers `dns-server`; l'autre est une session SSH ouverte directement sur `dhcp-router` (dans un autre terminal, par exemple).
 3. `172.16.10.1`, l'adresse LAN de `dhcp-router`.
 4. Non. `dhcp-router` ne transfère pas de paquets : il ouvre sa propre connexion TCP vers `dns-server` et relaie les données au niveau applicatif.
-{{% /expand %}} -->
+{{% /expand %}}
 
 <!-- ### 3. Configuration et copie
  
